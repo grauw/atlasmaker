@@ -90,19 +90,12 @@ public class AtlasMaker
 			tweekDimensions.run(binPackerList.get(binPackerList.size() - 1), listImage);
 		}
 		
-		int i = 0;
-		ArrayList<TexturePiece> texturePieces = new ArrayList<TexturePiece>();
-		for (BinPacker binPacker : binPackerList)
-		{
-			if (!textureSize.isPowerOfTwo())
-			{
-				binPacker.getTexturePiece().trim();
-			}
-			binPacker.getTexturePiece().write(outFile, i++);
-			texturePieces.add(binPacker.getTexturePiece());
-		}
+		if (!textureSize.isPowerOfTwo())
+			binPackerList.trim();
 		
-		return texturePieces;
+		binPackerList.write(outFile);
+		
+		return binPackerList.getTexturePieces();
 	}
 	
 	private ArrayList<AtlasImage> createAtlasImages(File[] files)
