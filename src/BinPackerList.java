@@ -1,7 +1,7 @@
 import java.io.File;
 import java.util.ArrayList;
 
-public class BinPackerList extends ArrayList<TexturePiece>
+public class BinPackerList extends ArrayList<TextureBin>
 {
 	private static final long serialVersionUID = 1L;
 	
@@ -21,8 +21,8 @@ public class BinPackerList extends ArrayList<TexturePiece>
 				pixelsReq += atlasImage.getNumPixels();
 			}
 			textureSize.getNextSizeFits(pixelsReq, maxWidth, maxHeight);
-			TexturePiece binPacker = new TexturePiece(textureSize.getWidth(), textureSize.getHeight());
-			this.add(binPacker);
+			TextureBin bin = new TextureBin(textureSize.getWidth(), textureSize.getHeight());
+			this.add(bin);
 			this.pack(atlasImages);
 			
 			if (atlasImages.size() == 0) 
@@ -37,12 +37,12 @@ public class BinPackerList extends ArrayList<TexturePiece>
 						prevWidth = textureSize.getWidth();
 						prevHeight = textureSize.getHeight();
 						textureSize.dec();
-						binPacker.resize(textureSize.getWidth(), textureSize.getHeight(), atlasImages); 
+						bin.resize(textureSize.getWidth(), textureSize.getHeight(), atlasImages); 
 						this.pack(atlasImages);
 						
 					} while (atlasImages.size() == 0 && !textureSize.isMinSize());
 					// revert back to last size that fit
-					binPacker.resize(prevWidth, prevHeight, atlasImages); 
+					bin.resize(prevWidth, prevHeight, atlasImages); 
 					this.pack(atlasImages);
 					
 					assert(atlasImages.size() == 0);
@@ -53,7 +53,7 @@ public class BinPackerList extends ArrayList<TexturePiece>
 			while (!textureSize.isMaxSize())
 			{
 				textureSize.inc();
-				binPacker.resize(textureSize.getWidth(), textureSize.getHeight(), atlasImages); 
+				bin.resize(textureSize.getWidth(), textureSize.getHeight(), atlasImages); 
 				this.pack(atlasImages);
 				
 				if (atlasImages.size() == 0)
@@ -68,9 +68,9 @@ public class BinPackerList extends ArrayList<TexturePiece>
 		for (int i = images.size() - 1; i >= 0; i--)
 		{
 			boolean added = false;
-			for (TexturePiece binPacker : this)
+			for (TextureBin bin : this)
 			{
-				if (binPacker.add(images.get(i)))
+				if (bin.add(images.get(i)))
 				{
 					added = true;
 					images.remove(i);
@@ -85,13 +85,13 @@ public class BinPackerList extends ArrayList<TexturePiece>
 	public void write(File outFile)
 	{
 		int i = 0;
-		for (TexturePiece piece : this)
-			piece.write(outFile, i++);
+		for (TextureBin bin : this)
+			bin.write(outFile, i++);
 	}
 	
 	public void trim()
 	{
-		for (TexturePiece piece : this)
-			piece.trim();
+		for (TextureBin bin : this)
+			bin.trim();
 	}
 }

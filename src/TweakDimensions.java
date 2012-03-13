@@ -9,26 +9,26 @@ public class TweakDimensions
 	private int origWidth;
 	private int origHeight;
 	
-	public void run(TexturePiece binPacker, ArrayList<AtlasImage> listImage)
+	public void run(TextureBin bin, ArrayList<AtlasImage> listImage)
 	{
 		bestSavings = 0;
-		binPacker.trim();
-		origWidth = binPacker.getWidth();
-		origHeight = binPacker.getHeight();
+		bin.trim();
+		origWidth = bin.getWidth();
+		origHeight = bin.getHeight();
 		bestWidth = origWidth;
 		bestHeight = origHeight;
-		tweakWidthHeight(binPacker, listImage, true);
-		binPacker.setSize(origWidth, origHeight);
-		tweakWidthHeight(binPacker, listImage, false);
-		if (bestWidth != binPacker.getWidth() || bestHeight != binPacker.getHeight())
+		tweakWidthHeight(bin, listImage, true);
+		bin.setSize(origWidth, origHeight);
+		tweakWidthHeight(bin, listImage, false);
+		if (bestWidth != bin.getWidth() || bestHeight != bin.getHeight())
 		{
-			binPacker.resize(bestWidth, bestHeight, listImage); 
-			binPacker.pack(listImage);
+			bin.resize(bestWidth, bestHeight, listImage); 
+			bin.pack(listImage);
 		}
 		assert(listImage.size() == 0);
 	}
 	
-	private void tweakWidthHeight(TexturePiece binPacker, ArrayList<AtlasImage> listImage, boolean doWidth)
+	private void tweakWidthHeight(TextureBin bin, ArrayList<AtlasImage> listImage, boolean doWidth)
 	{
 		int width = origWidth; 
 		int height = origHeight;
@@ -43,23 +43,23 @@ public class TweakDimensions
 			// reduce by two pixels to force minimum re-organise
 			if (doWidth)
 			{
-				width = binPacker.getWidth() - 1;
+				width = bin.getWidth() - 1;
 //				height = origWidth * origHeight / width;
 			}
 			else
 			{
-				height = binPacker.getHeight() - 1;
+				height = bin.getHeight() - 1;
 //				width = origWidth * origHeight / height;
 			}
-			binPacker.resize(width, height, listImage); 
-			binPacker.pack(listImage);
+			bin.resize(width, height, listImage); 
+			bin.pack(listImage);
 			if (listImage.size() > 0)
 			{
 				break;
 			}
 			// check if we gained anything
-			binPacker.trim();
-			savings = origWidth * origHeight - binPacker.getPixels();
+			bin.trim();
+			savings = origWidth * origHeight - bin.getPixels();
 		} while (savings >= prevSavings);
 		
 		if (bestSavings < prevSavings)

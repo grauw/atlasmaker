@@ -25,14 +25,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import javax.imageio.ImageIO;
 
-public class TexturePiece
+public class TextureBin
 {
 	private TreeNode treeNode;
 	private ArrayList<AtlasImage> images;
 	private int width;
 	private int height;
 	
-	public TexturePiece(int width, int height)
+	public TextureBin(int width, int height)
 	{
 		this.width = width;
 		this.height = height;
