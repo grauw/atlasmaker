@@ -5,6 +5,64 @@ public class BinPackerList extends ArrayList<BinPacker>
 {
 	private static final long serialVersionUID = 1L;
 	
+	public void binPack(TextureSize textureSize, ArrayList<AtlasImage> atlasImages)
+	{
+		while(true)
+		{
+			int maxWidth = 0;
+			int maxHeight = 0;
+			int pixelsReq = 0;
+			for (AtlasImage atlasImage : atlasImages)
+			{
+				if (maxWidth < atlasImage.getWidth())
+					maxWidth = atlasImage.getWidth();
+				if (maxHeight < atlasImage.getHeight())
+					maxHeight = atlasImage.getHeight();
+				pixelsReq += atlasImage.getNumPixels();
+			}
+			textureSize.getNextSizeFits(pixelsReq, maxWidth, maxHeight);
+			BinPacker binPacker = new BinPacker(textureSize.getWidth(), textureSize.getHeight());
+			this.add(binPacker);
+			this.pack(atlasImages);
+			
+			if (atlasImages.size() == 0) 
+			{
+				if (this.size() > 1 && !textureSize.isMinSize())
+				{
+					// there is opportunity for further reduction
+					// because some images might fit in gaps of previous atlases
+					int prevWidth, prevHeight;
+					do
+					{
+						prevWidth = textureSize.getWidth();
+						prevHeight = textureSize.getHeight();
+						textureSize.dec();
+						binPacker.resize(textureSize.getWidth(), textureSize.getHeight(), atlasImages); 
+						this.pack(atlasImages);
+						
+					} while (atlasImages.size() == 0 && !textureSize.isMinSize());
+					// revert back to last size that fit
+					binPacker.resize(prevWidth, prevHeight, atlasImages); 
+					this.pack(atlasImages);
+					
+					assert(atlasImages.size() == 0);
+				}
+				return;
+			}
+			
+			while (!textureSize.isMaxSize())
+			{
+				textureSize.inc();
+				binPacker.resize(textureSize.getWidth(), textureSize.getHeight(), atlasImages); 
+				this.pack(atlasImages);
+				
+				if (atlasImages.size() == 0)
+					return;
+			}
+			// recalculate values for remainder images
+		}
+	}
+	
 	public void pack(ArrayList<AtlasImage> images)
 	{
 		for (int i = images.size() - 1; i >= 0; i--)

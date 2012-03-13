@@ -81,7 +81,8 @@ public class AtlasMaker
 		ArrayList<AtlasImage> listImage = createAtlasImages(files);
 		
 		TextureSize textureSize = getTextureSize();
-		BinPackerList binPackerList = binPack(textureSize, listImage);
+		BinPackerList binPackerList = new BinPackerList();
+		binPackerList.binPack(textureSize, listImage);
 		
 		// try making texture size smaller by making it more rectangular
 		if (!textureSize.isPowerOfTwo())
@@ -135,66 +136,5 @@ public class AtlasMaker
 		}
 		
 		return image;
-	}
-	
-	private BinPackerList binPack(TextureSize textureSize, ArrayList<AtlasImage> atlasImages)
-	{
-		BinPackerList binPackerList = new BinPackerList();
-		BinPacker binPacker;
-		
-		while(true)
-		{
-			int maxWidth = 0;
-			int maxHeight = 0;
-			int pixelsReq = 0;
-			for (AtlasImage atlasImage : atlasImages)
-			{
-				if (maxWidth < atlasImage.getWidth())
-					maxWidth = atlasImage.getWidth();
-				if (maxHeight < atlasImage.getHeight())
-					maxHeight = atlasImage.getHeight();
-				pixelsReq += atlasImage.getNumPixels();
-			}
-			textureSize.getNextSizeFits(pixelsReq, maxWidth, maxHeight);
-			binPacker = new BinPacker(textureSize.getWidth(), textureSize.getHeight());
-			binPackerList.add(binPacker);
-			binPackerList.pack(atlasImages);
-			
-			if (atlasImages.size() == 0) 
-			{
-				if (binPackerList.size() > 1 && !textureSize.isMinSize())
-				{
-					// there is opportunity for further reduction
-					// because some images might fit in gaps of previous atlases
-					int prevWidth, prevHeight;
-					do
-					{
-						prevWidth = textureSize.getWidth();
-						prevHeight = textureSize.getHeight();
-						textureSize.dec();
-						binPacker.resize(textureSize.getWidth(), textureSize.getHeight(), atlasImages); 
-						binPackerList.pack(atlasImages);
-						
-					} while (atlasImages.size() == 0 && !textureSize.isMinSize());
-					// revert back to last size that fit
-					binPacker.resize(prevWidth, prevHeight, atlasImages); 
-					binPackerList.pack(atlasImages);
-					
-					assert(atlasImages.size() == 0);
-				}
-				return binPackerList;
-			}
-			
-			while (!textureSize.isMaxSize())
-			{
-				textureSize.inc();
-				binPacker.resize(textureSize.getWidth(), textureSize.getHeight(), atlasImages); 
-				binPackerList.pack(atlasImages);
-				
-				if (atlasImages.size() == 0)
-					return binPackerList;
-			}
-			// recalculate values for remainder images
-		}
 	}
 }
