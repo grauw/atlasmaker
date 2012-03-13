@@ -107,12 +107,12 @@ public class TexturePiece
 			strAtlasData += "false";
 		strAtlasData += "\">\n";
 		Collections.sort(images, new CompareName());
-		int n;
-		for (n = 0; n < images.size(); n++) 
+		
+		for (AtlasImage image : images)
 		{
-			images.get(n).draw(g);
-			strAtlasData += images.get(n).GetSerialize();
-		} 
+			image.draw(g);
+			strAtlasData += image.GetSerialize();
+		}
 		strAtlasData += "  </texture>\n";
 		g.dispose();
 		
