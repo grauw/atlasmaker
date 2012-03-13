@@ -64,12 +64,13 @@ public class AtlasMaker
 	
 	private TextureSize getTextureSize()
 	{
-		if (square)
+		if (square && powersOfTwo)
 			return new TextureSizeSq(maxSize);
-		if (powersOfTwo)
+		if (!square && powersOfTwo)
 			return new TextureSizePOT(maxSize);
-		else
+		if (!square && !powersOfTwo)
 			return new TextureSizeNPOT(maxSize);
+		throw new RuntimeException("Unsupported square/powersOfTwo combination.");
 	}
 	
 	public ArrayList<TexturePiece> create(File[] files, String outFile)
