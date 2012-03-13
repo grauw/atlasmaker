@@ -88,10 +88,9 @@ public class AtlasMaker
 		{
 			TweekDimensions tweekDimensions = new TweekDimensions();
 			tweekDimensions.run(binPackerList.get(binPackerList.size() - 1), listImage);
-		}
-		
-		if (!textureSize.isPowerOfTwo())
+			
 			binPackerList.trim();
+		}
 		
 		binPackerList.write(outFile);
 		
