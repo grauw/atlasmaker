@@ -73,7 +73,7 @@ public class AtlasMaker
 		throw new RuntimeException("Unsupported square/powersOfTwo combination.");
 	}
 	
-	public ArrayList<TexturePiece> create(File[] files, File outFile)
+	public BinPackerList create(File[] files, File outFile)
 	{
 		if (files == null || files.length == 0)
 			throw new RuntimeException("No files specified.");
@@ -95,7 +95,7 @@ public class AtlasMaker
 		
 		binPackerList.write(outFile);
 		
-		return binPackerList.getTexturePieces();
+		return binPackerList;
 	}
 	
 	private ArrayList<AtlasImage> createAtlasImages(File[] files)

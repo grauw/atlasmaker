@@ -27,6 +27,7 @@ import javax.imageio.ImageIO;
 
 public class TexturePiece
 {
+	private TreeNode treeNode;
 	private ArrayList<AtlasImage> images;
 	private int width;
 	private int height;
@@ -35,12 +36,37 @@ public class TexturePiece
 	{
 		this.width = width;
 		this.height = height;
+		treeNode = new TreeNode(0, 0, width, height, "");
 		images = new ArrayList<AtlasImage>();
 	}
 	
-	public void add(AtlasImage image)
+	public boolean add(AtlasImage image)
 	{
-		images.add(image);
+		boolean added = treeNode.add(image);
+		if (added)
+			images.add(image);
+		return added;
+	}
+	
+	public void pack(ArrayList<AtlasImage> listImage)
+	{
+		for (int ixImage = listImage.size() - 1; ixImage >= 0; ixImage--)
+		{
+			if (!add(listImage.get(ixImage)))
+				return;
+			listImage.remove(ixImage);
+		}
+	}
+	
+	public void resize(int width, int height, ArrayList<AtlasImage> listImage)
+	{
+		// puts images removed back on the list
+		this.remove(listImage);
+		// need to resort, because they may have been put in wrong order
+		Collections.sort(listImage, new CompareArea());
+		// resize resets everything
+		treeNode.resize(width, height);
+		this.resize(width, height);
 	}
 	
 	public void remove(ArrayList<AtlasImage> listImageReturn)

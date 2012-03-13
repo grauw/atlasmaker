@@ -10,7 +10,7 @@ public class Main
 		File outFile = new File("/Users/rcuser/Development/AtlasMaker/output/menu200");
 		
 		AtlasMaker atlasMaker = new AtlasMaker();
-		ArrayList<TexturePiece> texturePieces = atlasMaker.create(files, outFile);
+		BinPackerList texturePieces = atlasMaker.create(files, outFile);
 	}
 	
 	public static File[] getFiles(File dir)

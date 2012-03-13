@@ -1,7 +1,7 @@
 import java.io.File;
 import java.util.ArrayList;
 
-public class BinPackerList extends ArrayList<BinPacker>
+public class BinPackerList extends ArrayList<TexturePiece>
 {
 	private static final long serialVersionUID = 1L;
 	
@@ -21,7 +21,7 @@ public class BinPackerList extends ArrayList<BinPacker>
 				pixelsReq += atlasImage.getNumPixels();
 			}
 			textureSize.getNextSizeFits(pixelsReq, maxWidth, maxHeight);
-			BinPacker binPacker = new BinPacker(textureSize.getWidth(), textureSize.getHeight());
+			TexturePiece binPacker = new TexturePiece(textureSize.getWidth(), textureSize.getHeight());
 			this.add(binPacker);
 			this.pack(atlasImages);
 			
@@ -68,7 +68,7 @@ public class BinPackerList extends ArrayList<BinPacker>
 		for (int i = images.size() - 1; i >= 0; i--)
 		{
 			boolean added = false;
-			for (BinPacker binPacker : this)
+			for (TexturePiece binPacker : this)
 			{
 				if (binPacker.add(images.get(i)))
 				{
@@ -82,24 +82,16 @@ public class BinPackerList extends ArrayList<BinPacker>
 		}
 	}
 	
-	public ArrayList<TexturePiece> getTexturePieces()
-	{
-		ArrayList<TexturePiece> pieces = new ArrayList<TexturePiece>();
-		for (BinPacker packer : this)
-			pieces.add(packer.getTexturePiece());
-		return pieces;
-	}
-	
 	public void write(File outFile)
 	{
 		int i = 0;
-		for (TexturePiece piece : getTexturePieces())
+		for (TexturePiece piece : this)
 			piece.write(outFile, i++);
 	}
 	
 	public void trim()
 	{
-		for (TexturePiece piece : getTexturePieces())
+		for (TexturePiece piece : this)
 			piece.trim();
 	}
 }
