@@ -83,7 +83,7 @@ public class AtlasMaker
 		BinPackerList binPackerList = binPack(textureSize, listImage);
 		
 		// try making texture size smaller by making it more rectangular
-		if (textureSize.isNPOT())
+		if (!textureSize.isPowerOfTwo())
 		{
 			TweekDimensions tweekDimensions = new TweekDimensions();
 			tweekDimensions.run(binPackerList.get(binPackerList.size() - 1), listImage);
@@ -93,7 +93,7 @@ public class AtlasMaker
 		ArrayList<TexturePiece> texturePieces = new ArrayList<TexturePiece>();
 		for (BinPacker binPacker : binPackerList)
 		{
-			if (textureSize.isNPOT())
+			if (!textureSize.isPowerOfTwo())
 			{
 				binPacker.getTexturePiece().trim();
 			}

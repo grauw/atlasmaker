@@ -29,7 +29,7 @@ public class TextureSizeSq extends TextureSize
 		width /= 2;
 	}
 	
-	public boolean isNPOT() {
-		return false;
+	public boolean isPowerOfTwo() {
+		return true;
 	}
 }

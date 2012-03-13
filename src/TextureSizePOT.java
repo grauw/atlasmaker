@@ -51,7 +51,7 @@ public class TextureSizePOT extends TextureSize
 		checkMin();
 	}
 	
-	public boolean isNPOT() {
-		return false;
+	public boolean isPowerOfTwo() {
+		return true;
 	}
 }

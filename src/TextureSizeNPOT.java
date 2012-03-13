@@ -63,8 +63,8 @@ public class TextureSizeNPOT extends TextureSize
 		checkMax();
 	}
 	
-	public boolean isNPOT() {
-		return true;
+	public boolean isPowerOfTwo() {
+		return false;
 	}
 
 }

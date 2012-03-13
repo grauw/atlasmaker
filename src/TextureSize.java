@@ -78,5 +78,5 @@ public abstract class TextureSize
 	abstract public void inc();
 	abstract public void dec();
 	abstract public void getNextSizeFits(int pixelsReq, int maxWidth, int maxHeight);
-	abstract public boolean isNPOT();
+	abstract public boolean isPowerOfTwo();
 }
