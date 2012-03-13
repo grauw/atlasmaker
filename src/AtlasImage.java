@@ -50,12 +50,13 @@ public class AtlasImage
 	{
 		border = 0;
 	}
-	public void Load(String strDir, String fileName) throws IOException
+	
+	public void load(File file) throws IOException
 	{
-	    File file = new File(strDir + File.separator + fileName);
 	    image = ImageIO.read(file);
-	    this.fileName = fileName.substring(0, fileName.length()-4);
+	    this.fileName = file.getName().substring(0, file.getName().length() - 4);
 	}
+	
 	public boolean hasAlphaBorder()
 	{
 		return opaqueWidth < image.getWidth() || opaqueHeight < image.getHeight();
@@ -123,7 +124,7 @@ public class AtlasImage
 		this.x = x;
 		this.y = y;
 	}
-	public void CropTransparent(int alphaThresh) 
+	public void cropTransparent(int alphaThresh) 
 	{
 		if (!DetectAlpha(alphaThresh)) return;
 		BufferedImage imageCut;

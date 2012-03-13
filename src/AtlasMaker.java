@@ -21,129 +21,157 @@ import java.util.*;
 
 public class AtlasMaker
 {
-	private String strErr;
+	private int maxSize = 1024;
+	private boolean powersOfTwo = true;
+	private boolean square = true;
+	private int alphaThreshold = 0;
+	private int imageBorder = 0;
 	
 	public AtlasMaker()
 	{
 	}
-
 	
-	public boolean create(DirNode dirNode, 
-			String strOutFile, ArrayList<TexturePiece> listReturn, OptionsDialog optionsDialog)
+	public void setMaxSize(int size)
 	{
-		strErr = "";
-        File dir = new File(dirNode.getFileSpec());
-        File[] files = null;
-        FilenameFilter filter = new FilenameFilter() {
-            public boolean accept(File dir, String name) {
-                return name.endsWith(".png");
-            }
-        };
-        files = dir.listFiles(filter);
-		int maxSize = optionsDialog.getMaxSize();
+		if (size <= 0)
+			throw new RuntimeException("Size out of range.");
+		maxSize = size;
+	}
+	
+	public void setPowersOfTwo(boolean enable)
+	{
+		powersOfTwo = enable;
+	}
+	
+	public void setSquare(boolean enable)
+	{
+		square = enable;
+	}
+	
+	public void setAlphaThreshold(int threshold)
+	{
+		if (threshold < 0 || threshold > 254)
+			throw new RuntimeException("Threshold out of range.");
+		alphaThreshold = threshold;
+	}
+	
+	public void setImageBorder(int border)
+	{
+		if (border < 0)
+			throw new RuntimeException("Border out of range.");
+		imageBorder = border;
+	}
+	
+	private TextureSize getTextureSize()
+	{
+    	if (square)
+    		return new TextureSizeSq(maxSize);
+    	if (powersOfTwo)
+    		return new TextureSizePOT(maxSize);
+    	else
+    		return new TextureSizeNPOT(maxSize);
+	}
+	
+	public ArrayList<TexturePiece> create(File[] files, String outFile)
+	{
+		if (files == null || files.length == 0)
+        	throw new RuntimeException("No files specified.");
         
-        int n;
-        if (files == null || files.length == 0) return false;
-        TextureSize textureSize;
-        if (dirNode.getImageFormat() == ImageFormat.PVR)
-        {
-        	textureSize = new TextureSizeSq(maxSize);
-        }
-        else
-        {
-        	if (optionsDialog.isPOT())
-        		textureSize = new TextureSizePOT(maxSize);
-        	else
-        		textureSize = new TextureSizeNPOT(maxSize);
-        }
-    	AtlasImage atlasImage = null;
-    	ArrayList<AtlasImage> listImage;
-    	listImage = new ArrayList<AtlasImage>();
-        try 
-        {
-            for (n = 0; n < files.length; n++) 
-            {
-                atlasImage = new AtlasImage();
-                if (dirNode.getImageFormat() == ImageFormat.PVR)
-                	atlasImage.setBorder(2);
-                atlasImage.Load(dirNode.getFileSpec(), files[n].getName());
-                atlasImage.CropTransparent(optionsDialog.getAlphaThresh());
-
-    			// don't add images that don't fit
-        		if (atlasImage.getWidth() > maxSize 
-        			|| atlasImage.getHeight() > maxSize)
-                {
-                	strErr = "image too big to fit in texture: "+atlasImage.getFileName();
-                }
-        		else
-        		{
-	                listImage.add(atlasImage);
-        		}
-            }
-        } catch (Exception e) 
-        {
-        	strErr = "error: "+atlasImage.getFileName()+": " +e.toString();
-            return false;
-        }
-		if (listImage.size() == 0) return false;
-        // sorts in reverse order
-        // this is so we can remove from end of list as we add to atlas
-        Collections.sort(listImage, new CompareArea());
-        BinPackerList binPackerList = new BinPackerList();
-        binPack(binPackerList, textureSize, listImage);
+    	ArrayList<AtlasImage> listImage = createAtlasImages(files);
+    	
+        TextureSize textureSize = getTextureSize();
+        BinPackerList binPackerList = binPack(textureSize, listImage);
         
         // try making texture size smaller by making it more rectangular
     	if (textureSize.isNPOT())
     	{
     		TweekDimensions tweekDimensions = new TweekDimensions();
-    		tweekDimensions.run(
-    			binPackerList.get(binPackerList.size()-1), listImage);
+    		tweekDimensions.run(binPackerList.get(binPackerList.size() - 1), listImage);
     	}
-               
-        for (n = 0; n < binPackerList.size(); n++) 
+		
+    	int i = 0;
+		ArrayList<TexturePiece> texturePieces = new ArrayList<TexturePiece>();
+        for (BinPacker binPacker : binPackerList)
         {
         	if (textureSize.isNPOT())
         	{
-            	binPackerList.get(n).getTexturePiece().trim();
+        		binPacker.getTexturePiece().trim();
         	}
-        	binPackerList.get(n).getTexturePiece().createStuff(dirNode, strOutFile, n, optionsDialog);
-        	listReturn.add(binPackerList.get(n).getTexturePiece());
+        	binPacker.getTexturePiece().createStuff(outFile, i++);
+        	texturePieces.add(binPacker.getTexturePiece());
         }
-
-        return true;
+        
+        return texturePieces;
 	}
-
-
-	private void binPack(BinPackerList binPackerList, TextureSize textureSize, 
-			ArrayList<AtlasImage> listImage)
+	
+	private ArrayList<AtlasImage> createAtlasImages(File[] files)
 	{
+    	ArrayList<AtlasImage> images = new ArrayList<AtlasImage>();
+    	for (File file : files)
+        {
+	        try 
+	        {
+	        	images.add(createAtlasImage(file));
+	        }
+	        catch (IOException e) 
+	        {
+	        	throw new RuntimeException("Could not load " + file.getName(), e);
+            }
+        }
+		if (images.size() == 0)
+			throw new RuntimeException("No images created.");
+		
+        // sort images in reverse order
+        // this is so we can remove from end of list as we add to atlas
+        Collections.sort(images, new CompareArea());
+        
+		return images;
+	}
+	
+	private AtlasImage createAtlasImage(File file) throws IOException
+	{
+		AtlasImage image = new AtlasImage();
+		image.setBorder(imageBorder);
+        image.load(file);
+        image.cropTransparent(alphaThreshold);
+
+		// don't add images that don't fit
+		if (image.getWidth() > maxSize || image.getHeight() > maxSize)
+        {
+        	throw new RuntimeException("image too big to fit in texture: " + image.getFileName());
+        }
+		
+		return image;
+	}
+	
+	private BinPackerList binPack(TextureSize textureSize, ArrayList<AtlasImage> atlasImages)
+	{
+        BinPackerList binPackerList = new BinPackerList();
 		BinPacker binPacker;
-        int maxWidth;
-        int maxHeight;
-        int pixelsReq;
-    	AtlasImage atlasImage;
-    	int n;
-	    do
+    	
+		while(true)
 	    {
-	        maxWidth = 0;
-	        maxHeight = 0;
-	        pixelsReq = 0;
-			for (n = 0; n < listImage.size(); n++)
+	    	int maxWidth = 0;
+	    	int maxHeight = 0;
+	    	int pixelsReq = 0;
+			for (AtlasImage atlasImage : atlasImages)
 			{
-				atlasImage = listImage.get(n);
-	            if (maxWidth < atlasImage.getWidth()) maxWidth = atlasImage.getWidth();
-	            if (maxHeight < atlasImage.getHeight()) maxHeight = atlasImage.getHeight();
+	            if (maxWidth < atlasImage.getWidth())
+	            	maxWidth = atlasImage.getWidth();
+	            if (maxHeight < atlasImage.getHeight())
+	            	maxHeight = atlasImage.getHeight();
 	            pixelsReq += atlasImage.getNumPixels();
 			}
 	    	textureSize.getNextSizeFits(pixelsReq, maxWidth, maxHeight);
 	    	binPacker = new BinPacker(textureSize.getWidth(), textureSize.getHeight());
 	    	binPackerList.add(binPacker);
-	        binPackerList.pack(listImage);
-			if (listImage.size() == 0) 
+	        binPackerList.pack(atlasImages);
+	        
+			if (atlasImages.size() == 0) 
 			{
 				if (binPackerList.size() > 1 && !textureSize.isMinSize())
 				{
-					// there is opertunity for further reduction
+					// there is opportunity for further reduction
 					// because some images might fit in gaps of previous atlases
 					int prevWidth, prevHeight;
 					do
@@ -151,36 +179,30 @@ public class AtlasMaker
 						prevWidth = textureSize.getWidth();
 						prevHeight = textureSize.getHeight();
 			    		textureSize.dec();
-			    		binPacker.resize(textureSize.getWidth(), textureSize.getHeight(),
-			    				listImage); 
-			    		binPackerList.pack(listImage);
+			    		binPacker.resize(textureSize.getWidth(), textureSize.getHeight(), atlasImages); 
+			    		binPackerList.pack(atlasImages);
 						
-					} while (listImage.size() == 0 && !textureSize.isMinSize());
+					} while (atlasImages.size() == 0 && !textureSize.isMinSize());
 					// revert back to last size that fit
-		    		binPacker.resize(prevWidth, prevHeight, listImage); 
-		    		binPackerList.pack(listImage);
-		    		assert(listImage.size() == 0);
+		    		binPacker.resize(prevWidth, prevHeight, atlasImages); 
+		    		binPackerList.pack(atlasImages);
+		    		
+		    		assert(atlasImages.size() == 0);
 				}
-				return;
+				return binPackerList;
 			}
+			
 	        while (!textureSize.isMaxSize())
 	        {
 	    		textureSize.inc();
-	    		binPacker.resize(textureSize.getWidth(), 
-	    				textureSize.getHeight(), listImage); 
-	    		binPackerList.pack(listImage);
-				if (listImage.size() == 0) return;
+	    		binPacker.resize(textureSize.getWidth(), textureSize.getHeight(), atlasImages); 
+	    		binPackerList.pack(atlasImages);
+	    		
+				if (atlasImages.size() == 0)
+					return binPackerList;
 	        }
 	    	// recalculate values for remainder images
-	    } while(true);
-	}    
-
-	
-	public String getStrErr()
-	{
-		return strErr;
+	    }
 	}
-
-
-
+	
 }

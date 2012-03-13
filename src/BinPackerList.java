@@ -1,43 +1,25 @@
 import java.util.ArrayList;
 
-
-public class BinPackerList
+public class BinPackerList extends ArrayList<BinPacker>
 {
-    ArrayList<BinPacker> listBinPacker = new ArrayList<BinPacker>();
-
-    void add(BinPacker binPacker)
-    {
-    	listBinPacker.add(binPacker);
-    }
-    BinPacker get(int index)
-    {
-    	return listBinPacker.get(index);
-    }
-    int size() 
-    {
-    	return listBinPacker.size();
-    }
-    
-	public void pack(ArrayList<AtlasImage> listImage)
+	private static final long serialVersionUID = 1L;
+	
+	public void pack(ArrayList<AtlasImage> images)
 	{
-		int ixImage, n;
-		boolean added;
-		for (ixImage = listImage.size()-1; ixImage >= 0; ixImage--)
+		for (int i = images.size() - 1; i >= 0; i--)
 		{
-			added = false;
-			for (n = 0; n < listBinPacker.size(); n++)
+			boolean added = false;
+			for (BinPacker binPacker : this)
 			{
-				
-				if (listBinPacker.get(n).add(listImage.get(ixImage))) 
+				if (binPacker.add(images.get(i)))
 				{
 					added = true;
-					listImage.remove(ixImage);
+					images.remove(i);
 					break;
 				}
 			}
-			if (!added) break;
-		} 
-//		listImage.subList(0, ixImage).clear();
-	}	
-	
+			if (!added)
+				break;
+		}
+	}
 }

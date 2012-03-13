@@ -21,75 +21,69 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import javax.imageio.ImageIO;
-import javax.swing.JOptionPane;
-
 
 public class TexturePiece
 {
-	private ArrayList<AtlasImage> listImage;
+	private ArrayList<AtlasImage> images;
 	private BufferedImage imageDisplay;
-	private String strErr;
 	private String name;
 	private String strAtlasData;
 	private int width;
 	private int height;
-	private boolean transparent;
+	
 	public TexturePiece(int width, int height)
 	{
 		this.width = width;
 		this.height = height;
-    	listImage = new ArrayList<AtlasImage>();
+    	images = new ArrayList<AtlasImage>();
 	}
+	
 	public void add(AtlasImage image)
 	{
-		listImage.add(image);
+		images.add(image);
 	}
+	
 	public void remove(ArrayList<AtlasImage> listImageReturn)
 	{
-		listImageReturn.addAll(listImage);
-		listImage.clear();
+		listImageReturn.addAll(images);
+		images.clear();
 	}
+	
 	public void resize(int width, int height)
 	{
 		this.width = width;
 		this.height = height;
-		listImage.clear();
+		images.clear();
 	}
 	
 	// trims dimensions to minimium
-	public boolean trim()
+	public void trim()
 	{
 		width = 0;
 		height = 0;
-    	AtlasImage atlasImage;
-		int ixImage;
-		for (ixImage = 0; ixImage < listImage.size(); ixImage++)
+		for (AtlasImage image : images)
 		{
-			atlasImage = listImage.get(ixImage);
-            if (width < atlasImage.getRight()) 
-            	width = atlasImage.getRight();
-            if (height < atlasImage.getBottom()) 
-            	height = atlasImage.getBottom();
+            if (width < image.getRight()) 
+            	width = image.getRight();
+            if (height < image.getBottom()) 
+            	height = image.getBottom();
 		} 
-		return true;
-	}	
+	}
 	
-	public void createStuff(DirNode dirNode, String strOutFile, int index, OptionsDialog optionsDialog)
+	public boolean isTransparent()
 	{
-		transparent = false;
-		int ixImage;
-		for (ixImage = 0; ixImage < listImage.size(); ixImage++)
-		{
-            if (listImage.get(ixImage).isTransparent())
-            {
-            	transparent = true;
-            	break;
-            }
-		} 
-		
+		for (AtlasImage image : images)
+            if (image.isTransparent())
+            	return true;
+		return false;
+	}
+	
+	public void createStuff(String strOutFile, int index)
+	{
 	    imageDisplay = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 	    BufferedImage imageOut = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 	    Graphics2D g = imageOut.createGraphics();
@@ -103,115 +97,82 @@ public class TexturePiece
 	    int posDir = strOutFile.lastIndexOf(File.separatorChar);
 	    if (posDir != -1)
 	    {
-	    	stub = strOutFile.substring(posDir+1);
-	    	dir = strOutFile.substring(0, posDir+1);
+	    	stub = strOutFile.substring(posDir + 1);
+	    	dir = strOutFile.substring(0, posDir + 1);
 	    }
-		stub += index;
-        if (dirNode.getImageFormat() == ImageFormat.PVR)
-        {
-    		name = stub + ".pvr";
-    		fileName = stub + ".png";
-    	}
-    	else if (dirNode.getImageFormat() == ImageFormat.PNG)
-    	{
-    		name = stub + ".png";
-	    	fileName = name;
-    	}
-    	else if (dirNode.isTarga())
-    	{
-    		name = stub + ".tga";
-	    	fileName = name;
-    	}
-	    		
-	    strAtlasData = "  <texture file=\"" + name+"\" trans=\"";
-	    if (transparent)
+	    
+		name = stub + "-" + index + ".png";
+		fileName = name;
+		
+	    strAtlasData = "  <texture file=\"" + name + "\" trans=\"";
+	    if (isTransparent())
 	    	strAtlasData += "true";
 	    else
 	    	strAtlasData += "false";
 	    strAtlasData += "\">\n";
-	    Collections.sort(listImage, new CompareName());
+	    Collections.sort(images, new CompareName());
 	    int n;
-	    for (n = 0; n < listImage.size(); n++) 
+	    for (n = 0; n < images.size(); n++) 
 	    {
-	    	listImage.get(n).draw(g);
-	    	listImage.get(n).drawWithBorder(gDisplay);
-	    	strAtlasData += listImage.get(n).GetSerialize();
+	    	images.get(n).draw(g);
+	    	images.get(n).drawWithBorder(gDisplay);
+	    	strAtlasData += images.get(n).GetSerialize();
 	    } 
 	    strAtlasData += "  </texture>\n";
 	    gDisplay.setColor(Color.black);
 	    gDisplay.drawRect(0, 0, imageOut.getWidth()-1, imageOut.getHeight()-1);       
 	    g.dispose();
 	    gDisplay.dispose();
-	//  Write generated image to a file
-	    File file;
-	    try 
+	    
+	    //  Write generated image to a file
+	    File file = new File(dir, fileName);
+	    try
 	    {
-    		file = new File(dir+fileName);
-	    	if (dirNode.isTarga())
-	    	{
-	    		TargaWriter.write(imageOut, file, dirNode.getImageFormat(), transparent);       
-	    	}
-	    	else
-	    	{
-		        // Save as PNG
-	    		ImageIO.write(imageOut, "png", file);
-	    		if (optionsDialog.convPVR() && dirNode.getImageFormat() == ImageFormat.PVR)
-	    		{
-	    			String strCmd = optionsDialog.getTextToolPath();
-	    			if (optionsDialog.isPVR4Bit())
-	    				strCmd += " -fOGLPVRTC4 ";
-	    			else
-	    				strCmd += " -fOGLPVRTC2 ";
-	    			strCmd += " -pvrtciterations7 -yflip0 -i" + dir+fileName + " -o" + dir+name;
-	    			Runtime.getRuntime().exec(strCmd);
-	    		}
-	    	}
+	        // Save as PNG
+    		ImageIO.write(imageOut, "png", file);
 	    } 
-	    catch (Exception e)
+	    catch (IOException e)
 	    {
-	        System.out.println("error: "+e.toString());
-	    	strErr = "error: "+e.toString() + "processing " + name;
-			JOptionPane.showMessageDialog(null, strErr, "Error", JOptionPane.INFORMATION_MESSAGE); 
+	    	throw new RuntimeException("Could not save " + file.getName(), e);
 	    }
-		catch (OutOfMemoryError e) 
-		{
-	    	strErr = "error: "+e.toString() + "processing " + name;
-			JOptionPane.showMessageDialog(null, strErr, "Error", JOptionPane.INFORMATION_MESSAGE); 
-		}
 	}
+	
 	public int getHeight()
 	{
 		return height;
 	}
+	
 	public BufferedImage getImageDisplay()
 	{
 		return imageDisplay;
 	}
+	
 	public ArrayList<AtlasImage> getListImage()
 	{
-		return listImage;
+		return images;
 	}
-	public String getStrErr()
-	{
-		return strErr;
-	}
+	
 	public int getWidth()
 	{
 		return width;
 	}
+	
 	public void setSize(int width, int height)
 	{
 		this.width = width;
 		this.height = height;
 	}
+	
 	public int getPixels()
 	{
-		return width*height;
+		return width * height;
 	}
+	
 	public String getName()
 	{
 		return name;
 	}
+	
 	public String getStrAtlasData()
 	{
 		return strAtlasData;
