@@ -20,9 +20,8 @@ public class TweakDimensions
 		tweakWidthHeight(binPacker, listImage, true);
 		binPacker.setSize(origWidth, origHeight);
 		tweakWidthHeight(binPacker, listImage, false);
-		if (bestWidth != binPacker.getWidth() ||
-			bestHeight != binPacker.getHeight())
-		{	
+		if (bestWidth != binPacker.getWidth() || bestHeight != binPacker.getHeight())
+		{
 			binPacker.resize(bestWidth, bestHeight, listImage); 
 			binPacker.pack(listImage);
 		}
@@ -41,16 +40,16 @@ public class TweakDimensions
 			prevWidth = width;
 			prevHeight = height;
 			prevSavings = savings;
-			// reduce by two pixes to force minimum re-organise
+			// reduce by two pixels to force minimum re-organise
 			if (doWidth)
 			{
 				width = binPacker.getWidth() - 1;
-//				height = origWidth*origHeight/width;
+//				height = origWidth * origHeight / width;
 			}
 			else
 			{
 				height = binPacker.getHeight() - 1;
-//				width = origWidth*origHeight/height;
+//				width = origWidth * origHeight / height;
 			}
 			binPacker.resize(width, height, listImage); 
 			binPacker.pack(listImage);
