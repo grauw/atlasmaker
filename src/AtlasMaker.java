@@ -88,7 +88,7 @@ public class AtlasMaker
 		if (!textureSize.isPowerOfTwo())
 		{
 			TweakDimensions tweakDimensions = new TweakDimensions();
-			tweakDimensions.run(packer.get(packer.size() - 1), listImage);
+			tweakDimensions.run(packer.getLastTextureBin(), listImage);
 			
 			packer.trim();
 		}

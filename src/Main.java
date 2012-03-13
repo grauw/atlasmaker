@@ -11,6 +11,7 @@ public class Main
 		
 		AtlasMaker atlasMaker = new AtlasMaker();
 		BinPacker packer = atlasMaker.create(files, outFile);
+		TextureBin[] bins = packer.getTextureBins();
 	}
 	
 	public static File[] getFiles(File dir)

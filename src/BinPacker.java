@@ -1,9 +1,23 @@
 import java.io.File;
 import java.util.ArrayList;
 
-public class BinPacker extends ArrayList<TextureBin>
+public class BinPacker
 {
-	private static final long serialVersionUID = 1L;
+	private ArrayList<TextureBin> textureBins;
+	
+	public BinPacker() {
+		textureBins = new ArrayList<TextureBin>();
+	}
+	
+	public TextureBin[] getTextureBins()
+	{
+		return textureBins.toArray(new TextureBin[] {});
+	}
+	
+	public TextureBin getLastTextureBin()
+	{
+		return textureBins.get(textureBins.size() - 1);
+	}
 	
 	public void binPack(TextureSize textureSize, ArrayList<AtlasImage> atlasImages)
 	{
@@ -22,12 +36,12 @@ public class BinPacker extends ArrayList<TextureBin>
 			}
 			textureSize.getNextSizeFits(pixelsReq, maxWidth, maxHeight);
 			TextureBin bin = new TextureBin(textureSize.getWidth(), textureSize.getHeight());
-			this.add(bin);
+			textureBins.add(bin);
 			this.pack(atlasImages);
 			
 			if (atlasImages.size() == 0) 
 			{
-				if (this.size() > 1 && !textureSize.isMinSize())
+				if (textureBins.size() > 1 && !textureSize.isMinSize())
 				{
 					// there is opportunity for further reduction
 					// because some images might fit in gaps of previous atlases
@@ -68,7 +82,7 @@ public class BinPacker extends ArrayList<TextureBin>
 		for (int i = images.size() - 1; i >= 0; i--)
 		{
 			boolean added = false;
-			for (TextureBin bin : this)
+			for (TextureBin bin : textureBins)
 			{
 				if (bin.add(images.get(i)))
 				{
@@ -85,13 +99,13 @@ public class BinPacker extends ArrayList<TextureBin>
 	public void write(File outFile)
 	{
 		int i = 0;
-		for (TextureBin bin : this)
+		for (TextureBin bin : textureBins)
 			bin.write(outFile, i++);
 	}
 	
 	public void trim()
 	{
-		for (TextureBin bin : this)
+		for (TextureBin bin : textureBins)
 			bin.trim();
 	}
 }
