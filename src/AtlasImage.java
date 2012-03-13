@@ -212,15 +212,8 @@ public class AtlasImage
 		return true;
 	}
 
-	public String GetSerialize() 
+	public String toXMLString() 
 	{
-//		String str = "image name="+fileName + " x=" + x + " y=" + y + 
-//		" width=" + opaqueWidth + " height=" + opaqueHeight;
-//		if (xOffset != 0) str += " xOffset=" + xOffset;
-//		if (yOffset != 0) str += " yOffset=" + yOffset;
-//		if (opaqueWidth != transWidth) str += " transWidth=" + transWidth;
-//		if (opaqueHeight != transHeight) str += " transHeight=" + transHeight;
-//		if (!transparent) str += " trans="+transparent;
 		String str = "    <image name=\""+fileName + 
 			"\" x=\"" + x + 
 			"\" y=\"" + y + 

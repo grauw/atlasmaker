@@ -29,8 +29,6 @@ import javax.imageio.ImageIO;
 public class TexturePiece
 {
 	private ArrayList<AtlasImage> images;
-	private String name;
-	private String strAtlasData;
 	private int width;
 	private int height;
 	
@@ -80,52 +78,32 @@ public class TexturePiece
 				return true;
 		return false;
 	}
+
+	public void write(File outFile, int index)
+	{
+		write(new File(outFile.getPath() + "-" + index + ".png"));
+	}
 	
-	public void createStuff(String strOutFile, int index)
+	public void write(File outFile)
 	{
 		BufferedImage imageOut = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g = imageOut.createGraphics();
-		String stub = strOutFile;
-		String dir = "";
-		String fileName ="";
-		name = strOutFile;
 		
-		int posDir = strOutFile.lastIndexOf(File.separatorChar);
-		if (posDir != -1)
-		{
-			stub = strOutFile.substring(posDir + 1);
-			dir = strOutFile.substring(0, posDir + 1);
-		}
-		
-		name = stub + "-" + index + ".png";
-		fileName = name;
-		
-		strAtlasData = "  <texture file=\"" + name + "\" trans=\"";
-		if (isTransparent())
-			strAtlasData += "true";
-		else
-			strAtlasData += "false";
-		strAtlasData += "\">\n";
 		Collections.sort(images, new CompareName());
 		
 		for (AtlasImage image : images)
 		{
 			image.draw(g);
-			strAtlasData += image.GetSerialize();
 		}
-		strAtlasData += "  </texture>\n";
 		g.dispose();
 		
-		//  Write generated image to a file
-		File file = new File(dir, fileName);
 		try
 		{
-			// Save as PNG
-			ImageIO.write(imageOut, "png", file);
+			ImageIO.write(imageOut, "png", outFile);
 		}
 		catch (IOException e)
 		{
-			throw new RuntimeException("Could not save " + file.getName(), e);
+			throw new RuntimeException("Could not save " + outFile.getName(), e);
 		}
 	}
 	
@@ -155,13 +133,21 @@ public class TexturePiece
 		return width * height;
 	}
 	
-	public String getName()
+	public String toXMLString(File outFile)
 	{
-		return name;
-	}
-	
-	public String getStrAtlasData()
-	{
+		String strAtlasData = "  <texture file=\"" + outFile.getName() + "\" trans=\"";
+		if (isTransparent())
+			strAtlasData += "true";
+		else
+			strAtlasData += "false";
+		strAtlasData += "\">\n";
+		Collections.sort(images, new CompareName());
+		
+		for (AtlasImage image : images)
+		{
+			strAtlasData += image.toXMLString();
+		}
+		strAtlasData += "  </texture>\n";
 		return strAtlasData;
 	}
 }

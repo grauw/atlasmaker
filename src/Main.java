@@ -7,9 +7,10 @@ public class Main
 	public static void main(String[] args)
 	{
 		File[] files = getFiles(new File("/Users/rcuser/Development/game/client/Content/Art/GUI2/menu/200"));
+		File outFile = new File("/Users/rcuser/Development/AtlasMaker/output/menu200");
 		
 		AtlasMaker atlasMaker = new AtlasMaker();
-		ArrayList<TexturePiece> texturePieces = atlasMaker.create(files, "/Users/rcuser/Development/AtlasMaker/output/menu200");
+		ArrayList<TexturePiece> texturePieces = atlasMaker.create(files, outFile);
 	}
 	
 	public static File[] getFiles(File dir)
