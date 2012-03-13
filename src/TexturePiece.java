@@ -29,7 +29,6 @@ import javax.imageio.ImageIO;
 public class TexturePiece
 {
 	private ArrayList<AtlasImage> images;
-	private BufferedImage imageDisplay;
 	private String name;
 	private String strAtlasData;
 	private int width;
@@ -84,11 +83,8 @@ public class TexturePiece
 	
 	public void createStuff(String strOutFile, int index)
 	{
-		imageDisplay = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 		BufferedImage imageOut = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g = imageOut.createGraphics();
-		Graphics2D gDisplay = imageDisplay.createGraphics();
-		gDisplay.setColor(new Color(0x022370));
 		String stub = strOutFile;
 		String dir = "";
 		String fileName ="";
@@ -115,14 +111,10 @@ public class TexturePiece
 		for (n = 0; n < images.size(); n++) 
 		{
 			images.get(n).draw(g);
-			images.get(n).drawWithBorder(gDisplay);
 			strAtlasData += images.get(n).GetSerialize();
 		} 
 		strAtlasData += "  </texture>\n";
-		gDisplay.setColor(Color.black);
-		gDisplay.drawRect(0, 0, imageOut.getWidth() - 1, imageOut.getHeight() - 1);
 		g.dispose();
-		gDisplay.dispose();
 		
 		//  Write generated image to a file
 		File file = new File(dir, fileName);
@@ -140,11 +132,6 @@ public class TexturePiece
 	public int getHeight()
 	{
 		return height;
-	}
-	
-	public BufferedImage getImageDisplay()
-	{
-		return imageDisplay;
 	}
 	
 	public ArrayList<AtlasImage> getListImage()
