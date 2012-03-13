@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 
-public class TweekDimensions
+public class TweakDimensions
 {
 	private int bestSavings;
 	private int bestWidth;
@@ -17,9 +17,9 @@ public class TweekDimensions
 		origHeight = binPacker.getTexturePiece().getHeight();
 		bestWidth = origWidth;
 		bestHeight = origHeight;
-		tweekWidthHeight(binPacker, listImage, true);
+		tweakWidthHeight(binPacker, listImage, true);
 		binPacker.getTexturePiece().setSize(origWidth, origHeight);
-		tweekWidthHeight(binPacker, listImage, false);
+		tweakWidthHeight(binPacker, listImage, false);
 		if (bestWidth != binPacker.getTexturePiece().getWidth() ||
 			bestHeight != binPacker.getTexturePiece().getHeight())
 		{	
@@ -29,7 +29,7 @@ public class TweekDimensions
 		assert(listImage.size() == 0);
 	}
 	
-	private void tweekWidthHeight(BinPacker binPacker, ArrayList<AtlasImage> listImage, boolean doWidth)
+	private void tweakWidthHeight(BinPacker binPacker, ArrayList<AtlasImage> listImage, boolean doWidth)
 	{
 		int width = origWidth; 
 		int height = origHeight;

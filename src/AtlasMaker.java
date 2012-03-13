@@ -86,8 +86,8 @@ public class AtlasMaker
 		// try making texture size smaller by making it more rectangular
 		if (!textureSize.isPowerOfTwo())
 		{
-			TweekDimensions tweekDimensions = new TweekDimensions();
-			tweekDimensions.run(binPackerList.get(binPackerList.size() - 1), listImage);
+			TweakDimensions tweakDimensions = new TweakDimensions();
+			tweakDimensions.run(binPackerList.get(binPackerList.size() - 1), listImage);
 			
 			binPackerList.trim();
 		}
