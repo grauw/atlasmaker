@@ -23,15 +23,10 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
-
 public class AtlasImage 
 {
 	private int border;
 	private int x;
-	public void setBorder(int border)
-	{
-		this.border = border;
-	}
 	private int y;
 	private int xOffset;
 	private int yOffset;
@@ -40,103 +35,126 @@ public class AtlasImage
 	private int transWidth;
 	private int transHeight;
 	private boolean transparent;
-	public boolean isTransparent()
-	{
-		return transparent;
-	}
 	private BufferedImage image;
 	private String fileName;
+	
 	public AtlasImage()
 	{
 		border = 0;
 	}
 	
+	public void setBorder(int border)
+	{
+		this.border = border;
+	}
+	
+	public boolean isTransparent()
+	{
+		return transparent;
+	}
+	
 	public void load(File file) throws IOException
 	{
-	    image = ImageIO.read(file);
-	    this.fileName = file.getName().substring(0, file.getName().length() - 4);
+		image = ImageIO.read(file);
+		this.fileName = file.getName().substring(0, file.getName().length() - 4);
 	}
 	
 	public boolean hasAlphaBorder()
 	{
 		return opaqueWidth < image.getWidth() || opaqueHeight < image.getHeight();
 	}
+	
 	public BufferedImage getImage()
 	{
 		return image;
 	}
+	
 	public int getNumPixels()
 	{
-		return (opaqueHeight+border)*(opaqueWidth+border);
+		return (opaqueHeight + border) * (opaqueWidth + border);
 	}
+	
 	public boolean pointInside(int xTest, int yTest)
 	{
 		return xTest > x && xTest < x + getWidth() &&
 				yTest > y && yTest < y + getHeight();
 	}
+	
 	public int getHeight()
 	{
-		return image.getHeight()+border;
+		return image.getHeight() + border;
 	}
+	
 	public int getWidth()
 	{
-		return image.getWidth()+border;
-	}	
+		return image.getWidth() + border;
+	}
+	
 	public int getBottom()
 	{
 		return y + image.getHeight();
 	}
+	
 	public int getRight()
 	{
 		return x + image.getWidth();
 	}
+	
 	public void setImage(BufferedImage image)
 	{
 		this.image = image;
 	}
+	
 	public void draw(Graphics2D g)
 	{
-        g.drawImage(image, null, x, y);		
+		g.drawImage(image, null, x, y);		
 	}
+	
 	public void drawWithBorder(Graphics2D g)
 	{
-        g.drawImage(image, null, x, y);		
-        g.drawRect(x, y, getWidth()-1-border, getHeight()-1-border);
+		g.drawImage(image, null, x, y);		
+		g.drawRect(x, y, getWidth() - 1 - border, getHeight() - 1 - border);
 	}
+	
 	public int getX()
 	{
 		return x;
 	}
+	
 	public void setX(int x)
 	{
 		this.x = x;
 	}
+	
 	public int getY()
 	{
 		return y;
 	}
+	
 	public void setY(int y)
 	{
 		this.y = y;
 	}
+	
 	public void setXY(int x, int y)
 	{
 		this.x = x;
 		this.y = y;
 	}
+	
 	public void cropTransparent(int alphaThresh) 
 	{
-		if (!DetectAlpha(alphaThresh)) return;
+		if (!detectAlpha(alphaThresh)) return;
 		BufferedImage imageCut;
-        imageCut = new BufferedImage(opaqueWidth, opaqueHeight, 
-        		BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g = imageCut.createGraphics();
-        g.drawImage(image, null, -xOffset, -yOffset);		
-        g.dispose();
+		imageCut = new BufferedImage(opaqueWidth, opaqueHeight, 
+				BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g = imageCut.createGraphics();
+		g.drawImage(image, null, -xOffset, -yOffset);		
+		g.dispose();
 		image = imageCut;
 	}
 
-	public boolean DetectAlpha(int alphaThresh) 
+	public boolean detectAlpha(int alphaThresh) 
 	{
 		transWidth = image.getWidth(null);
 		transHeight = image.getHeight(null);
@@ -149,20 +167,20 @@ public class AtlasImage
 		{
 			return false;
 		}
-	    image.getRGB(0, 0, transWidth, transHeight, srcPixels, 0, transWidth);
-	    
+		image.getRGB(0, 0, transWidth, transHeight, srcPixels, 0, transWidth);
+		
 		int srcX, srcY;
 		int alpha;
-		int xFirst = transWidth+1;
+		int xFirst = transWidth + 1;
 		int xLast = -1;
-		int yFirst = transHeight+1;
+		int yFirst = transHeight + 1;
 		int yLast = -1;
 		transparent = false;
 		for (srcY = 0; srcY < transHeight; ++srcY) 
 		{
 			for (srcX = 0; srcX < transWidth; ++srcX) 
 			{
-				alpha = (srcPixels[srcX + srcY * transWidth] >>24) & 0xff;
+				alpha = (srcPixels[srcX + srcY * transWidth] >> 24) & 0xff;
 				if (alpha > alphaThresh)
 				{
 					if (xLast < srcX) xLast = srcX;  
@@ -176,20 +194,20 @@ public class AtlasImage
 				}
 			}
 		}
-		opaqueWidth = xLast-xFirst+1;
-		opaqueHeight = yLast-yFirst+1;
+		opaqueWidth = xLast - xFirst + 1;
+		opaqueHeight = yLast - yFirst + 1;
 		if (opaqueWidth < 1 || opaqueHeight < 1)
 		{
-	        xOffset = 0;
-	        yOffset = 0;
-	        opaqueWidth = 1;
-	        opaqueHeight = 1;
-	        System.out.println("Warning: image with no opaque pixels!" + fileName);
+			xOffset = 0;
+			yOffset = 0;
+			opaqueWidth = 1;
+			opaqueHeight = 1;
+			System.out.println("Warning: image with no opaque pixels!" + fileName);
 		}
 		else
 		{
-	        xOffset = xFirst;
-	        yOffset = yFirst;
+			xOffset = xFirst;
+			yOffset = yFirst;
 		}
 		return true;
 	}
@@ -216,6 +234,7 @@ public class AtlasImage
 		str += "\"/>\n";
 		return str;
 	}
+	
 	public String getFileName()
 	{
 		return fileName;

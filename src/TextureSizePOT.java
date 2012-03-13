@@ -2,10 +2,12 @@
 public class TextureSizePOT extends TextureSize
 {
 	protected int ixSize;
+	
 	public TextureSizePOT(int maxSize)
 	{
 		super(maxSize);
 	}
+	
 	public void getNextSizeFits(int pixelsReq, int maxWidth, int maxHeight)
 	{
 		ixSize = 0;
@@ -21,6 +23,7 @@ public class TextureSizePOT extends TextureSize
 			ixSize++;
 		}
 	}
+	
 	public void inc()
 	{
 		// swap height and width if it's not square
@@ -38,6 +41,7 @@ public class TextureSizePOT extends TextureSize
 		ixSize++;
 		checkMax();
 	}
+	
 	public void dec()
 	{
 		if (height < width)
@@ -46,5 +50,8 @@ public class TextureSizePOT extends TextureSize
 			height /= 2;
 		checkMin();
 	}
-	public boolean isNPOT() { return false; }
+	
+	public boolean isNPOT() {
+		return false;
+	}
 }

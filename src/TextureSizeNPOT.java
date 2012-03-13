@@ -2,11 +2,13 @@
 public class TextureSizeNPOT extends TextureSize
 {
 	protected int ixSize;
+	public static int STEP_SIZE = 64;
+	
 	public TextureSizeNPOT(int maxSize)
 	{
 		super(maxSize);
 	}
-	public static int STEP_SIZE = 64;
+	
 	public void inc()
 	{
 //		if (height > width && ixSize % 1 == 0)
@@ -22,6 +24,7 @@ public class TextureSizeNPOT extends TextureSize
 //		ixSize++;
 		checkMax();
 	}
+	
 	public void dec()
 	{
 		if (height < width)
@@ -31,6 +34,7 @@ public class TextureSizeNPOT extends TextureSize
 //		ixSize++;
 		checkMin();
 	}
+	
 	public void getNextSizeFits(int pixelsReq, int maxWidth, int maxHeight)
 	{
 		// some of the smaller images fit into the other textures
@@ -58,6 +62,9 @@ public class TextureSizeNPOT extends TextureSize
 		}
 		checkMax();
 	}
-	public boolean isNPOT() { return true; }
+	
+	public boolean isNPOT() {
+		return true;
+	}
 
 }

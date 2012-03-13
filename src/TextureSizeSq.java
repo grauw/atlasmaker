@@ -5,6 +5,7 @@ public class TextureSizeSq extends TextureSize
 	{
 		super(maxSize);
 	}
+	
 	public void getNextSizeFits(int pixelsReq, int maxWidth, int maxHeight)
 	{
 		width = 32;
@@ -15,16 +16,20 @@ public class TextureSizeSq extends TextureSize
 			inc();
 		}
 	}
-
+	
 	public void inc()
 	{
 		height *= 2;
 		width *= 2;
 	}
+	
 	public void dec()
 	{
 		height /= 2;
 		width /= 2;
 	}
-	public boolean isNPOT() { return false; }
+	
+	public boolean isNPOT() {
+		return false;
+	}
 }

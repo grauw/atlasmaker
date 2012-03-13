@@ -14,11 +14,11 @@ public class Main
 	
 	public static File[] getFiles(File dir)
 	{
-	    FilenameFilter filter = new FilenameFilter() {
-            public boolean accept(File dir, String name) {
-                return name.endsWith(".png");
-            }
-	    };
-	    return dir.listFiles(filter);
+		FilenameFilter filter = new FilenameFilter() {
+			public boolean accept(File dir, String name) {
+				return name.endsWith(".png");
+			}
+		};
+		return dir.listFiles(filter);
 	}
 }

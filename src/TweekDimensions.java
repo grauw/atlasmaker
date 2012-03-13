@@ -8,8 +8,8 @@ public class TweekDimensions
 	private int bestHeight;
 	private int origWidth;
 	private int origHeight;
-	public void run(BinPacker binPacker, 
-			ArrayList<AtlasImage> listImage)
+	
+	public void run(BinPacker binPacker, ArrayList<AtlasImage> listImage)
 	{
 		bestSavings = 0;
 		binPacker.getTexturePiece().trim();
@@ -29,48 +29,46 @@ public class TweekDimensions
 		assert(listImage.size() == 0);
 	}
 	
-	private void tweekWidthHeight(BinPacker binPacker, 
-			ArrayList<AtlasImage> listImage, 
-			boolean doWidth)
+	private void tweekWidthHeight(BinPacker binPacker, ArrayList<AtlasImage> listImage, boolean doWidth)
 	{
 		int width = origWidth; 
 		int height = origHeight;
 		int savings, prevSavings;
 		savings = 0;
 		int prevWidth, prevHeight;
-	    do
-	    {
-	    	prevWidth = width;
-	    	prevHeight = height;
-	    	prevSavings = savings;
-	    	// reduce by two pixes to force minimum re-organise
-	    	if (doWidth)
-	    	{
-		    	width = binPacker.getTexturePiece().getWidth()-1;
-//		        height = origWidth*origHeight/width;
-	    	}
-	    	else
-	    	{
-	    		height = binPacker.getTexturePiece().getHeight()-1;
-//		        width = origWidth*origHeight/height;
-	    	}
+		do
+		{
+			prevWidth = width;
+			prevHeight = height;
+			prevSavings = savings;
+			// reduce by two pixes to force minimum re-organise
+			if (doWidth)
+			{
+				width = binPacker.getTexturePiece().getWidth()-1;
+//				height = origWidth*origHeight/width;
+			}
+			else
+			{
+				height = binPacker.getTexturePiece().getHeight()-1;
+//				width = origWidth*origHeight/height;
+			}
 			binPacker.resize(width, height, listImage); 
 			binPacker.pack(listImage);
 			if (listImage.size() > 0)
 			{
-	    		break;
+				break;
 			}
 			// check if we gained anything
 			binPacker.getTexturePiece().trim();
 			savings = origWidth*origHeight-
 				binPacker.getTexturePiece().getPixels();
-	    } while (savings >= prevSavings);
-	    if (bestSavings < prevSavings)
-	    {
-	    	bestSavings = prevSavings;
-	    	bestWidth = prevWidth;
-	    	bestHeight = prevHeight;
-	    }
+		} while (savings >= prevSavings);
+		
+		if (bestSavings < prevSavings)
+		{
+			bestSavings = prevSavings;
+			bestWidth = prevWidth;
+			bestHeight = prevHeight;
+		}
 	}
-
 }

@@ -39,7 +39,7 @@ public class TexturePiece
 	{
 		this.width = width;
 		this.height = height;
-    	images = new ArrayList<AtlasImage>();
+		images = new ArrayList<AtlasImage>();
 	}
 	
 	public void add(AtlasImage image)
@@ -67,74 +67,74 @@ public class TexturePiece
 		height = 0;
 		for (AtlasImage image : images)
 		{
-            if (width < image.getRight()) 
-            	width = image.getRight();
-            if (height < image.getBottom()) 
-            	height = image.getBottom();
+			if (width < image.getRight()) 
+				width = image.getRight();
+			if (height < image.getBottom()) 
+				height = image.getBottom();
 		} 
 	}
 	
 	public boolean isTransparent()
 	{
 		for (AtlasImage image : images)
-            if (image.isTransparent())
-            	return true;
+			if (image.isTransparent())
+				return true;
 		return false;
 	}
 	
 	public void createStuff(String strOutFile, int index)
 	{
-	    imageDisplay = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-	    BufferedImage imageOut = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-	    Graphics2D g = imageOut.createGraphics();
-	    Graphics2D gDisplay = imageDisplay.createGraphics();
-	    gDisplay.setColor(new Color(0x022370));
-	    String stub = strOutFile;
-	    String dir = "";
-	    String fileName ="";
-	    name = strOutFile;
-	    
-	    int posDir = strOutFile.lastIndexOf(File.separatorChar);
-	    if (posDir != -1)
-	    {
-	    	stub = strOutFile.substring(posDir + 1);
-	    	dir = strOutFile.substring(0, posDir + 1);
-	    }
-	    
+		imageDisplay = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage imageOut = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g = imageOut.createGraphics();
+		Graphics2D gDisplay = imageDisplay.createGraphics();
+		gDisplay.setColor(new Color(0x022370));
+		String stub = strOutFile;
+		String dir = "";
+		String fileName ="";
+		name = strOutFile;
+		
+		int posDir = strOutFile.lastIndexOf(File.separatorChar);
+		if (posDir != -1)
+		{
+			stub = strOutFile.substring(posDir + 1);
+			dir = strOutFile.substring(0, posDir + 1);
+		}
+		
 		name = stub + "-" + index + ".png";
 		fileName = name;
 		
-	    strAtlasData = "  <texture file=\"" + name + "\" trans=\"";
-	    if (isTransparent())
-	    	strAtlasData += "true";
-	    else
-	    	strAtlasData += "false";
-	    strAtlasData += "\">\n";
-	    Collections.sort(images, new CompareName());
-	    int n;
-	    for (n = 0; n < images.size(); n++) 
-	    {
-	    	images.get(n).draw(g);
-	    	images.get(n).drawWithBorder(gDisplay);
-	    	strAtlasData += images.get(n).GetSerialize();
-	    } 
-	    strAtlasData += "  </texture>\n";
-	    gDisplay.setColor(Color.black);
-	    gDisplay.drawRect(0, 0, imageOut.getWidth()-1, imageOut.getHeight()-1);       
-	    g.dispose();
-	    gDisplay.dispose();
-	    
-	    //  Write generated image to a file
-	    File file = new File(dir, fileName);
-	    try
-	    {
-	        // Save as PNG
-    		ImageIO.write(imageOut, "png", file);
-	    } 
-	    catch (IOException e)
-	    {
-	    	throw new RuntimeException("Could not save " + file.getName(), e);
-	    }
+		strAtlasData = "  <texture file=\"" + name + "\" trans=\"";
+		if (isTransparent())
+			strAtlasData += "true";
+		else
+			strAtlasData += "false";
+		strAtlasData += "\">\n";
+		Collections.sort(images, new CompareName());
+		int n;
+		for (n = 0; n < images.size(); n++) 
+		{
+			images.get(n).draw(g);
+			images.get(n).drawWithBorder(gDisplay);
+			strAtlasData += images.get(n).GetSerialize();
+		} 
+		strAtlasData += "  </texture>\n";
+		gDisplay.setColor(Color.black);
+		gDisplay.drawRect(0, 0, imageOut.getWidth() - 1, imageOut.getHeight() - 1);
+		g.dispose();
+		gDisplay.dispose();
+		
+		//  Write generated image to a file
+		File file = new File(dir, fileName);
+		try
+		{
+			// Save as PNG
+			ImageIO.write(imageOut, "png", file);
+		}
+		catch (IOException e)
+		{
+			throw new RuntimeException("Could not save " + file.getName(), e);
+		}
 	}
 	
 	public int getHeight()

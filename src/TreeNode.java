@@ -26,6 +26,7 @@ public class TreeNode
 	private TreeNode leaf1 = null;
 	private TreeNode leaf2 = null;
 	private String fileName;		// used for debugging only
+	
 	public TreeNode(int x, int y, int width, int height, String fileName)
 	{
 		this.x = x;
@@ -34,6 +35,7 @@ public class TreeNode
 		this.height = height;
 		this.fileName = fileName;
 	}
+	
 	public void resize(int width, int height)
 	{
 		this.x = 0;
@@ -44,6 +46,7 @@ public class TreeNode
 		leaf1 = null;
 		leaf2 = null;
 	}
+	
 	public void createBranches(AtlasImage image)
 	{
 		int dx = width - image.getWidth();
@@ -54,25 +57,26 @@ public class TreeNode
 		if (dx < dy)	
 		{
 			//	split so the top is cut in half and the rest is one big rect below
-			leaf1 = new TreeNode(x + image.getWidth(), y, 
+			leaf1 = new TreeNode(x + image.getWidth(), y,
 					width - image.getWidth(), image.getHeight(), image.getFileName());
-			leaf2 = new TreeNode(x, y + image.getHeight(), 
+			leaf2 = new TreeNode(x, y + image.getHeight(),
 					width, height - image.getHeight(), image.getFileName());
 		}
 		else
 		{
 			//	leaf1 = left (cut in half)
-			leaf1 = new TreeNode(x, y + image.getHeight(), 
+			leaf1 = new TreeNode(x, y + image.getHeight(),
 					image.getWidth(), height - image.getHeight(), image.getFileName());
 			// leaf2 = right (not cut)
-			leaf2 = new TreeNode(x + image.getWidth(), y, 
+			leaf2 = new TreeNode(x + image.getWidth(), y,
 					width - image.getWidth(), height, image.getFileName());
 		}
 	}
+	
 	public boolean add(AtlasImage image)
 	{
 		if (empty())
-		{	
+		{
 			if (fits(image))
 			{
 				createBranches(image);
@@ -81,20 +85,22 @@ public class TreeNode
 			}
 			return false;
 		}
-		if (leaf1.add(image)) 
+		if (leaf1.add(image))
 		{
 			return true;
 		}
-		if (leaf2.add(image)) 
+		if (leaf2.add(image))
 		{
 			return true;
 		}
-		return false;		
+		return false;
 	}
+	
 	public boolean fits(AtlasImage image)
 	{
 		return image.getWidth() <= width && image.getHeight() <= height;
 	}
+	
 	public boolean empty()
 	{
 		return leaf1 == null && leaf2 == null;
