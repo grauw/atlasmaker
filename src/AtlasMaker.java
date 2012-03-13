@@ -73,7 +73,7 @@ public class AtlasMaker
 		throw new RuntimeException("Unsupported square/powersOfTwo combination.");
 	}
 	
-	public BinPackerList create(File[] files, File outFile)
+	public BinPacker create(File[] files, File outFile)
 	{
 		if (files == null || files.length == 0)
 			throw new RuntimeException("No files specified.");
@@ -81,21 +81,21 @@ public class AtlasMaker
 		ArrayList<AtlasImage> listImage = createAtlasImages(files);
 		
 		TextureSize textureSize = getTextureSize();
-		BinPackerList binPackerList = new BinPackerList();
-		binPackerList.binPack(textureSize, listImage);
+		BinPacker packer = new BinPacker();
+		packer.binPack(textureSize, listImage);
 		
 		// try making texture size smaller by making it more rectangular
 		if (!textureSize.isPowerOfTwo())
 		{
 			TweakDimensions tweakDimensions = new TweakDimensions();
-			tweakDimensions.run(binPackerList.get(binPackerList.size() - 1), listImage);
+			tweakDimensions.run(packer.get(packer.size() - 1), listImage);
 			
-			binPackerList.trim();
+			packer.trim();
 		}
 		
-		binPackerList.write(outFile);
+		packer.write(outFile);
 		
-		return binPackerList;
+		return packer;
 	}
 	
 	private ArrayList<AtlasImage> createAtlasImages(File[] files)

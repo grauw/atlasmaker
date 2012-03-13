@@ -1,7 +1,7 @@
 import java.io.File;
 import java.util.ArrayList;
 
-public class BinPackerList extends ArrayList<TextureBin>
+public class BinPacker extends ArrayList<TextureBin>
 {
 	private static final long serialVersionUID = 1L;
 	
