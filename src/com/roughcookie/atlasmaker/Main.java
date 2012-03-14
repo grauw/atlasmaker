@@ -90,7 +90,7 @@ public class Main
 	{
 		for (AtlasMaker atlas : getAtlasMakers())
 		{
-			BinPacker packer = atlas.create();
+			atlas.create();
 		}
 	}
 }
