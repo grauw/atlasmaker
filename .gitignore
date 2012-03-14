@@ -1,4 +1,5 @@
 /bin/
+/target/
 /output/
 /.project
 /.classpath

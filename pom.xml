@@ -7,8 +7,20 @@
 	<artifactId>atlasmaker</artifactId>
 	<version>1.0</version>
 
+	<licenses>
+		<license>
+			<name>Simplified BSD License</name>
+			<url>http://www.opensource.org/licenses/bsd-license.php</url>
+			<comments>This is a permissive free software license.</comments>
+		</license>
+	</licenses>
+
+	<properties>
+		<mainClass>com.roughcookie.atlasmaker.Main</mainClass>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
 	<build>
-		<sourceDirectory>src</sourceDirectory>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -16,7 +28,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>com.roughcookie.atlasmaker.Main</mainClass>
+							<mainClass>${mainClass}</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
