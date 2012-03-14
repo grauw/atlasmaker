@@ -227,7 +227,7 @@ public class AtlasImage
 	public JSONObject toJSON() throws JSONException 
 	{
 		JSONObject image = new JSONObject();
-		image.put("name", getRelativePath());
+		image.put("path", getRelativePath());
 		JSONObject coordinates = new JSONObject();
 		coordinates.put("x", x);
 		coordinates.put("y", y);
