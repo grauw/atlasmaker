@@ -169,7 +169,7 @@ public class TextureBin
 	public JSONObject toJSON() throws JSONException 
 	{
 		JSONObject texture = new JSONObject();
-		texture.put("file", outputFile.getName());
+		texture.put("path", outputFile.getName());
 		texture.put("width", width);
 		texture.put("height", height);
 		texture.put("transparent", isTransparent());
