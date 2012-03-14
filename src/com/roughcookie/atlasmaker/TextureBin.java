@@ -104,13 +104,13 @@ public class TextureBin
 				return true;
 		return false;
 	}
-
-	public void write(File outFile, int index)
+	
+	public void write(File outputDir, int index)
 	{
-		write(new File(outFile.getPath() + "-" + index + ".png"));
+		write(new File(outputDir, "atlas-" + index + ".png"));
 	}
 	
-	public void write(File outFile)
+	public void write(File outputFile)
 	{
 		BufferedImage imageOut = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g = imageOut.createGraphics();
@@ -125,11 +125,11 @@ public class TextureBin
 		
 		try
 		{
-			ImageIO.write(imageOut, "png", outFile);
+			ImageIO.write(imageOut, "png", outputFile);
 		}
 		catch (IOException e)
 		{
-			throw new RuntimeException("Could not save " + outFile.getName(), e);
+			throw new RuntimeException("Could not save " + outputFile.getName(), e);
 		}
 	}
 	

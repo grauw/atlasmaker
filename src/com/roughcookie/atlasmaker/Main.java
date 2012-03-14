@@ -1,27 +1,96 @@
 package com.roughcookie.atlasmaker;
+import java.io.BufferedReader;
 import java.io.File;
-import java.io.FilenameFilter;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.List;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
+
+import com.esotericsoftware.wildcard.Paths;
 
 public class Main
 {
+	public static Main main;
+	private File manifest;
+	
 	public static void main(String[] args)
 	{
-		File[] files = getFiles(new File("/Users/rcuser/Development/game/client/Content/Art/GUI2/menu/200"));
-		File outFile = new File("/Users/rcuser/Development/AtlasMaker/output/menu200");
-		
-		AtlasMaker atlasMaker = new AtlasMaker();
-		BinPacker packer = atlasMaker.create(files, outFile);
-		TextureBin[] bins = packer.getTextureBins();
+		main = new Main();
+		main.createAtlases();
 	}
 	
-	public static File[] getFiles(File dir)
+	public Main()
 	{
-		FilenameFilter filter = new FilenameFilter() {
-			public boolean accept(File dir, String name) {
-				return name.endsWith(".png");
+		manifest = new File("atlasManifest.json");
+	}
+	
+	public JSONObject getManifestJson()
+	{
+		try
+		{
+			BufferedReader manifestReader = new BufferedReader(new FileReader(manifest));
+			return new JSONObject(new JSONTokener(manifestReader));
+		}
+		catch (FileNotFoundException e)
+		{
+			throw new RuntimeException("File not found: " + manifest, e);
+		}
+		catch (JSONException e)
+		{
+			throw new RuntimeException("Error parsing JSON in file " + manifest, e);
+		}
+	}
+	
+	public List<AtlasMaker> getAtlasMakers()
+	{
+		JSONObject manifestJson = getManifestJson();
+		ArrayList<AtlasMaker> atlases = new ArrayList<AtlasMaker>();
+		
+		try
+		{
+			String[] atlasNames = JSONObject.getNames(manifestJson);
+			for (String atlasName : atlasNames)
+			{
+				JSONArray atlasFilePatterns = manifestJson.getJSONArray(atlasName);
+				
+				Paths paths = new Paths();
+				String baseDir = "/"; //manifest.getAbsoluteFile().getParent();
+				for (int i = 0; i < atlasFilePatterns.length(); i++)
+				{
+					paths.glob(baseDir, atlasFilePatterns.getString(i));
+				}
+				
+				if (paths.count() == 0)
+				{
+					System.out.println("No files found for atlas: " + atlasName);
+					continue;
+				}
+				
+				File outputDir = new File("./output/", atlasName);
+				outputDir.mkdirs();
+				AtlasMaker atlas = new AtlasMaker(paths.getFiles(), outputDir);
+				
+				atlases.add(atlas);
 			}
-		};
-		return dir.listFiles(filter);
+		}
+		catch (JSONException e)
+		{
+			throw new RuntimeException("Error processing JSON in file " + manifest, e);
+		}
+		
+		return atlases;
+	}
+	
+	public void createAtlases()
+	{
+		for (AtlasMaker atlas : getAtlasMakers())
+		{
+			BinPacker packer = atlas.create();
+		}
 	}
 }

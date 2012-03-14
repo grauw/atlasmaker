@@ -22,14 +22,23 @@ import java.util.*;
 
 public class AtlasMaker
 {
+	private List<File> sourceFiles;
+	private File outputDir;
 	private int maxSize = 1024;
 	private boolean powersOfTwo = true;
 	private boolean square = true;
 	private int alphaThreshold = 0;
 	private int imageBorder = 0;
 	
-	public AtlasMaker()
+	public AtlasMaker(List<File> sourceFiles, File outputDir)
 	{
+		if (sourceFiles == null || sourceFiles.size() == 0)
+			throw new RuntimeException("No files specified.");
+		if (outputDir == null || !outputDir.isDirectory())
+			throw new RuntimeException("Output location is not a directory.");
+		
+		this.sourceFiles = sourceFiles;
+		this.outputDir = outputDir;
 	}
 	
 	public void setMaxSize(int size)
@@ -74,12 +83,9 @@ public class AtlasMaker
 		throw new RuntimeException("Unsupported square/powersOfTwo combination.");
 	}
 	
-	public BinPacker create(File[] files, File outFile)
+	public BinPacker create()
 	{
-		if (files == null || files.length == 0)
-			throw new RuntimeException("No files specified.");
-		
-		ArrayList<AtlasImage> images = createAtlasImages(files);
+		ArrayList<AtlasImage> images = createAtlasImages(sourceFiles);
 		
 		TextureSize textureSize = getTextureSize();
 		BinPacker packer = new BinPacker();
@@ -94,12 +100,12 @@ public class AtlasMaker
 			packer.trim();
 		}
 		
-		packer.write(outFile);
+		packer.write(outputDir);
 		
 		return packer;
 	}
 	
-	private ArrayList<AtlasImage> createAtlasImages(File[] files)
+	private ArrayList<AtlasImage> createAtlasImages(List<File> files)
 	{
 		ArrayList<AtlasImage> images = new ArrayList<AtlasImage>();
 		for (File file : files)
