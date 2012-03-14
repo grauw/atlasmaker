@@ -3,6 +3,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,9 +32,10 @@ public class Main
 	
 	public JSONObject getManifestJson()
 	{
+		BufferedReader manifestReader = null;
 		try
 		{
-			BufferedReader manifestReader = new BufferedReader(new FileReader(manifest));
+			manifestReader = new BufferedReader(new FileReader(manifest));
 			return new JSONObject(new JSONTokener(manifestReader));
 		}
 		catch (FileNotFoundException e)
@@ -43,6 +45,15 @@ public class Main
 		catch (JSONException e)
 		{
 			throw new RuntimeException("Error parsing JSON in file " + manifest, e);
+		}
+		finally
+		{
+			try
+			{
+				if (manifestReader != null)
+					manifestReader.close();
+			}
+			catch (IOException e) {}
 		}
 	}
 	
