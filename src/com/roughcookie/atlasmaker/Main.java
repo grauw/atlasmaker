@@ -32,6 +32,12 @@ public class Main
 		outputDir = new File("./output");
 	}
 	
+	public Main(File manifest, File outputDir)
+	{
+		this.manifest = manifest;
+		this.outputDir = outputDir;
+	}
+	
 	public JSONObject getManifestJson()
 	{
 		BufferedReader manifestReader = null;
