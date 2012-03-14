@@ -168,7 +168,7 @@ public class TextureBin
 	public JSONObject toJSON() throws JSONException 
 	{
 		JSONObject texture = new JSONObject();
-		texture.put("file", outputFile.getPath());
+		texture.put("file", outputFile.getName());
 		texture.put("transparent", isTransparent());
 		JSONArray imagesJson = new JSONArray();
 		for (AtlasImage image : images)
