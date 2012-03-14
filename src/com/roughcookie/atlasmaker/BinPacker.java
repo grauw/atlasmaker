@@ -97,11 +97,11 @@ public class BinPacker
 		}
 	}
 	
-	public void write(File outFile)
+	public void write(File outputDir)
 	{
 		int i = 0;
 		for (TextureBin bin : textureBins)
-			bin.write(outFile, i++);
+			bin.write(outputDir, i++);
 	}
 	
 	public void trim()
