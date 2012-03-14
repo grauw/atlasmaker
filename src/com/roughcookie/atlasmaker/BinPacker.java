@@ -1,12 +1,21 @@
 package com.roughcookie.atlasmaker;
+
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 public class BinPacker
 {
+	private File outputDir;
 	private ArrayList<TextureBin> textureBins;
 	
-	public BinPacker() {
+	public BinPacker(File outputDir) {
+		this.outputDir = outputDir;
 		textureBins = new ArrayList<TextureBin>();
 	}
 	
@@ -22,7 +31,7 @@ public class BinPacker
 	
 	public void pack(TextureSize textureSize, ArrayList<AtlasImage> atlasImages)
 	{
-		while(true)
+		for (int i = 0; ; i++)
 		{
 			int maxWidth = 0;
 			int maxHeight = 0;
@@ -36,7 +45,7 @@ public class BinPacker
 				pixelsReq += atlasImage.getNumPixels();
 			}
 			textureSize.getNextSizeFits(pixelsReq, maxWidth, maxHeight);
-			TextureBin bin = new TextureBin(textureSize.getWidth(), textureSize.getHeight());
+			TextureBin bin = new TextureBin(outputDir, i, textureSize);
 			textureBins.add(bin);
 			this.pack(atlasImages);
 			
@@ -97,16 +106,55 @@ public class BinPacker
 		}
 	}
 	
-	public void write(File outputDir)
-	{
-		int i = 0;
-		for (TextureBin bin : textureBins)
-			bin.write(outputDir, i++);
-	}
-	
 	public void trim()
 	{
 		for (TextureBin bin : textureBins)
 			bin.trim();
+	}
+	
+	public void write()
+	{
+		for (TextureBin bin : textureBins)
+			bin.write();
+		writeIndex();
+	}
+	
+	public void writeIndex()
+	{
+		File index = new File(outputDir, "index.json");
+		
+		BufferedWriter indexWriter = null;
+		try
+		{
+			indexWriter = new BufferedWriter(new FileWriter(index));
+			toJSON().write(indexWriter);
+		}
+		catch (IOException e)
+		{
+			throw new RuntimeException("Error writing index: " + index, e);
+		}
+		catch (JSONException e)
+		{
+			throw new RuntimeException("Error serializing index: " + index, e);
+		}
+		finally
+		{
+			try
+			{
+				if (indexWriter != null)
+					indexWriter.close();
+			}
+			catch (IOException e) {}
+		}
+	}
+	
+	public JSONArray toJSON() throws JSONException 
+	{
+		JSONArray texturesJson = new JSONArray();
+		for (TextureBin bin : textureBins)
+		{
+			texturesJson.put(bin.toJSON());
+		}
+		return texturesJson;
 	}
 }

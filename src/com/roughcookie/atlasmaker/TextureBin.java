@@ -26,18 +26,29 @@ import java.util.ArrayList;
 import java.util.Collections;
 import javax.imageio.ImageIO;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class TextureBin
 {
+	private File outputFile;
 	private TreeNode treeNode;
 	private ArrayList<AtlasImage> images;
 	private int width;
 	private int height;
 	
-	public TextureBin(int width, int height)
+	public TextureBin(File outputDir, int index, TextureSize textureSize)
 	{
-		this.width = width;
-		this.height = height;
-		treeNode = new TreeNode(0, 0, width, height, "");
+		this(new File(outputDir, "atlas-" + index + ".png"), textureSize);
+	}
+	
+	public TextureBin(File outputFile, TextureSize textureSize)
+	{
+		this.outputFile = outputFile;
+		this.width = textureSize.getWidth();
+		this.height = textureSize.getHeight();
+		treeNode = new TreeNode(0, 0, width, height);
 		images = new ArrayList<AtlasImage>();
 	}
 	
@@ -105,12 +116,7 @@ public class TextureBin
 		return false;
 	}
 	
-	public void write(File outputDir, int index)
-	{
-		write(new File(outputDir, "atlas-" + index + ".png"));
-	}
-	
-	public void write(File outputFile)
+	public void write()
 	{
 		BufferedImage imageOut = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g = imageOut.createGraphics();
@@ -159,21 +165,17 @@ public class TextureBin
 		return width * height;
 	}
 	
-	public String toXMLString(File outFile)
+	public JSONObject toJSON() throws JSONException 
 	{
-		String strAtlasData = "  <texture file=\"" + outFile.getName() + "\" trans=\"";
-		if (isTransparent())
-			strAtlasData += "true";
-		else
-			strAtlasData += "false";
-		strAtlasData += "\">\n";
-		Collections.sort(images, new CompareName());
-		
+		JSONObject texture = new JSONObject();
+		texture.put("file", outputFile.getPath());
+		texture.put("transparent", isTransparent());
+		JSONArray imagesJson = new JSONArray();
 		for (AtlasImage image : images)
 		{
-			strAtlasData += image.toXMLString();
+			imagesJson.put(image.toJSON());
 		}
-		strAtlasData += "  </texture>\n";
-		return strAtlasData;
+		texture.put("images", imagesJson);
+		return texture;
 	}
 }

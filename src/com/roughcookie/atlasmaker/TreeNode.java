@@ -26,15 +26,20 @@ public class TreeNode
 	private int height;
 	private TreeNode leaf1 = null;
 	private TreeNode leaf2 = null;
-	private String fileName;		// used for debugging only
+	private AtlasImage image;		// used for debugging only
+
+	public TreeNode(int x, int y, int width, int height)
+	{
+		this(x, y, width, height, null);
+	}
 	
-	public TreeNode(int x, int y, int width, int height, String fileName)
+	public TreeNode(int x, int y, int width, int height, AtlasImage image)
 	{
 		this.x = x;
 		this.y = y;
 		this.width = width;
 		this.height = height;
-		this.fileName = fileName;
+		this.image = image;
 	}
 	
 	public void resize(int width, int height)
@@ -43,7 +48,7 @@ public class TreeNode
 		this.y = 0;
 		this.width = width;
 		this.height = height;
-		this.fileName = "";
+		this.image = null;
 		leaf1 = null;
 		leaf2 = null;
 	}
@@ -59,18 +64,18 @@ public class TreeNode
 		{
 			//	split so the top is cut in half and the rest is one big rect below
 			leaf1 = new TreeNode(x + image.getWidth(), y,
-					width - image.getWidth(), image.getHeight(), image.getFileName());
+					width - image.getWidth(), image.getHeight(), image);
 			leaf2 = new TreeNode(x, y + image.getHeight(),
-					width, height - image.getHeight(), image.getFileName());
+					width, height - image.getHeight(), image);
 		}
 		else
 		{
 			//	leaf1 = left (cut in half)
 			leaf1 = new TreeNode(x, y + image.getHeight(),
-					image.getWidth(), height - image.getHeight(), image.getFileName());
+					image.getWidth(), height - image.getHeight(), image);
 			// leaf2 = right (not cut)
 			leaf2 = new TreeNode(x + image.getWidth(), y,
-					width - image.getWidth(), height, image.getFileName());
+					width - image.getWidth(), height, image);
 		}
 	}
 	

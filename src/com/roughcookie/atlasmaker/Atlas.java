@@ -83,12 +83,12 @@ public class Atlas
 		throw new RuntimeException("Unsupported square/powersOfTwo combination.");
 	}
 	
-	public BinPacker create()
+	public void create()
 	{
 		ArrayList<AtlasImage> images = createAtlasImages(sourceFiles);
 		
 		TextureSize textureSize = getTextureSize();
-		BinPacker packer = new BinPacker();
+		BinPacker packer = new BinPacker(outputDir);
 		packer.pack(textureSize, images);
 		
 		// try making texture size smaller by making it more rectangular
@@ -100,9 +100,7 @@ public class Atlas
 			packer.trim();
 		}
 		
-		packer.write(outputDir);
-		
-		return packer;
+		packer.write();
 	}
 	
 	private ArrayList<AtlasImage> createAtlasImages(List<File> files)
@@ -139,7 +137,7 @@ public class Atlas
 		// don't add images that don't fit
 		if (image.getWidth() > maxSize || image.getHeight() > maxSize)
 		{
-			throw new RuntimeException("image too big to fit in texture: " + image.getFileName());
+			throw new RuntimeException("image too big to fit in texture: " + image.getFile());
 		}
 		
 		return image;

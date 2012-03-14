@@ -24,6 +24,9 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class AtlasImage 
 {
 	private int border;
@@ -48,6 +51,11 @@ public class AtlasImage
 	public void setBorder(int border)
 	{
 		this.border = border;
+	}
+	
+	public File getFile()
+	{
+		return file;
 	}
 	
 	public boolean isTransparent()
@@ -212,20 +220,22 @@ public class AtlasImage
 		}
 		return true;
 	}
-
-	public String toXMLString() 
+	
+	public JSONObject toJSON() throws JSONException 
 	{
-		String str = "    <image name=\"" + file.getName() + 
-			"\" x=\"" + x + 
-			"\" y=\"" + y + 
-			"\" width=\"" + opaqueWidth + 
-			"\" height=\"" + opaqueHeight;
-		if (xOffset != 0) str += "\" xOffset=\"" + xOffset;
-		if (yOffset != 0) str += "\" yOffset=\"" + yOffset;
-		if (opaqueWidth != transWidth) str += "\" transWidth=\"" + transWidth;
-		if (opaqueHeight != transHeight) str += "\" transHeight=\"" + transHeight;
-		if (!transparent) str += "\" trans=\""+transparent;
-		str += "\"/>\n";
-		return str;
+		JSONObject image = new JSONObject();
+		image.put("name", file.getPath());
+		JSONObject coordinates = new JSONObject();
+		coordinates.put("x", x);
+		coordinates.put("y", y);
+		coordinates.put("width", opaqueWidth);
+		coordinates.put("height", opaqueHeight);
+		image.put("coordinates", coordinates);
+		image.put("xOffset", xOffset);
+		image.put("yOffset", yOffset);
+		image.put("width", transWidth);
+		image.put("height", transHeight);
+		image.put("transparent", transparent);  // XXX not interesting?
+		return image;
 	}
 }
