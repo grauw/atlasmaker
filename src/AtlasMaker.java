@@ -78,17 +78,17 @@ public class AtlasMaker
 		if (files == null || files.length == 0)
 			throw new RuntimeException("No files specified.");
 		
-		ArrayList<AtlasImage> listImage = createAtlasImages(files);
+		ArrayList<AtlasImage> images = createAtlasImages(files);
 		
 		TextureSize textureSize = getTextureSize();
 		BinPacker packer = new BinPacker();
-		packer.binPack(textureSize, listImage);
+		packer.binPack(textureSize, images);
 		
 		// try making texture size smaller by making it more rectangular
 		if (!textureSize.isPowerOfTwo())
 		{
 			TweakDimensions tweakDimensions = new TweakDimensions();
-			tweakDimensions.run(packer.getLastTextureBin(), listImage);
+			tweakDimensions.run(packer.getLastTextureBin(), images);
 			
 			packer.trim();
 		}
