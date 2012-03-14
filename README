@@ -16,6 +16,7 @@ Table of contents
 - Output directory structure
 - Index json file format
 - Build instructions
+- Eclipse project setup
 
 Manifest JSON file format
 =========================
@@ -108,3 +109,22 @@ The project can be built with the Maven build tool:
   mvn package
 
 After this command, the executable jar can be found in the target directory.
+
+Eclipse project setup
+=====================
+
+To set up the project in Eclipse, first install the "m2e" plugin (Maven
+integration for Eclipse). You can find this plugin in the Eclipse Marketplace
+(Help / Eclipse Marketplace...).
+
+Then, to import the project in Eclipse, go to File / Import and choose
+Maven / Existing Maven Projects.
+
+When you try to launch the program it may ask you how to run it, choose run as
+Java Application.
+
+You may want to specify command line arguments in the build configuration, go
+to Run / Run configurations, select the correct entry and go to the Arguments
+tab. There, enter your command line arguments, e.g.:
+
+  /projects/game/client/Content/Art/atlasManifest.json ./output
