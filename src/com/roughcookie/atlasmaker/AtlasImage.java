@@ -41,10 +41,12 @@ public class AtlasImage
 	private boolean transparent;
 	private BufferedImage image;
 	private File file;
+	private File baseDir;  // base dir of source files for index (manifest location)
 	
-	public AtlasImage(File file)
+	public AtlasImage(File file, File baseDir)
 	{
 		this.file = file;
+		this.baseDir = baseDir;
 		border = 0;
 	}
 	
@@ -224,7 +226,7 @@ public class AtlasImage
 	public JSONObject toJSON() throws JSONException 
 	{
 		JSONObject image = new JSONObject();
-		image.put("name", file.getPath());
+		image.put("name", getRelativePath());
 		JSONObject coordinates = new JSONObject();
 		coordinates.put("x", x);
 		coordinates.put("y", y);
@@ -237,5 +239,21 @@ public class AtlasImage
 		image.put("height", transHeight);
 		image.put("transparent", transparent);  // XXX not interesting?
 		return image;
+	}
+	
+	private String getRelativePath()
+	{
+		try
+		{
+			String baseDirPath = baseDir.getCanonicalPath() + File.separator;
+			String filePath = file.getCanonicalPath();
+			if (!filePath.startsWith(baseDirPath))
+				throw new RuntimeException("Atlas file is not contained in manifest directory: " + file);
+			return filePath.substring(baseDirPath.length());
+		}
+		catch (IOException e)
+		{
+			throw new RuntimeException("IO exception while determining canonical path for file: " + file, e);
+		}
 	}
 }

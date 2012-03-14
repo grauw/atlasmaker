@@ -23,6 +23,7 @@ import java.util.*;
 public class Atlas
 {
 	private List<File> sourceFiles;
+	private File baseDir;  // base dir of source files for index (manifest location)
 	private File outputDir;
 	private int maxSize = 1024;
 	private boolean powersOfTwo = true;
@@ -30,7 +31,7 @@ public class Atlas
 	private int alphaThreshold = 0;
 	private int imageBorder = 0;
 	
-	public Atlas(List<File> sourceFiles, File outputDir)
+	public Atlas(List<File> sourceFiles, File baseDir, File outputDir)
 	{
 		if (sourceFiles == null || sourceFiles.size() == 0)
 			throw new RuntimeException("No files specified.");
@@ -38,6 +39,7 @@ public class Atlas
 			throw new RuntimeException("Output location is not a directory.");
 		
 		this.sourceFiles = sourceFiles;
+		this.baseDir = baseDir;
 		this.outputDir = outputDir;
 	}
 	
@@ -129,7 +131,7 @@ public class Atlas
 	
 	private AtlasImage createAtlasImage(File file) throws IOException
 	{
-		AtlasImage image = new AtlasImage(file);
+		AtlasImage image = new AtlasImage(file, baseDir);
 		image.setBorder(imageBorder);
 		image.load();
 		image.cropTransparent(alphaThreshold);

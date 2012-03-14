@@ -70,7 +70,7 @@ public class Main
 				JSONArray atlasFilePatterns = manifestJson.getJSONArray(atlasName);
 				
 				Paths paths = new Paths();
-				String baseDir = manifest.getAbsoluteFile().getParent();
+				String baseDir = manifest.getParent();
 				for (int i = 0; i < atlasFilePatterns.length(); i++)
 				{
 					paths.glob(baseDir, atlasFilePatterns.getString(i));
@@ -84,7 +84,7 @@ public class Main
 				
 				File outputDir = new File("./output/", atlasName);
 				outputDir.mkdirs();
-				Atlas atlas = new Atlas(paths.getFiles(), outputDir);
+				Atlas atlas = new Atlas(paths.getFiles(), manifest.getParentFile(), outputDir);
 				
 				atlases.add(atlas);
 			}
