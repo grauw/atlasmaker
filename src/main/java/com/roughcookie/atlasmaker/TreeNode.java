@@ -43,6 +43,10 @@ public class TreeNode
 		this.image = image;
 	}
 	
+	public AtlasImage getImage() {
+		return image;
+	}
+	
 	public void resize(int width, int height)
 	{
 		this.x = 0;
