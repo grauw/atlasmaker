@@ -20,7 +20,7 @@ public class BinPacker
 		return textureBins.get(textureBins.size() - 1);
 	}
 	
-	public void binPack(TextureSize textureSize, ArrayList<AtlasImage> atlasImages)
+	public void pack(TextureSize textureSize, ArrayList<AtlasImage> atlasImages)
 	{
 		while(true)
 		{
@@ -78,7 +78,7 @@ public class BinPacker
 		}
 	}
 	
-	public void pack(ArrayList<AtlasImage> images)
+	private void pack(ArrayList<AtlasImage> images)
 	{
 		for (int i = images.size() - 1; i >= 0; i--)
 		{

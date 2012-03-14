@@ -89,7 +89,7 @@ public class Atlas
 		
 		TextureSize textureSize = getTextureSize();
 		BinPacker packer = new BinPacker();
-		packer.binPack(textureSize, images);
+		packer.pack(textureSize, images);
 		
 		// try making texture size smaller by making it more rectangular
 		if (!textureSize.isPowerOfTwo())
