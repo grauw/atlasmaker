@@ -1,3 +1,4 @@
+package com.roughcookie.atlasmaker;
 /*
 Copyright (c) 2012, Ed Welch
 All rights reserved.

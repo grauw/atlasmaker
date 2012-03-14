@@ -1,6 +1,7 @@
-import java.util.*;
+package com.roughcookie.atlasmaker;
+import java.util.Comparator;
 
-public class CompareWidth implements Comparator<AtlasImage>
+public class CompareHeight implements Comparator<AtlasImage>
 {
 	public int compare(AtlasImage ai1, AtlasImage ai2) 
 	{

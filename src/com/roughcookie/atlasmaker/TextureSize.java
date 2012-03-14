@@ -1,3 +1,4 @@
+package com.roughcookie.atlasmaker;
 public abstract class TextureSize
 {
 	protected int width;

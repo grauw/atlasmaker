@@ -1,3 +1,4 @@
+package com.roughcookie.atlasmaker;
 
 public class TextureSizePOT extends TextureSize
 {

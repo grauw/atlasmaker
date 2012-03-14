@@ -1,3 +1,4 @@
+package com.roughcookie.atlasmaker;
 import java.util.Comparator;
 
 public class CompareName implements Comparator<AtlasImage>
