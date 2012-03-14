@@ -170,6 +170,8 @@ public class TextureBin
 	{
 		JSONObject texture = new JSONObject();
 		texture.put("file", outputFile.getName());
+		texture.put("width", width);
+		texture.put("height", height);
 		texture.put("transparent", isTransparent());
 		JSONArray imagesJson = new JSONArray();
 		for (AtlasImage image : images)
