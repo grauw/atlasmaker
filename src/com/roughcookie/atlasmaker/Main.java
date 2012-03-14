@@ -46,10 +46,10 @@ public class Main
 		}
 	}
 	
-	public List<AtlasMaker> getAtlasMakers()
+	public List<Atlas> getAtlasMakers()
 	{
 		JSONObject manifestJson = getManifestJson();
-		ArrayList<AtlasMaker> atlases = new ArrayList<AtlasMaker>();
+		ArrayList<Atlas> atlases = new ArrayList<Atlas>();
 		
 		try
 		{
@@ -73,7 +73,7 @@ public class Main
 				
 				File outputDir = new File("./output/", atlasName);
 				outputDir.mkdirs();
-				AtlasMaker atlas = new AtlasMaker(paths.getFiles(), outputDir);
+				Atlas atlas = new Atlas(paths.getFiles(), outputDir);
 				
 				atlases.add(atlas);
 			}
@@ -88,7 +88,7 @@ public class Main
 	
 	public void createAtlases()
 	{
-		for (AtlasMaker atlas : getAtlasMakers())
+		for (Atlas atlas : getAtlasMakers())
 		{
 			atlas.create();
 		}

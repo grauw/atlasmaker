@@ -20,7 +20,7 @@ OF THE POSSIBILITY OF SUCH DAMAGE.
 import java.io.*;
 import java.util.*;
 
-public class AtlasMaker
+public class Atlas
 {
 	private List<File> sourceFiles;
 	private File outputDir;
@@ -30,7 +30,7 @@ public class AtlasMaker
 	private int alphaThreshold = 0;
 	private int imageBorder = 0;
 	
-	public AtlasMaker(List<File> sourceFiles, File outputDir)
+	public Atlas(List<File> sourceFiles, File outputDir)
 	{
 		if (sourceFiles == null || sourceFiles.size() == 0)
 			throw new RuntimeException("No files specified.");
