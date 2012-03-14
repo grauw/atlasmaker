@@ -27,7 +27,7 @@ public class Main
 	
 	public Main()
 	{
-		manifest = new File("atlasManifest.json");
+		manifest = new File("/Users/rcuser/Development/game/client/Content/Art/atlasManifest.json");
 	}
 	
 	public JSONObject getManifestJson()
@@ -70,7 +70,7 @@ public class Main
 				JSONArray atlasFilePatterns = manifestJson.getJSONArray(atlasName);
 				
 				Paths paths = new Paths();
-				String baseDir = "/"; //manifest.getAbsoluteFile().getParent();
+				String baseDir = manifest.getAbsoluteFile().getParent();
 				for (int i = 0; i < atlasFilePatterns.length(); i++)
 				{
 					paths.glob(baseDir, atlasFilePatterns.getString(i));
