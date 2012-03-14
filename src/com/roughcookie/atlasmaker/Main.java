@@ -22,14 +22,24 @@ public class Main
 	
 	public static void main(String[] args)
 	{
-		main = new Main();
-		main.createAtlases();
+		if (args.length == 2)
+		{
+			main = new Main(new File(args[0]), new File(args[1]));
+			main.createAtlases();
+		}
+		else
+		{
+			main = new Main();
+			main.createAtlases();
+		}
 	}
 	
 	public Main()
 	{
-		manifest = new File("/Users/rcuser/Development/game/client/Content/Art/atlasManifest.json");
-		outputDir = new File("./output");
+		this(
+			new File("/Users/rcuser/Development/game/client/Content/Art/atlasManifest.json"),
+			new File("./output")
+		);
 	}
 	
 	public Main(File manifest, File outputDir)
