@@ -29,17 +29,8 @@ public class Main
 		}
 		else
 		{
-			main = new Main();
-			main.createAtlases();
+			System.out.println("usage: java -jar AtlasMaker.jar MANIFEST_FILE OUTPUT_DIR");
 		}
-	}
-	
-	public Main()
-	{
-		this(
-			new File("/Users/rcuser/Development/game/client/Content/Art/atlasManifest.json"),
-			new File("./output")
-		);
 	}
 	
 	public Main(File manifest, File outputDir)
