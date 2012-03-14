@@ -67,7 +67,7 @@ public class Main
 				
 				if (paths.count() == 0)
 				{
-					System.out.println("No files found for atlas: " + atlasName);
+					System.out.println("Warning: No files found for atlas: " + atlasName);
 					continue;
 				}
 				
