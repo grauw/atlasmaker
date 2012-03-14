@@ -1,0 +1,17 @@
+Texture Atlas Maker
+Copyright (c) 2012, Rough Cookie
+
+This project includes software developed at Rough Cookie.
+
+This project is based on the Texture Atlas Maker tool developed by Ed Welch.
+Website: http://www.codeproject.com/Articles/330742/Texture-Atlas-Maker
+This software is BSD licensed.
+
+This project includes glob file matching software developed by Nathan Sweet.
+Website: http://code.google.com/p/wildcard/
+This software is BSD licensed.
+
+This project includes JSON processing software developed by Douglas Crockford.
+Website: http://json.org/java/
+This software has a custom, permissive license, similar to the BSD license.
+Please note the special license provision.

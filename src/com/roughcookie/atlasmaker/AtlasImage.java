@@ -1,6 +1,8 @@
 package com.roughcookie.atlasmaker;
+
 /*
 Copyright (c) 2012, Ed Welch
+Copyright (c) 2012, Rough Cookie
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
