@@ -7,6 +7,9 @@
 	<artifactId>atlasmaker</artifactId>
 	<version>1.0</version>
 
+	<name>Texture Atlas Maker</name>
+	<description>This tool generates texture atlases from PNG images.</description>
+
 	<licenses>
 		<license>
 			<name>Simplified BSD License</name>
@@ -20,8 +23,12 @@
 		<url>http://www.roughcookie.com/</url>
 	</organization>
 
-	<name>Texture Atlas Maker</name>
-	<description>This tool generates texture atlases from PNG images.</description>
+	<contributors>
+		<contributor>
+			<name>Laurens Holst</name>
+			<email>lholst@roughcookie.com</email>
+		</contributor>
+	</contributors>
 
 	<properties>
 		<mainClass>com.roughcookie.atlasmaker.Main</mainClass>
