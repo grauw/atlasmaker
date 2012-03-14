@@ -37,10 +37,11 @@ public class AtlasImage
 	private int transHeight;
 	private boolean transparent;
 	private BufferedImage image;
-	private String fileName;
+	private File file;
 	
-	public AtlasImage()
+	public AtlasImage(File file)
 	{
+		this.file = file;
 		border = 0;
 	}
 	
@@ -54,10 +55,9 @@ public class AtlasImage
 		return transparent;
 	}
 	
-	public void load(File file) throws IOException
+	public void load() throws IOException
 	{
 		image = ImageIO.read(file);
-		this.fileName = file.getName().substring(0, file.getName().length() - 4);
 	}
 	
 	public boolean hasAlphaBorder()
@@ -203,7 +203,7 @@ public class AtlasImage
 			yOffset = 0;
 			opaqueWidth = 1;
 			opaqueHeight = 1;
-			System.out.println("Warning: image with no opaque pixels!" + fileName);
+			System.out.println("Warning: image with no opaque pixels! " + file.getName());
 		}
 		else
 		{
@@ -215,7 +215,7 @@ public class AtlasImage
 
 	public String toXMLString() 
 	{
-		String str = "    <image name=\""+fileName + 
+		String str = "    <image name=\"" + file.getName() + 
 			"\" x=\"" + x + 
 			"\" y=\"" + y + 
 			"\" width=\"" + opaqueWidth + 
@@ -227,10 +227,5 @@ public class AtlasImage
 		if (!transparent) str += "\" trans=\""+transparent;
 		str += "\"/>\n";
 		return str;
-	}
-	
-	public String getFileName()
-	{
-		return fileName;
 	}
 }

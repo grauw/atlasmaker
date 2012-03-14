@@ -131,9 +131,9 @@ public class Atlas
 	
 	private AtlasImage createAtlasImage(File file) throws IOException
 	{
-		AtlasImage image = new AtlasImage();
+		AtlasImage image = new AtlasImage(file);
 		image.setBorder(imageBorder);
-		image.load(file);
+		image.load();
 		image.cropTransparent(alphaThreshold);
 
 		// don't add images that don't fit
