@@ -1,0 +1,92 @@
+Texture Atlas Maker
+Copyright (c) 2012, Rough Cookie and Ed Welch
+
+This tool takes a manifest which references PNG images, and generates texture
+atlases and JSON index files.
+
+Usage:
+
+  java -jar AtlasMaker.jar MANIFEST_FILE OUTPUT_DIR
+
+Manifest JSON file format
+=========================
+
+The manifest is a JSON file which has the following format:
+
+{
+    "<atlas_name>": [
+        "<path_to_images>",
+        ...
+    ],
+    ...
+}
+
+The atlas name determines the directory name in the output directory. The paths
+to images are relative to the manifest file, and can contain wildcards. Example:
+
+{
+    "ui_100": [
+        "navigation/100/*.png",
+        "settings/100/*.png"
+    ],
+    "ui_200": [
+        "navigation/200/*.png",
+        "settings/200/*.png"
+    ]
+}
+
+Output directory structure
+==========================
+
+The files are output to the output directory in the following structure:
+
+OUTPUT_DIR/
+  atlas_name/
+    atlas-0.png
+    atlas-1.png
+    index.json
+
+The sequentially numbered png files are the atlas textures. The json file is
+an index which describes the positions of each individual image in each texture.
+
+Index json file format
+======================
+
+The index json file has the following structure:
+
+[
+    {
+        "path": "atlas-0.png",
+        "width": 1024,
+        "height": 1024,
+        "transparent": true,
+        "images": [
+            {
+                "path": "navigation/100/close_button.png",
+                "coordinates": {
+                    "height": 60,
+                    "width": 60,
+                    "y": 312,
+                    "x": 0
+                },
+                "xOffset": 2,
+                "yOffset": 2,
+                "width": 64,
+                "height": 64,
+                "transparent": true
+            },
+            ...
+        ]
+    },
+    ...
+]
+
+The root consists of an array of textures. For each texture it specifies the
+path, its width, height, whether the texture has any transparent pixels, and the
+images it contains.
+
+Each image object consists of the original path of the image, and its
+coordinates in the texture. Additionally, it specifies the x and y-offset and
+the original size. This is because the tool trims away any transparent edges
+from the images. Finally, there is also a field which indicates whether the
+image contains any transparent pixels.
