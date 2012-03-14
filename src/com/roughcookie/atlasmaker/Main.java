@@ -18,6 +18,7 @@ public class Main
 {
 	public static Main main;
 	private File manifest;
+	private File outputDir;
 	
 	public static void main(String[] args)
 	{
@@ -28,6 +29,7 @@ public class Main
 	public Main()
 	{
 		manifest = new File("/Users/rcuser/Development/game/client/Content/Art/atlasManifest.json");
+		outputDir = new File("./output");
 	}
 	
 	public JSONObject getManifestJson()
@@ -82,9 +84,9 @@ public class Main
 					continue;
 				}
 				
-				File outputDir = new File("./output/", atlasName);
-				outputDir.mkdirs();
-				Atlas atlas = new Atlas(paths.getFiles(), manifest.getParentFile(), outputDir);
+				File atlasOutputDir = new File(outputDir, atlasName);
+				atlasOutputDir.mkdirs();
+				Atlas atlas = new Atlas(paths.getFiles(), manifest.getParentFile(), atlasOutputDir);
 				
 				atlases.add(atlas);
 			}
