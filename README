@@ -110,11 +110,11 @@ The project can be built with the Maven build tool:
 
 After this command, the executable jar can be found in the target directory:
 
-  target/atlasmaker-1.0-SNAPSHOT-jar-with-dependencies.jar
+  target/atlasmaker-1.0-jar-with-dependencies.jar
 
 Run it like so:
 
-  java -jar target/atlasmaker-1.0-SNAPSHOT-jar-with-dependencies.jar
+  java -jar target/atlasmaker-1.0-jar-with-dependencies.jar
       /<projects>/game/client/Content/Art/atlasManifest.json ./output
 
 Eclipse project setup
