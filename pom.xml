@@ -23,12 +23,13 @@
 		<url>http://www.roughcookie.com/</url>
 	</organization>
 
-	<contributors>
-		<contributor>
+	<developers>
+		<developer>
 			<name>Laurens Holst</name>
 			<email>lholst@roughcookie.com</email>
-		</contributor>
-	</contributors>
+			<id>lholst</id>
+		</developer>
+	</developers>
 
 	<properties>
 		<mainClass>com.roughcookie.atlasmaker.Main</mainClass>
