@@ -8,6 +8,15 @@ Usage:
 
   java -jar AtlasMaker.jar MANIFEST_FILE OUTPUT_DIR
 
+Table of contents
+=================
+
+- Overview
+- Manifest JSON file format
+- Output directory structure
+- Index json file format
+- Build instructions
+
 Manifest JSON file format
 =========================
 
@@ -90,3 +99,12 @@ coordinates in the texture. Additionally, it specifies the x and y-offset and
 the original size. This is because the tool trims away any transparent edges
 from the images. Finally, there is also a field which indicates whether the
 image contains any transparent pixels.
+
+Build instructions
+==================
+
+The project can be built with the Maven build tool:
+
+  mvn package
+
+After this command, the executable jar can be found in the target directory.
