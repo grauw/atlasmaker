@@ -27,7 +27,7 @@ public class TreeNode
 	private int height;
 	private TreeNode leaf1 = null;
 	private TreeNode leaf2 = null;
-	private AtlasImage image;		// used for debugging only
+	public AtlasImage image;		// used for debugging only
 
 	public TreeNode(int x, int y, int width, int height)
 	{
@@ -41,10 +41,6 @@ public class TreeNode
 		this.width = width;
 		this.height = height;
 		this.image = image;
-	}
-	
-	public AtlasImage getImage() {
-		return image;
 	}
 	
 	public void resize(int width, int height)
