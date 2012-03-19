@@ -6,7 +6,7 @@ atlases and JSON index files.
 
 Usage:
 
-  java -jar AtlasMaker.jar MANIFEST_FILE OUTPUT_DIR
+  java -jar atlasmaker.jar MANIFEST_FILE OUTPUT_DIR
 
 Table of contents
 =================
@@ -115,7 +115,7 @@ After this command, the executable jar can be found in the target directory:
 Run it like so:
 
   java -jar target/atlasmaker-1.0-jar-with-dependencies.jar
-      /<projects>/game/client/Content/Art/atlasManifest.json ./output
+      /<project_path>/client/Content/Art/atlasManifest.json ./output
 
 Eclipse project setup
 =====================
@@ -134,4 +134,4 @@ You may want to specify command line arguments in the build configuration, go
 to Run / Run configurations, select the correct entry and go to the Arguments
 tab. There, enter your command line arguments, e.g.:
 
-  /projects/game/client/Content/Art/atlasManifest.json ./output
+  /<project_path>/client/Content/Art/atlasManifest.json ./output
