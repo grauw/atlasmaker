@@ -44,7 +44,7 @@ to images are relative to the manifest file, and can contain wildcards. Example:
         "settings/200/*.png"
     ],
     "ui_all": [
-        "**/*.png"
+        "**.png"
     ]
 }
 
