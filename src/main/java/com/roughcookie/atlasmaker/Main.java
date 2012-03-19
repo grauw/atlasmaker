@@ -130,6 +130,7 @@ public class Main
 	{
 		for (Atlas atlas : getAtlasMakers())
 		{
+			System.out.println("Building atlas " + atlas.getOutputDir().getName() + "...");
 			atlas.create();
 		}
 	}

@@ -45,6 +45,11 @@ public class Atlas
 		this.outputDir = outputDir;
 	}
 	
+	public File getOutputDir()
+	{
+		return outputDir;
+	}
+	
 	public void setMaxSize(int size)
 	{
 		if (size <= 0)
