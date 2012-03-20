@@ -67,9 +67,14 @@ public class Atlas
 		square = enable;
 	}
 	
+	/**
+	 * Sets alpha threshold value for cropping transparent regions off atlas images.
+	 * 
+	 * @param threshold Threshold from 0 to 255, or -1 to disable alpha cropping.
+	 */
 	public void setAlphaThreshold(int threshold)
 	{
-		if (threshold < 0 || threshold > 254)
+		if (threshold < -1 || threshold > 254)
 			throw new RuntimeException("Threshold out of range.");
 		alphaThreshold = threshold;
 	}
