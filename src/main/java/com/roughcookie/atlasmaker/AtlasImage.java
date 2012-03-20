@@ -250,7 +250,7 @@ public class AtlasImage
 			String filePath = file.getCanonicalPath();
 			if (!filePath.startsWith(baseDirPath))
 				throw new RuntimeException("Atlas file is not contained in manifest directory: " + file);
-			return filePath.substring(baseDirPath.length());
+			return filePath.substring(baseDirPath.length()).replace(File.separatorChar, '/');
 		}
 		catch (IOException e)
 		{
