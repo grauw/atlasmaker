@@ -59,13 +59,13 @@ public class Main
 		this.outputDir = outputDir;
 	}
 	
-	public JSONObject getManifestJson()
+	public JSONArray getManifestJson()
 	{
 		BufferedReader manifestReader = null;
 		try
 		{
 			manifestReader = new BufferedReader(new FileReader(manifest));
-			return new JSONObject(new JSONTokener(manifestReader));
+			return new JSONArray(new JSONTokener(manifestReader));
 		}
 		catch (FileNotFoundException e)
 		{
@@ -88,21 +88,22 @@ public class Main
 	
 	public List<Atlas> getAtlasMakers()
 	{
-		JSONObject manifestJson = getManifestJson();
+		JSONArray manifestJson = getManifestJson();
 		ArrayList<Atlas> atlases = new ArrayList<Atlas>();
 		
 		try
 		{
-			String[] atlasNames = JSONObject.getNames(manifestJson);
-			for (String atlasName : atlasNames)
+			for (int i = 0; i < manifestJson.length(); i++)
 			{
-				JSONArray atlasFilePatterns = manifestJson.getJSONArray(atlasName);
+				JSONObject atlasJson = manifestJson.getJSONObject(i);
+				String atlasName = atlasJson.getString("name");
 				
+				JSONArray atlasFilePatterns = atlasJson.getJSONArray("images");
 				Paths paths = new Paths();
 				String baseDir = manifest.getParent();
-				for (int i = 0; i < atlasFilePatterns.length(); i++)
+				for (int j = 0; j < atlasFilePatterns.length(); j++)
 				{
-					paths.glob(baseDir, atlasFilePatterns.getString(i));
+					paths.glob(baseDir, atlasFilePatterns.getString(j));
 				}
 				
 				if (paths.count() == 0)
@@ -114,6 +115,21 @@ public class Main
 				File atlasOutputDir = new File(outputDir, atlasName);
 				atlasOutputDir.mkdirs();
 				Atlas atlas = new Atlas(paths.getFiles(), manifest.getParentFile(), atlasOutputDir);
+				
+				if (atlasJson.has("maxSize"))
+					atlas.setMaxSize(atlasJson.getInt("maxSize"));
+				
+				if (atlasJson.has("powersOfTwo"))
+					atlas.setPowersOfTwo(atlasJson.getBoolean("powersOfTwo"));
+				
+				if (atlasJson.has("square"))
+					atlas.setSquare(atlasJson.getBoolean("square"));
+				
+				if (atlasJson.has("alphaThreshold"))
+					atlas.setAlphaThreshold(atlasJson.getInt("alphaThreshold"));
+				
+				if (atlasJson.has("imageBorder"))
+					atlas.setImageBorder(atlasJson.getInt("imageBorder"));
 				
 				atlases.add(atlas);
 			}
