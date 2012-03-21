@@ -128,8 +128,8 @@ public class Main
 				if (atlasJson.has("alphaThreshold"))
 					atlas.setAlphaThreshold(atlasJson.getInt("alphaThreshold"));
 				
-				if (atlasJson.has("imageBorder"))
-					atlas.setImageBorder(atlasJson.getInt("imageBorder"));
+				if (atlasJson.has("border"))
+					atlas.setImageBorder(atlasJson.getInt("border"));
 				
 				atlases.add(atlas);
 			}
