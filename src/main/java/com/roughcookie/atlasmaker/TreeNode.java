@@ -64,19 +64,14 @@ public class TreeNode
 		if (dx < dy)	
 		{
 			//	split so the top is cut in half and the rest is one big rect below
-			leaf1 = new TreeNode(x + image.getWidth(), y,
-					width - image.getWidth(), image.getHeight(), image);
-			leaf2 = new TreeNode(x, y + image.getHeight(),
-					width, height - image.getHeight(), image);
+			leaf1 = new TreeNode(x + image.getWidth(), y, width - image.getWidth(), image.getHeight(), image);
+			leaf2 = new TreeNode(x, y + image.getHeight(), width, height - image.getHeight(), image);
 		}
 		else
 		{
-			//	leaf1 = left (cut in half)
-			leaf1 = new TreeNode(x, y + image.getHeight(),
-					image.getWidth(), height - image.getHeight(), image);
-			// leaf2 = right (not cut)
-			leaf2 = new TreeNode(x + image.getWidth(), y,
-					width - image.getWidth(), height, image);
+			//	split so the left is cut in half and the rest is one big rect to the right
+			leaf1 = new TreeNode(x, y + image.getHeight(), image.getWidth(), height - image.getHeight(), image);
+			leaf2 = new TreeNode(x + image.getWidth(), y, width - image.getWidth(), height, image);
 		}
 	}
 	
