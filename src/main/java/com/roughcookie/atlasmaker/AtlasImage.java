@@ -122,12 +122,6 @@ public class AtlasImage
 		g.drawImage(image, null, x, y);		
 	}
 	
-	public void drawWithBorder(Graphics2D g)
-	{
-		g.drawImage(image, null, x, y);		
-		g.drawRect(x, y, getWidth() - 1 - border, getHeight() - 1 - border);
-	}
-	
 	public int getX()
 	{
 		return x;
