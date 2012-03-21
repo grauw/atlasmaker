@@ -114,7 +114,7 @@ public class Main
 				
 				File atlasOutputDir = new File(outputDir, atlasName);
 				atlasOutputDir.mkdirs();
-				Atlas atlas = new Atlas(paths.getFiles(), manifest.getParentFile(), atlasOutputDir);
+				Atlas atlas = new Atlas(paths.getFiles(), manifest.getParentFile(), atlasOutputDir, atlasName);
 				
 				if (atlasJson.has("maxSize"))
 					atlas.setMaxSize(atlasJson.getInt("maxSize"));
@@ -146,7 +146,7 @@ public class Main
 	{
 		for (Atlas atlas : getAtlasMakers())
 		{
-			System.out.println("Building atlas " + atlas.getOutputDir().getName() + "...");
+			System.out.println("Building atlas " + atlas.getName() + "...");
 			atlas.create();
 		}
 	}

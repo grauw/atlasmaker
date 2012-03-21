@@ -27,13 +27,14 @@ public class Atlas
 	private List<File> sourceFiles;
 	private File baseDir;  // base dir of source files for index (manifest location)
 	private File outputDir;
+	private String name;
 	private int maxSize = 1024;
 	private boolean powersOfTwo = true;
 	private boolean square = true;
 	private int alphaThreshold = 0;
 	private int imageBorder = 0;
 	
-	public Atlas(List<File> sourceFiles, File baseDir, File outputDir)
+	public Atlas(List<File> sourceFiles, File baseDir, File outputDir, String name)
 	{
 		if (sourceFiles == null || sourceFiles.size() == 0)
 			throw new RuntimeException("No files specified.");
@@ -43,11 +44,17 @@ public class Atlas
 		this.sourceFiles = sourceFiles;
 		this.baseDir = baseDir;
 		this.outputDir = outputDir;
+		this.name = name;
 	}
 	
 	public File getOutputDir()
 	{
 		return outputDir;
+	}
+	
+	public String getName()
+	{
+		return name;
 	}
 	
 	public void setMaxSize(int size)
