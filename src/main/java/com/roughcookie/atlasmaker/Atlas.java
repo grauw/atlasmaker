@@ -110,7 +110,7 @@ public class Atlas
 		
 		TextureSize textureSize = getTextureSize();
 		BinPacker packer = new BinPacker(outputDir);
-		packer.pack(textureSize, images);
+		packer.pack(textureSize, images, imageBorder);
 		
 		// try making texture size smaller by making it more rectangular
 		if (!textureSize.isPowerOfTwo())
@@ -151,7 +151,6 @@ public class Atlas
 	private AtlasImage createAtlasImage(File file) throws IOException
 	{
 		AtlasImage image = new AtlasImage(file, baseDir);
-		image.setBorder(imageBorder);
 		image.load();
 		image.cropTransparent(alphaThreshold);
 

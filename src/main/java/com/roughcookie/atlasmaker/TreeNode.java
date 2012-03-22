@@ -27,19 +27,21 @@ public class TreeNode
 	private int height;
 	private TreeNode leaf1 = null;
 	private TreeNode leaf2 = null;
+	private int border;
 	public AtlasImage image;		// used for debugging only
 
-	public TreeNode(int x, int y, int width, int height)
+	public TreeNode(int x, int y, int width, int height, int border)
 	{
-		this(x, y, width, height, null);
+		this(x, y, width, height, border, null);
 	}
 	
-	public TreeNode(int x, int y, int width, int height, AtlasImage image)
+	public TreeNode(int x, int y, int width, int height, int border, AtlasImage image)
 	{
 		this.x = x;
 		this.y = y;
 		this.width = width;
 		this.height = height;
+		this.border = border;
 		this.image = image;
 	}
 	
@@ -61,17 +63,17 @@ public class TreeNode
 		// we split to give one very small leaf and one very big one
 		// because it allows more efficent use of space
 		// if you don't do this, the bottom right corner never gets used
-		if (dx < dy)	
+		if (dx < dy)
 		{
 			//	split so the top is cut in half and the rest is one big rect below
-			leaf1 = new TreeNode(x + image.getWidth(), y, width - image.getWidth(), image.getHeight(), image);
-			leaf2 = new TreeNode(x, y + image.getHeight(), width, height - image.getHeight(), image);
+			leaf1 = new TreeNode(x + image.getWidth() + border, y, width - image.getWidth() - border, image.getHeight(), border, image);
+			leaf2 = new TreeNode(x, y + image.getHeight() + border, width, height - image.getHeight() - border, border, image);
 		}
 		else
 		{
 			//	split so the left is cut in half and the rest is one big rect to the right
-			leaf1 = new TreeNode(x, y + image.getHeight(), image.getWidth(), height - image.getHeight(), image);
-			leaf2 = new TreeNode(x + image.getWidth(), y, width - image.getWidth(), height, image);
+			leaf1 = new TreeNode(x, y + image.getHeight() + border, image.getWidth(), height - image.getHeight() - border, border, image);
+			leaf2 = new TreeNode(x + image.getWidth() + border, y, width - image.getWidth() - border, height, border, image);
 		}
 	}
 	

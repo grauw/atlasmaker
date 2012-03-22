@@ -39,17 +39,17 @@ public class TextureBin
 	private int width;
 	private int height;
 	
-	public TextureBin(File outputDir, int index, TextureSize textureSize)
+	public TextureBin(File outputDir, int index, TextureSize textureSize, int border)
 	{
-		this(new File(outputDir, "atlas-" + index + ".png"), textureSize);
+		this(new File(outputDir, "atlas-" + index + ".png"), textureSize, border);
 	}
 	
-	public TextureBin(File outputFile, TextureSize textureSize)
+	public TextureBin(File outputFile, TextureSize textureSize, int border)
 	{
 		this.outputFile = outputFile;
 		this.width = textureSize.getWidth();
 		this.height = textureSize.getHeight();
-		treeNode = new TreeNode(0, 0, width, height);
+		treeNode = new TreeNode(0, 0, width, height, border);
 		images = new ArrayList<AtlasImage>();
 	}
 	

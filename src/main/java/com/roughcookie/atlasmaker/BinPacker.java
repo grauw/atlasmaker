@@ -48,7 +48,7 @@ public class BinPacker
 		return textureBins.get(textureBins.size() - 1);
 	}
 	
-	public void pack(TextureSize textureSize, ArrayList<AtlasImage> atlasImages)
+	public void pack(TextureSize textureSize, ArrayList<AtlasImage> atlasImages, int border)
 	{
 		for (int i = 0; ; i++)
 		{
@@ -64,7 +64,7 @@ public class BinPacker
 				pixelsReq += atlasImage.getNumPixels();
 			}
 			textureSize.getNextSizeFits(pixelsReq, maxWidth, maxHeight);
-			TextureBin bin = new TextureBin(outputDir, i, textureSize);
+			TextureBin bin = new TextureBin(outputDir, i, textureSize, border);
 			textureBins.add(bin);
 			this.pack(atlasImages);
 			

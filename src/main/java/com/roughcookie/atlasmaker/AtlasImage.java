@@ -30,7 +30,6 @@ import org.json.JSONObject;
 
 public class AtlasImage 
 {
-	private int border;
 	private int x;
 	private int y;
 	private int xOffset;
@@ -48,12 +47,6 @@ public class AtlasImage
 	{
 		this.file = file;
 		this.baseDir = baseDir;
-		border = 0;
-	}
-	
-	public void setBorder(int border)
-	{
-		this.border = border;
 	}
 	
 	public File getFile()
@@ -83,7 +76,7 @@ public class AtlasImage
 	
 	public int getNumPixels()
 	{
-		return (opaqueHeight + border) * (opaqueWidth + border);
+		return opaqueHeight * opaqueWidth;
 	}
 	
 	public boolean pointInside(int xTest, int yTest)
@@ -94,12 +87,12 @@ public class AtlasImage
 	
 	public int getHeight()
 	{
-		return image.getHeight() + border;
+		return image.getHeight();
 	}
 	
 	public int getWidth()
 	{
-		return image.getWidth() + border;
+		return image.getWidth();
 	}
 	
 	public int getBottom()
