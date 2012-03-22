@@ -190,6 +190,11 @@ public class TextureBin
 		progressListeners.add(listener);
 	}
 	
+	public void removeProgressListener(ProgressListener listener)
+	{
+		progressListeners.remove(listener);
+	}
+	
 	private void fireProgressTick() {
 		for (ProgressListener listener : progressListeners)
 			listener.progressTick();

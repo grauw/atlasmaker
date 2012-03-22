@@ -146,22 +146,26 @@ public class Main
 	{
 		for (Atlas atlas : getAtlasMakers())
 		{
+			ProgressListener tickCounter = new ProgressListener() {
+				public void progressTick() {
+					System.out.print('.');
+				}
+			};
+			
+			atlas.addProgressListener(tickCounter);
+			
 			System.out.printf("Building atlas %s.", atlas.getName());
 			
 			try
 			{
-				atlas.addProgressListener(new ProgressListener() {
-					public void progressTick() {
-						System.out.print('.');
-					}
-				});
-				
 				atlas.create();
 			}
 			finally
 			{
 				System.out.println("");
 			}
+			
+			atlas.removeProgressListener(tickCounter);
 		}
 	}
 }

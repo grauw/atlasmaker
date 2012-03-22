@@ -24,6 +24,9 @@ OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 public interface ProgressListener {
 	
+	/**
+	 * A progress tick.
+	 */
 	public void progressTick();
 	
 }
