@@ -146,7 +146,7 @@ public class Main
 	{
 		for (Atlas atlas : getAtlasMakers())
 		{
-			System.out.print("Building atlas " + atlas.getName() + ".");
+			System.out.printf("Building atlas %s.", atlas.getName());
 			
 			try
 			{
