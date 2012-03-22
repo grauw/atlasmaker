@@ -157,7 +157,8 @@ public class Atlas
 		// don't add images that don't fit
 		if (image.getWidth() > maxSize || image.getHeight() > maxSize)
 		{
-			throw new RuntimeException("image too big to fit in texture: " + image.getFile());
+			throw new RuntimeException(String.format("Image size exceeds max texture size %dx%d: %s (%dx%d)",
+					maxSize, maxSize, image.getFile(), image.getWidth(), image.getHeight()));
 		}
 		
 		return image;
