@@ -74,7 +74,7 @@ public class AtlasImage
 		return image;
 	}
 	
-	public int getNumPixels()
+	public int getPixelCount()
 	{
 		return opaqueHeight * opaqueWidth;
 	}

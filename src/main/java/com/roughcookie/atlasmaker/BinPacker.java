@@ -61,7 +61,7 @@ public class BinPacker
 					maxWidth = atlasImage.getWidth();
 				if (maxHeight < atlasImage.getHeight())
 					maxHeight = atlasImage.getHeight();
-				pixelsReq += atlasImage.getNumPixels();
+				pixelsReq += atlasImage.getPixelCount();
 			}
 			textureSize.getNextSizeFits(pixelsReq, maxWidth, maxHeight);
 			TextureBin bin = new TextureBin(outputDir, i, textureSize, border);
