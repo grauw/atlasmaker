@@ -19,7 +19,7 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-import java.util.*;
+import java.util.Comparator;
 
 public class CompareWidth implements Comparator<AtlasImage>
 {
