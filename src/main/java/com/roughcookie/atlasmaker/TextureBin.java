@@ -25,6 +25,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
+
 import javax.imageio.ImageIO;
 
 import org.json.JSONArray;
@@ -38,7 +40,7 @@ public class TextureBin
 	private ArrayList<AtlasImage> images;
 	private int width;
 	private int height;
-	private ArrayList<ProgressListener> progressListeners = new ArrayList<ProgressListener>();
+	private List<ProgressListener> progressListeners = new ArrayList<ProgressListener>();
 	
 	public TextureBin(File outputDir, int index, TextureSize textureSize, int border)
 	{

@@ -33,7 +33,7 @@ public class Atlas implements ProgressListener
 	private boolean square = true;
 	private int alphaThreshold = 0;
 	private int imageBorder = 0;
-	private ArrayList<ProgressListener> progressListeners = new ArrayList<ProgressListener>();
+	private List<ProgressListener> progressListeners = new ArrayList<ProgressListener>();
 	
 	public Atlas(List<File> sourceFiles, File baseDir, File outputDir, String name)
 	{
