@@ -38,6 +38,7 @@ public class TextureBin
 	private ArrayList<AtlasImage> images;
 	private int width;
 	private int height;
+	private ArrayList<ProgressListener> progressListeners = new ArrayList<ProgressListener>();
 	
 	public TextureBin(File outputDir, int index, TextureSize textureSize, int border)
 	{
@@ -138,6 +139,8 @@ public class TextureBin
 		{
 			throw new RuntimeException("Could not save " + outputFile.getName(), e);
 		}
+		
+		fireProgressTick();
 	}
 	
 	public int getHeight()
@@ -180,5 +183,15 @@ public class TextureBin
 		}
 		texture.put("images", imagesJson);
 		return texture;
+	}
+	
+	public void addProgressListener(ProgressListener listener)
+	{
+		progressListeners.add(listener);
+	}
+	
+	private void fireProgressTick() {
+		for (ProgressListener listener : progressListeners)
+			listener.progressTick();
 	}
 }

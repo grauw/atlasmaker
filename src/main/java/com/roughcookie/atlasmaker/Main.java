@@ -146,8 +146,22 @@ public class Main
 	{
 		for (Atlas atlas : getAtlasMakers())
 		{
-			System.out.println("Building atlas " + atlas.getName() + "...");
-			atlas.create();
+			System.out.print("Building atlas " + atlas.getName() + ".");
+			
+			try
+			{
+				atlas.addProgressListener(new ProgressListener() {
+					public void progressTick() {
+						System.out.print('.');
+					}
+				});
+				
+				atlas.create();
+			}
+			finally
+			{
+				System.out.println("");
+			}
 		}
 	}
 }

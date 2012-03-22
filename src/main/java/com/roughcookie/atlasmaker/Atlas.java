@@ -22,7 +22,7 @@ OF THE POSSIBILITY OF SUCH DAMAGE.
 import java.io.*;
 import java.util.*;
 
-public class Atlas
+public class Atlas implements ProgressListener
 {
 	private List<File> sourceFiles;
 	private File baseDir;  // base dir of source files for index (manifest location)
@@ -33,6 +33,7 @@ public class Atlas
 	private boolean square = true;
 	private int alphaThreshold = 0;
 	private int imageBorder = 0;
+	private ArrayList<ProgressListener> progressListeners = new ArrayList<ProgressListener>();
 	
 	public Atlas(List<File> sourceFiles, File baseDir, File outputDir, String name)
 	{
@@ -121,6 +122,9 @@ public class Atlas
 			packer.trim();
 		}
 		
+		for (TextureBin textureBin : packer.getTextureBins())
+			textureBin.addProgressListener(this);
+		
 		packer.write();
 	}
 	
@@ -137,6 +141,8 @@ public class Atlas
 			{
 				throw new RuntimeException("Could not load " + file.getName(), e);
 			}
+			
+			fireProgressTick();
 		}
 		if (images.size() == 0)
 			throw new RuntimeException("No images created.");
@@ -162,5 +168,19 @@ public class Atlas
 		}
 		
 		return image;
+	}
+	
+	public void addProgressListener(ProgressListener listener)
+	{
+		progressListeners.add(listener);
+	}
+	
+	private void fireProgressTick() {
+		for (ProgressListener listener : progressListeners)
+			listener.progressTick();
+	}
+	
+	public void progressTick() {
+		fireProgressTick();
 	}
 }
