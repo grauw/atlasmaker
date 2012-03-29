@@ -42,11 +42,6 @@ public class TextureBin
 	private int height;
 	private List<ProgressListener> progressListeners = new ArrayList<ProgressListener>();
 	
-	public TextureBin(File outputDir, int index, TextureSize textureSize, int border)
-	{
-		this(new File(outputDir, "atlas-" + index + ".png"), textureSize, border);
-	}
-	
 	public TextureBin(File outputFile, TextureSize textureSize, int border)
 	{
 		this.outputFile = outputFile;

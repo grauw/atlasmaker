@@ -28,6 +28,8 @@ import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import com.esotericsoftware.wildcard.Paths;
+
 public class BinPacker
 {
 	private File outputDir;
@@ -64,7 +66,7 @@ public class BinPacker
 				pixelsReq += atlasImage.getPixelCount();
 			}
 			textureSize.getNextSizeFits(pixelsReq, maxWidth, maxHeight);
-			TextureBin bin = new TextureBin(outputDir, i, textureSize, border);
+			TextureBin bin = new TextureBin(new File(outputDir, "atlas-" + i + ".png"), textureSize, border);
 			textureBins.add(bin);
 			this.pack(atlasImages);
 			
@@ -133,6 +135,12 @@ public class BinPacker
 	
 	public void write()
 	{
+		outputDir.mkdirs();
+		
+		// remove old atlases first
+		Paths oldAtlasRemover = new Paths(outputDir.getAbsolutePath(), "atlas*.png");
+		oldAtlasRemover.delete();
+		
 		for (TextureBin bin : textureBins)
 			bin.write();
 		writeIndex();

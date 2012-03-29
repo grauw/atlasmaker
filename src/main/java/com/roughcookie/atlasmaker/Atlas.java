@@ -42,8 +42,8 @@ public class Atlas implements ProgressListener
 	{
 		if (sourceFiles == null || sourceFiles.size() == 0)
 			throw new RuntimeException("No files specified.");
-		if (outputDir == null || !outputDir.isDirectory())
-			throw new RuntimeException("Output location is not a directory.");
+		if (outputDir == null)
+			throw new RuntimeException("No output directory specified.");
 		
 		this.sourceFiles = sourceFiles;
 		this.baseDir = baseDir;

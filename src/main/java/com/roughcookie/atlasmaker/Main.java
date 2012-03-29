@@ -113,7 +113,6 @@ public class Main
 				}
 				
 				File atlasOutputDir = new File(outputDir, atlasName);
-				atlasOutputDir.mkdirs();
 				Atlas atlas = new Atlas(paths.getFiles(), manifest.getParentFile(), atlasOutputDir, atlasName);
 				
 				if (atlasJson.has("maxSize"))
