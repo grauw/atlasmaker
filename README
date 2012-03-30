@@ -26,30 +26,54 @@ Manifest JSON file format
 
 The manifest is a JSON file which has the following format:
 
-{
-    "<atlas_name>": [
-        "<path_to_images>",
-        ...
-    ],
+[
+    {
+        "name": "ui/100",
+        "border": 1,
+        "maxSize": 1,
+        "images": [
+            "<path_to_images>",
+            ...
+        ]
+    },
     ...
-}
+]
 
 The atlas name determines the directory name in the output directory. The paths
 to images are relative to the manifest file, and can contain wildcards. Example:
 
-{
-    "ui_100": [
-        "navigation/100/*.png",
-        "settings/100/*.png"
-    ],
-    "ui_200": [
-        "navigation/200/*.png",
-        "settings/200/*.png"
-    ],
-    "ui_all": [
-        "**.png"
-    ]
-}
+[
+    {
+        "name": "ui/100",
+        "images": [
+            "navigation/100/*.png",
+            "settings/100/*.png"
+        ]
+    },
+    {
+        "name": "all",
+        "images": [
+            "**.png"
+        ]
+    }
+]
+
+Additional optional atlas properties are:
+
+  maxSize
+    The maximum atlas size. Default 1024.
+
+  powersOfTwo
+    Whether to restrict atlas sizes to powers of two. Default true.
+
+  square
+    Whether to restrict atlas sizes to squares. Default true.
+
+  alphaThreshold
+    The threshold for cropping transparent regions (-1 .. 255). Default 0.
+
+  border
+    The number of transparent pixel borders between images. Default 0.
 
 Output directory structure
 ==========================
