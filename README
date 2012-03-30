@@ -8,10 +8,13 @@ Usage:
 
   java -Xmx512m -jar atlasmaker.jar MANIFEST_FILE OUTPUT_DIR
 
+Project page:
+
+  https://bitbucket.org/Grauw/atlasmaker
+
 Table of contents
 =================
 
-- Overview
 - Manifest JSON file format
 - Output directory structure
 - Index json file format
