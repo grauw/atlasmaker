@@ -51,22 +51,14 @@ public class TextureBin
 		images = new ArrayList<AtlasImage>();
 	}
 	
-	public boolean add(AtlasImage image)
+	public int getHeight()
 	{
-		boolean added = treeNode.add(image);
-		if (added)
-			images.add(image);
-		return added;
+		return height;
 	}
 	
-	public void pack(ArrayList<AtlasImage> imageList)
+	public int getWidth()
 	{
-		for (int ixImage = imageList.size() - 1; ixImage >= 0; ixImage--)
-		{
-			if (!add(imageList.get(ixImage)))
-				return;
-			imageList.remove(ixImage);
-		}
+		return width;
 	}
 	
 	public void resize(int width, int height, ArrayList<AtlasImage> imageList)
@@ -77,6 +69,30 @@ public class TextureBin
 		treeNode.resize(width, height);
 		
 		this.clear(imageList);
+	}
+	
+	public void setSize(int width, int height)
+	{
+		this.width = width;
+		this.height = height;
+	}
+	
+	public int getPixels()
+	{
+		return width * height;
+	}
+	
+	public ArrayList<AtlasImage> getImages()
+	{
+		return images;
+	}
+	
+	public boolean add(AtlasImage image)
+	{
+		boolean added = treeNode.add(image);
+		if (added)
+			images.add(image);
+		return added;
 	}
 	
 	/**
@@ -91,6 +107,16 @@ public class TextureBin
 		Collections.sort(imageList, new CompareArea());
 		
 		images.clear();
+	}
+	
+	public void pack(ArrayList<AtlasImage> imageList)
+	{
+		for (int ixImage = imageList.size() - 1; ixImage >= 0; ixImage--)
+		{
+			if (!add(imageList.get(ixImage)))
+				return;
+			imageList.remove(ixImage);
+		}
 	}
 	
 	// trims dimensions to minimium
@@ -138,32 +164,6 @@ public class TextureBin
 		}
 		
 		fireProgressTick();
-	}
-	
-	public int getHeight()
-	{
-		return height;
-	}
-	
-	public int getWidth()
-	{
-		return width;
-	}
-	
-	public void setSize(int width, int height)
-	{
-		this.width = width;
-		this.height = height;
-	}
-	
-	public int getPixels()
-	{
-		return width * height;
-	}
-	
-	public ArrayList<AtlasImage> getImages()
-	{
-		return images;
 	}
 	
 	public JSONObject toJSON() throws JSONException 
