@@ -79,7 +79,7 @@ public class TreeNode
 	
 	public boolean add(AtlasImage image)
 	{
-		if (empty())
+		if (isEmpty())
 		{
 			if (fits(image))
 			{
@@ -105,7 +105,7 @@ public class TreeNode
 		return image.getWidth() <= width && image.getHeight() <= height;
 	}
 	
-	public boolean empty()
+	public boolean isEmpty()
 	{
 		return leaf1 == null && leaf2 == null;
 	}
