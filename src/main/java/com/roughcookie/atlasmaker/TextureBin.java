@@ -82,7 +82,7 @@ public class TextureBin
 	
 	/**
 	 * Clears all images from the bin and re-adds them to the image list.
-	 * @param imageList
+	 * @param imageList The list to put the removed images into.
 	 */
 	private void remove(ArrayList<AtlasImage> imageList)
 	{
@@ -149,11 +149,6 @@ public class TextureBin
 		return height;
 	}
 	
-	public ArrayList<AtlasImage> getListImage()
-	{
-		return images;
-	}
-	
 	public int getWidth()
 	{
 		return width;
@@ -168,6 +163,11 @@ public class TextureBin
 	public int getPixels()
 	{
 		return width * height;
+	}
+	
+	public ArrayList<AtlasImage> getImages()
+	{
+		return images;
 	}
 	
 	public JSONObject toJSON() throws JSONException 
