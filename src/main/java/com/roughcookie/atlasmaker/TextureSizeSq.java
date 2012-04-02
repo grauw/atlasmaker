@@ -30,8 +30,7 @@ public class TextureSizeSq extends TextureSize
 	{
 		width = 32;
 		height = 32;
-		while ((width*height < pixelsReq ||
-				width < maxWidth || height < maxHeight) && !isMaxSize())
+		while ((width * height < pixelsReq || width < maxWidth || height < maxHeight) && !isMaxSize())
 		{
 			inc();
 		}

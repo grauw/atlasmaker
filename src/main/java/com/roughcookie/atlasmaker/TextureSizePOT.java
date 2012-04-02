@@ -33,8 +33,7 @@ public class TextureSizePOT extends TextureSize
 		ixSize = 0;
 		width = 32;
 		height = 32;
-		while ((width*height < pixelsReq ||
-				width < maxWidth || height < maxHeight) && !isMaxSize())
+		while ((width * height < pixelsReq || width < maxWidth || height < maxHeight) && !isMaxSize())
 		{
 			if (height > width)
 				width *= 2;
