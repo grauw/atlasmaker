@@ -68,8 +68,6 @@ public class TextureBin
 		this.width = width;
 		this.height = height;
 		
-		treeNode = new TreeNode(0, 0, width, height, border);
-		
 		this.clear(imageList);
 	}
 	
@@ -107,6 +105,8 @@ public class TextureBin
 		
 		// need to resort, because they may have been put in wrong order
 		Collections.sort(imageList, new CompareArea());
+		
+		treeNode = new TreeNode(0, 0, width, height, border);
 		
 		images.clear();
 	}
