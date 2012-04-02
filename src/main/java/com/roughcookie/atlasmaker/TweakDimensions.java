@@ -29,7 +29,7 @@ public class TweakDimensions
 	private int origWidth;
 	private int origHeight;
 	
-	public void run(TextureBin bin, ArrayList<AtlasImage> imageList)
+	public void tweak(TextureBin bin, ArrayList<AtlasImage> imageList)
 	{
 		bestSavings = 0;
 		bin.trim();

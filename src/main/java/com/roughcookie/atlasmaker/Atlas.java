@@ -120,7 +120,7 @@ public class Atlas implements ProgressListener
 		if (!textureSize.isPowerOfTwo())
 		{
 			TweakDimensions tweakDimensions = new TweakDimensions();
-			tweakDimensions.run(packer.getLastTextureBin(), images);
+			tweakDimensions.tweak(packer.getLastTextureBin(), images);
 			
 			packer.trim();
 		}
