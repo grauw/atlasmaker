@@ -59,34 +59,38 @@ public class TextureBin
 		return added;
 	}
 	
-	public void pack(ArrayList<AtlasImage> listImage)
+	public void pack(ArrayList<AtlasImage> imageList)
 	{
-		for (int ixImage = listImage.size() - 1; ixImage >= 0; ixImage--)
+		for (int ixImage = imageList.size() - 1; ixImage >= 0; ixImage--)
 		{
-			if (!add(listImage.get(ixImage)))
+			if (!add(imageList.get(ixImage)))
 				return;
-			listImage.remove(ixImage);
+			imageList.remove(ixImage);
 		}
 	}
 	
-	public void resize(int width, int height, ArrayList<AtlasImage> listImage)
+	public void resize(int width, int height, ArrayList<AtlasImage> imageList)
 	{
 		// puts images removed back on the list
-		this.remove(listImage);
+		this.remove(imageList);
 		// need to resort, because they may have been put in wrong order
-		Collections.sort(listImage, new CompareArea());
+		Collections.sort(imageList, new CompareArea());
 		// resize resets everything
 		treeNode.resize(width, height);
 		this.resize(width, height);
 	}
 	
-	public void remove(ArrayList<AtlasImage> listImageReturn)
+	/**
+	 * Clears all images from the bin and re-adds them to the image list.
+	 * @param imageList
+	 */
+	private void remove(ArrayList<AtlasImage> imageList)
 	{
-		listImageReturn.addAll(images);
+		imageList.addAll(images);
 		images.clear();
 	}
 	
-	public void resize(int width, int height)
+	private void resize(int width, int height)
 	{
 		this.width = width;
 		this.height = height;

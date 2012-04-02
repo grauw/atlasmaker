@@ -29,7 +29,7 @@ public class TweakDimensions
 	private int origWidth;
 	private int origHeight;
 	
-	public void run(TextureBin bin, ArrayList<AtlasImage> listImage)
+	public void run(TextureBin bin, ArrayList<AtlasImage> imageList)
 	{
 		bestSavings = 0;
 		bin.trim();
@@ -37,18 +37,18 @@ public class TweakDimensions
 		origHeight = bin.getHeight();
 		bestWidth = origWidth;
 		bestHeight = origHeight;
-		tweakWidthHeight(bin, listImage, true);
+		tweakWidthHeight(bin, imageList, true);
 		bin.setSize(origWidth, origHeight);
-		tweakWidthHeight(bin, listImage, false);
+		tweakWidthHeight(bin, imageList, false);
 		if (bestWidth != bin.getWidth() || bestHeight != bin.getHeight())
 		{
-			bin.resize(bestWidth, bestHeight, listImage); 
-			bin.pack(listImage);
+			bin.resize(bestWidth, bestHeight, imageList); 
+			bin.pack(imageList);
 		}
-		assert(listImage.size() == 0);
+		assert(imageList.size() == 0);
 	}
 	
-	private void tweakWidthHeight(TextureBin bin, ArrayList<AtlasImage> listImage, boolean doWidth)
+	private void tweakWidthHeight(TextureBin bin, ArrayList<AtlasImage> imageList, boolean doWidth)
 	{
 		int width = origWidth; 
 		int height = origHeight;
@@ -71,9 +71,9 @@ public class TweakDimensions
 				height = bin.getHeight() - 1;
 //				width = origWidth * origHeight / height;
 			}
-			bin.resize(width, height, listImage); 
-			bin.pack(listImage);
-			if (listImage.size() > 0)
+			bin.resize(width, height, imageList); 
+			bin.pack(imageList);
+			if (imageList.size() > 0)
 			{
 				break;
 			}
