@@ -97,14 +97,14 @@ public class Atlas implements ProgressListener
 		imageBorder = border;
 	}
 	
-	private TextureSize getTextureSize()
+	private BinPacker createBinPacker()
 	{
 		if (square && powersOfTwo)
-			return new TextureSizeSq(maxSize);
+			return new BinPackerSq(outputDir, maxSize, imageBorder);
 		if (!square && powersOfTwo)
-			return new TextureSizePOT(maxSize);
+			return new BinPackerPOT(outputDir, maxSize, imageBorder);
 		if (!square && !powersOfTwo)
-			return new TextureSizeNPOT(maxSize);
+			return new BinPackerNPOT(outputDir, maxSize, imageBorder);
 		throw new RuntimeException("Unsupported square/powersOfTwo combination.");
 	}
 	
@@ -112,18 +112,8 @@ public class Atlas implements ProgressListener
 	{
 		ArrayList<AtlasImage> images = createAtlasImages(sourceFiles);
 		
-		TextureSize textureSize = getTextureSize();
-		BinPacker packer = new BinPacker(outputDir, imageBorder);
-		packer.pack(textureSize, images);
-		
-		// try making texture size smaller by making it more rectangular
-		if (!textureSize.isPowerOfTwo())
-		{
-			TweakDimensions tweakDimensions = new TweakDimensions();
-			tweakDimensions.tweak(packer.getLastTextureBin(), images);
-			
-			packer.trim();
-		}
+		BinPacker packer = createBinPacker();
+		packer.pack(images);
 		
 		for (TextureBin textureBin : packer.getTextureBins())
 			textureBin.addProgressListener(this);

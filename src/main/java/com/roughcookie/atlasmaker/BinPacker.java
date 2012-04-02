@@ -30,7 +30,7 @@ import org.json.JSONException;
 
 import com.esotericsoftware.wildcard.Paths;
 
-public class BinPacker
+public abstract class BinPacker
 {
 	private File outputDir;
 	private ArrayList<TextureBin> textureBins;
@@ -42,6 +42,8 @@ public class BinPacker
 		textureBins = new ArrayList<TextureBin>();
 	}
 	
+	public abstract TextureSize createTextureSize();
+	
 	public TextureBin[] getTextureBins()
 	{
 		return textureBins.toArray(new TextureBin[] {});
@@ -52,8 +54,10 @@ public class BinPacker
 		return textureBins.get(textureBins.size() - 1);
 	}
 	
-	public void pack(TextureSize textureSize, ArrayList<AtlasImage> atlasImages)
+	public void pack(ArrayList<AtlasImage> atlasImages)
 	{
+		TextureSize textureSize = createTextureSize();
+		
 		for (int i = 0; ; i++)
 		{
 			int maxWidth = 0;
@@ -70,7 +74,7 @@ public class BinPacker
 			textureSize.getNextSizeFits(pixelsReq, maxWidth, maxHeight);
 			TextureBin bin = new TextureBin(new File(outputDir, "atlas-" + i + ".png"), textureSize, border);
 			textureBins.add(bin);
-			this.pack(atlasImages);
+			this.pack2(atlasImages);
 			
 			if (atlasImages.isEmpty()) 
 			{
@@ -85,12 +89,12 @@ public class BinPacker
 						prevHeight = textureSize.getHeight();
 						textureSize.dec();
 						bin.resize(textureSize.getWidth(), textureSize.getHeight(), atlasImages); 
-						this.pack(atlasImages);
+						this.pack2(atlasImages);
 						
 					} while (atlasImages.isEmpty() && !textureSize.isMinSize());
 					// revert back to last size that fit
 					bin.resize(prevWidth, prevHeight, atlasImages); 
-					this.pack(atlasImages);
+					this.pack2(atlasImages);
 					
 					assert(atlasImages.isEmpty());
 				}
@@ -101,7 +105,7 @@ public class BinPacker
 			{
 				textureSize.inc();
 				bin.resize(textureSize.getWidth(), textureSize.getHeight(), atlasImages); 
-				this.pack(atlasImages);
+				this.pack2(atlasImages);
 				
 				if (atlasImages.isEmpty())
 					return;
@@ -110,7 +114,7 @@ public class BinPacker
 		}
 	}
 	
-	private void pack(ArrayList<AtlasImage> images)
+	private void pack2(ArrayList<AtlasImage> images)
 	{
 		for (int i = images.size() - 1; i >= 0; i--)
 		{
