@@ -45,7 +45,7 @@ public class TweakDimensions
 			bin.resize(bestWidth, bestHeight, imageList); 
 			bin.pack(imageList);
 		}
-		assert(imageList.size() == 0);
+		assert(imageList.isEmpty());
 	}
 	
 	private void tweakWidthHeight(TextureBin bin, ArrayList<AtlasImage> imageList, boolean doWidth)

@@ -40,7 +40,7 @@ public class Atlas implements ProgressListener
 	
 	public Atlas(List<File> sourceFiles, File baseDir, File outputDir, String name)
 	{
-		if (sourceFiles == null || sourceFiles.size() == 0)
+		if (sourceFiles == null || sourceFiles.isEmpty())
 			throw new RuntimeException("No files specified.");
 		if (outputDir == null)
 			throw new RuntimeException("No output directory specified.");
@@ -147,7 +147,7 @@ public class Atlas implements ProgressListener
 			
 			fireProgressTick();
 		}
-		if (images.size() == 0)
+		if (images.isEmpty())
 			throw new RuntimeException("No images created.");
 		
 		// sort images in reverse order

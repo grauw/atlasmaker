@@ -70,7 +70,7 @@ public class BinPacker
 			textureBins.add(bin);
 			this.pack(atlasImages);
 			
-			if (atlasImages.size() == 0) 
+			if (atlasImages.isEmpty()) 
 			{
 				if (textureBins.size() > 1 && !textureSize.isMinSize())
 				{
@@ -85,12 +85,12 @@ public class BinPacker
 						bin.resize(textureSize.getWidth(), textureSize.getHeight(), atlasImages); 
 						this.pack(atlasImages);
 						
-					} while (atlasImages.size() == 0 && !textureSize.isMinSize());
+					} while (atlasImages.isEmpty() && !textureSize.isMinSize());
 					// revert back to last size that fit
 					bin.resize(prevWidth, prevHeight, atlasImages); 
 					this.pack(atlasImages);
 					
-					assert(atlasImages.size() == 0);
+					assert(atlasImages.isEmpty());
 				}
 				return;
 			}
@@ -101,7 +101,7 @@ public class BinPacker
 				bin.resize(textureSize.getWidth(), textureSize.getHeight(), atlasImages); 
 				this.pack(atlasImages);
 				
-				if (atlasImages.size() == 0)
+				if (atlasImages.isEmpty())
 					return;
 			}
 			// recalculate values for remainder images
