@@ -72,7 +72,7 @@ public class TextureBin
 	public void resize(int width, int height, ArrayList<AtlasImage> imageList)
 	{
 		// puts images removed back on the list
-		this.remove(imageList);
+		this.clear(imageList);
 		// need to resort, because they may have been put in wrong order
 		Collections.sort(imageList, new CompareArea());
 		// resize resets everything
@@ -84,7 +84,7 @@ public class TextureBin
 	 * Clears all images from the bin and re-adds them to the image list.
 	 * @param imageList The list to put the removed images into.
 	 */
-	private void remove(ArrayList<AtlasImage> imageList)
+	public void clear(ArrayList<AtlasImage> imageList)
 	{
 		imageList.addAll(images);
 		images.clear();
