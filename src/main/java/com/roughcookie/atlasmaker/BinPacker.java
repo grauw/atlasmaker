@@ -34,9 +34,11 @@ public class BinPacker
 {
 	private File outputDir;
 	private ArrayList<TextureBin> textureBins;
+	private int border;
 	
-	public BinPacker(File outputDir) {
+	public BinPacker(File outputDir, int border) {
 		this.outputDir = outputDir;
+		this.border = border;
 		textureBins = new ArrayList<TextureBin>();
 	}
 	
@@ -50,7 +52,7 @@ public class BinPacker
 		return textureBins.get(textureBins.size() - 1);
 	}
 	
-	public void pack(TextureSize textureSize, ArrayList<AtlasImage> atlasImages, int border)
+	public void pack(TextureSize textureSize, ArrayList<AtlasImage> atlasImages)
 	{
 		for (int i = 0; ; i++)
 		{

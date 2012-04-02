@@ -113,8 +113,8 @@ public class Atlas implements ProgressListener
 		ArrayList<AtlasImage> images = createAtlasImages(sourceFiles);
 		
 		TextureSize textureSize = getTextureSize();
-		BinPacker packer = new BinPacker(outputDir);
-		packer.pack(textureSize, images, imageBorder);
+		BinPacker packer = new BinPacker(outputDir, imageBorder);
+		packer.pack(textureSize, images);
 		
 		// try making texture size smaller by making it more rectangular
 		if (!textureSize.isPowerOfTwo())
