@@ -73,8 +73,6 @@ public class TextureBin
 	{
 		// puts images removed back on the list
 		this.clear(imageList);
-		// need to resort, because they may have been put in wrong order
-		Collections.sort(imageList, new CompareArea());
 		// resize resets everything
 		treeNode.resize(width, height);
 		this.resize(width, height);
@@ -87,6 +85,10 @@ public class TextureBin
 	public void clear(ArrayList<AtlasImage> imageList)
 	{
 		imageList.addAll(images);
+		
+		// need to resort, because they may have been put in wrong order
+		Collections.sort(imageList, new CompareArea());
+		
 		images.clear();
 	}
 	
