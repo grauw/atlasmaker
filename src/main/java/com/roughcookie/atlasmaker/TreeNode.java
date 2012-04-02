@@ -39,17 +39,6 @@ public class TreeNode
 		this.border = border;
 	}
 	
-	public void resize(int width, int height)
-	{
-		this.x = 0;
-		this.y = 0;
-		this.width = width;
-		this.height = height;
-		this.image = null;
-		leaf1 = null;
-		leaf2 = null;
-	}
-	
 	public void createBranches(AtlasImage image)
 	{
 		int dx = width - image.getWidth();

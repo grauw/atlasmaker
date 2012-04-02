@@ -40,6 +40,7 @@ public class TextureBin
 	private ArrayList<AtlasImage> images;
 	private int width;
 	private int height;
+	private int border;
 	private List<ProgressListener> progressListeners = new ArrayList<ProgressListener>();
 	
 	public TextureBin(File outputFile, TextureSize textureSize, int border)
@@ -47,6 +48,7 @@ public class TextureBin
 		this.outputFile = outputFile;
 		this.width = textureSize.getWidth();
 		this.height = textureSize.getHeight();
+		this.border = border;
 		treeNode = new TreeNode(0, 0, width, height, border);
 		images = new ArrayList<AtlasImage>();
 	}
@@ -66,7 +68,7 @@ public class TextureBin
 		this.width = width;
 		this.height = height;
 		
-		treeNode.resize(width, height);
+		treeNode = new TreeNode(0, 0, width, height, border);
 		
 		this.clear(imageList);
 	}
