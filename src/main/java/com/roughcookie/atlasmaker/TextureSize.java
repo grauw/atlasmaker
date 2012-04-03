@@ -41,7 +41,7 @@ public abstract class TextureSize
 	
 	public int getNumPixels()
 	{
-		return width*height;
+		return width * height;
 	}
 	
 	public boolean isMaxSize()
