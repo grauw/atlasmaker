@@ -84,24 +84,7 @@ public abstract class BinPacker
 			
 			if (atlasImages.isEmpty()) 
 			{
-				if (textureBins.size() > 1 && !bin.getSize().isMinSize())
-				{
-					// there is opportunity for further reduction
-					// because some images might fit in gaps of previous atlases
-					TextureSize prevSize;
-					do
-					{
-						prevSize = bin.getSize();
-						bin.resize(bin.getSize().dec(), atlasImages); 
-						this.pack2(atlasImages);
-						
-					} while (atlasImages.isEmpty() && !bin.getSize().isMinSize());
-					// revert back to last size that fit
-					bin.resize(prevSize, atlasImages); 
-					this.pack2(atlasImages);
-					
-					assert(atlasImages.isEmpty());
-				}
+				repackLastBin();
 				return;
 			}
 			
@@ -134,6 +117,34 @@ public abstract class BinPacker
 			if (!added)
 				break;
 		}
+	}
+	
+	/**
+	 * Attempt to downsize the last atlas.
+	 */
+	protected void repackLastBin()
+	{
+		TextureBin bin = getLastTextureBin();
+		ArrayList<AtlasImage> atlasImages = new ArrayList<AtlasImage>();
+		
+		if (bin.getSize().isMinSize())
+			return;
+		
+		// there is opportunity for further reduction
+		// because some images might fit in gaps of previous atlases
+		TextureSize prevSize;
+		do
+		{
+			prevSize = bin.getSize();
+			bin.resize(bin.getSize().dec(), atlasImages); 
+			this.pack2(atlasImages);
+			
+		} while (atlasImages.isEmpty() && !bin.getSize().isMinSize());
+		// revert back to last size that fit
+		bin.resize(prevSize, atlasImages); 
+		this.pack2(atlasImages);
+		
+		assert(atlasImages.isEmpty());
 	}
 	
 	public void trim()
