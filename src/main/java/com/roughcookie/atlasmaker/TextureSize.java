@@ -30,8 +30,8 @@ public abstract class TextureSize
 	{
 		int minSize = 32;
 		
-		if (maxSize <= minSize)
-			throw new RuntimeException("Maximum texture size can not be lower than or equal to minimum.");
+		if (maxSize < minSize)
+			throw new RuntimeException("Maximum texture size can not be lower than minimum.");
 		
 		this.width = Math.min(Math.max(minSize, width), maxSize);
 		this.height = Math.min(Math.max(minSize, height), maxSize);
