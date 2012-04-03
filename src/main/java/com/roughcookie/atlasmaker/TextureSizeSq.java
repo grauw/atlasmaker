@@ -31,11 +31,13 @@ public class TextureSizeSq extends TextureSize
 		super(width, height, maxSize);
 	}
 	
+	@Override
 	public TextureSize inc()
 	{
 		return new TextureSizeSq(height * 2, width * 2, maxSize);
 	}
 	
+	@Override
 	public TextureSize getNextSizeFits(int pixelsReq, int minWidth, int minHeight)
 	{
 		if ((width * height < pixelsReq || width < minWidth || height < minHeight) && !isMaxSize())
@@ -43,6 +45,7 @@ public class TextureSizeSq extends TextureSize
 		return this;
 	}
 	
+	@Override
 	public TextureSize dec()
 	{
 		return new TextureSizeSq(height / 2, width / 2, maxSize);

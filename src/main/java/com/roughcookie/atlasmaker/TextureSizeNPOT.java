@@ -33,6 +33,7 @@ public class TextureSizeNPOT extends TextureSize
 		super(width, height, maxSize);
 	}
 	
+	@Override
 	public TextureSize inc()
 	{
 		if (height > width)
@@ -41,6 +42,7 @@ public class TextureSizeNPOT extends TextureSize
 			return new TextureSizeNPOT(width, height + STEP_SIZE, maxSize);
 	}
 	
+	@Override
 	public TextureSize dec()
 	{
 		if (height < width)
@@ -49,6 +51,7 @@ public class TextureSizeNPOT extends TextureSize
 			return new TextureSizeNPOT(width, height - STEP_SIZE, maxSize);
 	}
 	
+	@Override
 	public TextureSize getNextSizeFits(int pixelsReq, int minWidth, int minHeight)
 	{
 		// some of the smaller images fit into the other textures

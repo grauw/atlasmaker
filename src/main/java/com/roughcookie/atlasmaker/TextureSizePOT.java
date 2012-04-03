@@ -31,6 +31,7 @@ public class TextureSizePOT extends TextureSize
 		super(width, height, maxSize);
 	}
 	
+	@Override
 	public TextureSize inc()
 	{
 		// swap height and width if it's not square
@@ -43,6 +44,7 @@ public class TextureSizePOT extends TextureSize
 			return new TextureSizePOT(width, height * 2, maxSize);
 	}
 	
+	@Override
 	public TextureSize dec()
 	{
 		if (height > width)
@@ -53,6 +55,7 @@ public class TextureSizePOT extends TextureSize
 			return new TextureSizePOT(width, height / 2, maxSize);
 	}
 	
+	@Override
 	public TextureSize getNextSizeFits(int pixelsReq, int minWidth, int minHeight)
 	{
 		if ((width * height < pixelsReq || width < minWidth || height < minHeight) && !isMaxSize())
