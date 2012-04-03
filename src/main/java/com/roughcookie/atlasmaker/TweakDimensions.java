@@ -26,8 +26,8 @@ public class TweakDimensions
 	private int bestSavings;
 	private int bestWidth;
 	private int bestHeight;
-	private int origWidth;
-	private int origHeight;
+	private final int origWidth;
+	private final int origHeight;
 	
 	public void tweak(TextureBin bin, ArrayList<AtlasImage> imageList)
 	{
