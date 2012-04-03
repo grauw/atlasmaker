@@ -74,12 +74,7 @@ public abstract class BinPacker
 	{
 		for (int i = 0; !atlasImages.isEmpty(); i++)
 		{
-			TextureBin bin = new TextureBin(
-				new File(outputDir, "atlas-" + i + ".png"),
-				createFittingTextureSize(atlasImages),
-				border
-			);
-			
+			TextureBin bin = new TextureBin(createFittingTextureSize(atlasImages), border);
 			textureBins.add(bin);
 			
 			this.pack2(atlasImages);
@@ -150,9 +145,11 @@ public abstract class BinPacker
 		// remove old atlases first
 		Paths oldAtlasRemover = new Paths(outputDir.getAbsolutePath(), "atlas*.png");
 		oldAtlasRemover.delete();
-		
-		for (TextureBin bin : textureBins)
-			bin.write();
+
+		for (int i = 0; i < textureBins.size(); i++)
+		{
+			textureBins.get(i).write(createAtlasPath(i));
+		}
 		writeIndex();
 	}
 	
@@ -188,10 +185,16 @@ public abstract class BinPacker
 	public JSONArray toJSON() throws JSONException 
 	{
 		JSONArray texturesJson = new JSONArray();
-		for (TextureBin bin : textureBins)
+		for (int i = 0; i < textureBins.size(); i++)
 		{
-			texturesJson.put(bin.toJSON());
+			texturesJson.put(textureBins.get(i).toJSON(createAtlasPath(i)));
 		}
 		return texturesJson;
 	}
+	
+	private File createAtlasPath(int index)
+	{
+		return new File(outputDir, "atlas-" + index + ".png");
+	}
+	
 }

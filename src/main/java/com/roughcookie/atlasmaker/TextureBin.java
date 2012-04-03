@@ -35,16 +35,14 @@ import org.json.JSONObject;
 
 public class TextureBin
 {
-	private File outputFile;
 	private TreeNode treeNode;
 	private ArrayList<AtlasImage> images;
 	private TextureSize textureSize;
 	private int border;
 	private List<ProgressListener> progressListeners = new ArrayList<ProgressListener>();
 	
-	public TextureBin(File outputFile, TextureSize textureSize, int border)
+	public TextureBin(TextureSize textureSize, int border)
 	{
-		this.outputFile = outputFile;
 		this.textureSize = textureSize;
 		this.border = border;
 		treeNode = new TreeNode(0, 0, textureSize.getWidth(), textureSize.getHeight(), border);
@@ -129,7 +127,7 @@ public class TextureBin
 		return false;
 	}
 	
-	public void write()
+	public void write(File outputFile)
 	{
 		BufferedImage imageOut = new BufferedImage(textureSize.getWidth(), textureSize.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g = imageOut.createGraphics();
@@ -154,7 +152,7 @@ public class TextureBin
 		fireProgressTick();
 	}
 	
-	public JSONObject toJSON() throws JSONException 
+	public JSONObject toJSON(File outputFile) throws JSONException 
 	{
 		JSONObject texture = new JSONObject();
 		texture.put("path", outputFile.getName());
