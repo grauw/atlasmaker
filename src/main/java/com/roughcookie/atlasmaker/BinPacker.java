@@ -42,8 +42,6 @@ public abstract class BinPacker
 		textureBins = new ArrayList<TextureBin>();
 	}
 	
-	public abstract TextureSize createTextureSize();
-	
 	public TextureBin[] getTextureBins()
 	{
 		return textureBins.toArray(new TextureBin[] {});
@@ -54,23 +52,29 @@ public abstract class BinPacker
 		return textureBins.get(textureBins.size() - 1);
 	}
 	
+	public abstract TextureSize createTextureSize();
+	
+	private TextureSize createFittingTextureSize(ArrayList<AtlasImage> atlasImages)
+	{
+		int maxWidth = 0;
+		int maxHeight = 0;
+		int pixelsReq = 0;
+		for (AtlasImage atlasImage : atlasImages)
+		{
+			if (maxWidth < atlasImage.getWidth())
+				maxWidth = atlasImage.getWidth();
+			if (maxHeight < atlasImage.getHeight())
+				maxHeight = atlasImage.getHeight();
+			pixelsReq += atlasImage.getPixelCount();
+		}
+		return createTextureSize().getNextSizeFits(pixelsReq, maxWidth, maxHeight);
+	}
+	
 	public void pack(ArrayList<AtlasImage> atlasImages)
 	{
 		for (int i = 0; ; i++)
 		{
-			int maxWidth = 0;
-			int maxHeight = 0;
-			int pixelsReq = 0;
-			for (AtlasImage atlasImage : atlasImages)
-			{
-				if (maxWidth < atlasImage.getWidth())
-					maxWidth = atlasImage.getWidth();
-				if (maxHeight < atlasImage.getHeight())
-					maxHeight = atlasImage.getHeight();
-				pixelsReq += atlasImage.getPixelCount();
-			}
-			TextureSize textureSize = createTextureSize().getNextSizeFits(pixelsReq, maxWidth, maxHeight);
-			
+			TextureSize textureSize = createFittingTextureSize(atlasImages);
 			TextureBin bin = new TextureBin(new File(outputDir, "atlas-" + i + ".png"), textureSize, border);
 			textureBins.add(bin);
 			this.pack2(atlasImages);
