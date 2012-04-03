@@ -70,11 +70,16 @@ public abstract class BinPacker
 		return createTextureSize().getNextSizeFits(pixelsReq, maxWidth, maxHeight);
 	}
 	
+	protected TextureBin createTextureBin(TextureSize size)
+	{
+		return new TextureBin(size, border);
+	}
+	
 	public void pack(ArrayList<AtlasImage> atlasImages)
 	{
 		for (int i = 0; !atlasImages.isEmpty(); i++)
 		{
-			TextureBin bin = new TextureBin(createFittingTextureSize(atlasImages), border);
+			TextureBin bin = createTextureBin(createFittingTextureSize(atlasImages));
 			textureBins.add(bin);
 			
 			this.pack2(atlasImages);
