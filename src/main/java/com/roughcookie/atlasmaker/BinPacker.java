@@ -33,7 +33,7 @@ import com.esotericsoftware.wildcard.Paths;
 public abstract class BinPacker
 {
 	private File outputDir;
-	private ArrayList<TextureBin> textureBins;
+	protected ArrayList<TextureBin> textureBins;
 	private int border;
 	
 	public BinPacker(File outputDir, int border) {
@@ -145,12 +145,6 @@ public abstract class BinPacker
 		this.pack2(atlasImages);
 		
 		assert(atlasImages.isEmpty());
-	}
-	
-	public void trim()
-	{
-		for (TextureBin bin : textureBins)
-			bin.trim();
 	}
 	
 	public void write()

@@ -27,4 +27,10 @@ public class BinPackerNPOT extends BinPacker {
 		trim();
 	}
 	
+	public void trim()
+	{
+		for (TextureBin bin : textureBins)
+			bin.trim();
+	}
+	
 }
