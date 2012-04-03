@@ -34,6 +34,16 @@ public abstract class TextureSize
 		this.minSize = 32;
 	}
 	
+	public int getHeight()
+	{
+		return height;
+	}
+	
+	public int getWidth()
+	{
+		return width;
+	}
+	
 	public int getNumPixels()
 	{
 		return width * height;
@@ -63,16 +73,6 @@ public abstract class TextureSize
 			width = minSize;
 		if (height < minSize)
 			height = minSize;
-	}
-	
-	public int getHeight()
-	{
-		return height;
-	}
-	
-	public int getWidth()
-	{
-		return width;
 	}
 	
 	abstract public void inc();
