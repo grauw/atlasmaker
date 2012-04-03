@@ -72,7 +72,7 @@ public abstract class BinPacker
 	
 	public void pack(ArrayList<AtlasImage> atlasImages)
 	{
-		for (int i = 0; ; i++)
+		for (int i = 0; !atlasImages.isEmpty(); i++)
 		{
 			TextureBin bin = new TextureBin(
 				new File(outputDir, "atlas-" + i + ".png"),
@@ -84,22 +84,16 @@ public abstract class BinPacker
 			
 			this.pack2(atlasImages);
 			
-			if (atlasImages.isEmpty()) 
-			{
-				repackLastBin();
-				return;
-			}
-			
 			// scale up the texture if useful
-			while (!bin.getSize().isMaxSize())
+			while (!atlasImages.isEmpty() && !bin.getSize().isMaxSize())
 			{
 				bin.resize(bin.getSize().inc(), atlasImages); 
 				this.pack2(atlasImages);
-				
-				if (atlasImages.isEmpty())
-					return;
 			}
 		}
+		
+		if (!textureBins.isEmpty())
+			repackLastBin();
 	}
 	
 	private void pack2(ArrayList<AtlasImage> images)
