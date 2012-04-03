@@ -79,7 +79,9 @@ public abstract class BinPacker
 				createFittingTextureSize(atlasImages),
 				border
 			);
+			
 			textureBins.add(bin);
+			
 			this.pack2(atlasImages);
 			
 			if (atlasImages.isEmpty()) 
@@ -88,6 +90,7 @@ public abstract class BinPacker
 				return;
 			}
 			
+			// scale up the texture if useful
 			while (!bin.getSize().isMaxSize())
 			{
 				bin.resize(bin.getSize().inc(), atlasImages); 
@@ -96,7 +99,6 @@ public abstract class BinPacker
 				if (atlasImages.isEmpty())
 					return;
 			}
-			// recalculate values for remainder images
 		}
 	}
 	
@@ -136,12 +138,12 @@ public abstract class BinPacker
 		do
 		{
 			prevSize = bin.getSize();
-			bin.resize(bin.getSize().dec(), atlasImages); 
+			bin.resize(bin.getSize().dec(), atlasImages);
 			this.pack2(atlasImages);
 			
 		} while (atlasImages.isEmpty() && !bin.getSize().isMinSize());
 		// revert back to last size that fit
-		bin.resize(prevSize, atlasImages); 
+		bin.resize(prevSize, atlasImages);
 		this.pack2(atlasImages);
 		
 		assert(atlasImages.isEmpty());
