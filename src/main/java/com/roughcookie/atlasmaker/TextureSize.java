@@ -64,6 +64,11 @@ public abstract class TextureSize
 		return width == minSize && height == minSize;
 	}
 	
+	public boolean equals(TextureSize otherSize)
+	{
+		return width == otherSize.width && height == otherSize.height;
+	}
+	
 	abstract public TextureSize inc();
 	abstract public TextureSize dec();
 	abstract public TextureSize getNextSizeFits(int pixelsReq, int minWidth, int minHeight);

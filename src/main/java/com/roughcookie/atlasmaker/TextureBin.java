@@ -56,40 +56,15 @@ public class TextureBin
 		return textureSize;
 	}
 	
-	public int getHeight()
-	{
-		return textureSize.getHeight();
-	}
-	
-	public int getWidth()
-	{
-		return textureSize.getWidth();
-	}
-	
 	public void resize(TextureSize textureSize, ArrayList<AtlasImage> imageList)
 	{
 		setSize(textureSize);
 		clear(imageList);
 	}
 	
-	public void resize(int width, int height, ArrayList<AtlasImage> imageList)
-	{
-		resize(textureSize.resize(width, height), imageList);
-	}
-	
 	public void setSize(TextureSize textureSize)
 	{
 		this.textureSize = textureSize;
-	}
-	
-	public void setSize(int width, int height)
-	{
-		setSize(textureSize.resize(width, height));
-	}
-	
-	public int getPixels()
-	{
-		return textureSize.getPixels();
 	}
 	
 	public ArrayList<AtlasImage> getImages()
@@ -143,7 +118,7 @@ public class TextureBin
 			if (height < image.getBottom()) 
 				height = image.getBottom();
 		}
-		setSize(width, height);
+		setSize(textureSize.resize(width, height));
 	}
 	
 	public boolean isTransparent()

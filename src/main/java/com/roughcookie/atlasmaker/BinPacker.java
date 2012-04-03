@@ -85,18 +85,17 @@ public abstract class BinPacker
 				{
 					// there is opportunity for further reduction
 					// because some images might fit in gaps of previous atlases
-					int prevWidth, prevHeight;
+					TextureSize prevSize;
 					do
 					{
-						prevWidth = textureSize.getWidth();
-						prevHeight = textureSize.getHeight();
+						prevSize = textureSize;
 						textureSize = textureSize.dec();
-						bin.resize(textureSize.getWidth(), textureSize.getHeight(), atlasImages); 
+						bin.resize(textureSize, atlasImages); 
 						this.pack2(atlasImages);
 						
 					} while (atlasImages.isEmpty() && !textureSize.isMinSize());
 					// revert back to last size that fit
-					bin.resize(prevWidth, prevHeight, atlasImages); 
+					bin.resize(prevSize, atlasImages); 
 					this.pack2(atlasImages);
 					
 					assert(atlasImages.isEmpty());
@@ -107,7 +106,7 @@ public abstract class BinPacker
 			while (!textureSize.isMaxSize())
 			{
 				textureSize = textureSize.inc();
-				bin.resize(textureSize.getWidth(), textureSize.getHeight(), atlasImages); 
+				bin.resize(textureSize, atlasImages); 
 				this.pack2(atlasImages);
 				
 				if (atlasImages.isEmpty())
