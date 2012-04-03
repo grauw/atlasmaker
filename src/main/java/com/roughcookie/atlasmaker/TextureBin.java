@@ -51,7 +51,7 @@ public class TextureBin
 		images = new ArrayList<AtlasImage>();
 	}
 	
-	public TextureSize getTextureSize()
+	public TextureSize getSize()
 	{
 		return textureSize;
 	}
