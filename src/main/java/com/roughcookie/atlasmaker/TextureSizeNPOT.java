@@ -64,4 +64,9 @@ public class TextureSizeNPOT extends TextureSize
 		return new TextureSizeNPOT(Math.max(width, minWidth), Math.max(height, minHeight), maxSize);
 	}
 	
+	@Override
+	public TextureSize resize(int width, int height) {
+		return new TextureSizeNPOT(width, height, maxSize);
+	}
+	
 }

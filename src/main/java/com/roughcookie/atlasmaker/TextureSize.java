@@ -67,4 +67,5 @@ public abstract class TextureSize
 	abstract public TextureSize inc();
 	abstract public TextureSize dec();
 	abstract public TextureSize getNextSizeFits(int pixelsReq, int minWidth, int minHeight);
+	abstract public TextureSize resize(int width, int height);
 }

@@ -63,4 +63,9 @@ public class TextureSizePOT extends TextureSize
 		return this;
 	}
 	
+	@Override
+	public TextureSize resize(int width, int height) {
+		return new TextureSizePOT(width, height, maxSize);
+	}
+	
 }

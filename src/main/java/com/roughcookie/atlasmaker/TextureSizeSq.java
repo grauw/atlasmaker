@@ -51,4 +51,9 @@ public class TextureSizeSq extends TextureSize
 		return new TextureSizeSq(height / 2, width / 2, maxSize);
 	}
 	
+	@Override
+	public TextureSize resize(int width, int height) {
+		return new TextureSizeSq(height, width, maxSize);
+	}
+	
 }
