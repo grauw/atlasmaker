@@ -38,48 +38,58 @@ public class TextureBin
 	private File outputFile;
 	private TreeNode treeNode;
 	private ArrayList<AtlasImage> images;
-	private int width;
-	private int height;
+	private TextureSize textureSize;
 	private int border;
 	private List<ProgressListener> progressListeners = new ArrayList<ProgressListener>();
 	
 	public TextureBin(File outputFile, TextureSize textureSize, int border)
 	{
 		this.outputFile = outputFile;
-		this.width = textureSize.getWidth();
-		this.height = textureSize.getHeight();
+		this.textureSize = textureSize;
 		this.border = border;
-		treeNode = new TreeNode(0, 0, width, height, border);
+		treeNode = new TreeNode(0, 0, textureSize.getWidth(), textureSize.getHeight(), border);
 		images = new ArrayList<AtlasImage>();
+	}
+	
+	public TextureSize getTextureSize()
+	{
+		return textureSize;
 	}
 	
 	public int getHeight()
 	{
-		return height;
+		return textureSize.getHeight();
 	}
 	
 	public int getWidth()
 	{
-		return width;
+		return textureSize.getWidth();
+	}
+	
+	public void resize(TextureSize textureSize, ArrayList<AtlasImage> imageList)
+	{
+		setSize(textureSize);
+		clear(imageList);
 	}
 	
 	public void resize(int width, int height, ArrayList<AtlasImage> imageList)
 	{
-		this.width = width;
-		this.height = height;
-		
-		this.clear(imageList);
+		resize(textureSize.resize(width, height), imageList);
+	}
+	
+	public void setSize(TextureSize textureSize)
+	{
+		this.textureSize = textureSize;
 	}
 	
 	public void setSize(int width, int height)
 	{
-		this.width = width;
-		this.height = height;
+		setSize(textureSize.resize(width, height));
 	}
 	
 	public int getPixels()
 	{
-		return width * height;
+		return textureSize.getPixels();
 	}
 	
 	public ArrayList<AtlasImage> getImages()
@@ -106,7 +116,7 @@ public class TextureBin
 		// need to resort, because they may have been put in wrong order
 		Collections.sort(imageList, new CompareArea());
 		
-		treeNode = new TreeNode(0, 0, width, height, border);
+		treeNode = new TreeNode(0, 0, textureSize.getWidth(), textureSize.getHeight(), border);
 		
 		images.clear();
 	}
@@ -124,15 +134,16 @@ public class TextureBin
 	// trims dimensions to minimium
 	public void trim()
 	{
-		width = 0;
-		height = 0;
+		int width = 0;
+		int height = 0;
 		for (AtlasImage image : images)
 		{
 			if (width < image.getRight()) 
 				width = image.getRight();
 			if (height < image.getBottom()) 
 				height = image.getBottom();
-		} 
+		}
+		setSize(width, height);
 	}
 	
 	public boolean isTransparent()
@@ -145,7 +156,7 @@ public class TextureBin
 	
 	public void write()
 	{
-		BufferedImage imageOut = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage imageOut = new BufferedImage(textureSize.getWidth(), textureSize.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g = imageOut.createGraphics();
 		
 		Collections.sort(images, new CompareName());
@@ -172,8 +183,8 @@ public class TextureBin
 	{
 		JSONObject texture = new JSONObject();
 		texture.put("path", outputFile.getName());
-		texture.put("width", width);
-		texture.put("height", height);
+		texture.put("width", textureSize.getWidth());
+		texture.put("height", textureSize.getHeight());
 		texture.put("transparent", isTransparent());
 		JSONArray imagesJson = new JSONArray();
 		for (AtlasImage image : images)
