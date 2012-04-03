@@ -21,17 +21,22 @@ OF THE POSSIBILITY OF SUCH DAMAGE.
 
 public abstract class TextureSize
 {
-	protected int width;
-	protected int height;
-	protected int maxSize;
-	protected int minSize;
+	protected final int width;
+	protected final int height;
+	protected final int maxSize;
+	protected final int minSize;
 	
-	public TextureSize(int maxSize)
+	protected TextureSize(int width, int height, int maxSize)
 	{
-		this.width = 0;
-		this.height = 0;
+		int minSize = 32;
+		
+		if (maxSize <= minSize)
+			throw new RuntimeException("Maximum texture size can not be lower than or equal to minimum.");
+		
+		this.width = Math.min(Math.max(minSize, width), maxSize);
+		this.height = Math.min(Math.max(minSize, height), maxSize);
 		this.maxSize = maxSize;
-		this.minSize = 32;
+		this.minSize = minSize;
 	}
 	
 	public int getHeight()
@@ -59,24 +64,7 @@ public abstract class TextureSize
 		return width == minSize && height == minSize;
 	}
 	
-	protected void checkMax()
-	{
-		if (width > maxSize)
-			width = maxSize;
-		if (height > maxSize)
-			height = maxSize;
-	}
-	
-	protected void checkMin()
-	{
-		if (width < minSize)
-			width = minSize;
-		if (height < minSize)
-			height = minSize;
-	}
-	
-	abstract public void inc();
-	abstract public void dec();
-	abstract public void getNextSizeFits(int pixelsReq, int maxWidth, int maxHeight);
-	abstract public boolean isPowerOfTwo();
+	abstract public TextureSize inc();
+	abstract public TextureSize dec();
+	abstract public TextureSize getNextSizeFits(int pixelsReq, int minWidth, int minHeight);
 }

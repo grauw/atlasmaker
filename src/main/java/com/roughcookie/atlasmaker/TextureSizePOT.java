@@ -21,56 +21,43 @@ OF THE POSSIBILITY OF SUCH DAMAGE.
 
 public class TextureSizePOT extends TextureSize
 {
-	protected int ixSize;
-	
 	public TextureSizePOT(int maxSize)
 	{
-		super(maxSize);
+		this(0, 0, maxSize);
 	}
 	
-	public void getNextSizeFits(int pixelsReq, int maxWidth, int maxHeight)
+	private TextureSizePOT(int width, int height, int maxSize)
 	{
-		ixSize = 0;
-		width = 32;
-		height = 32;
-		while ((width * height < pixelsReq || width < maxWidth || height < maxHeight) && !isMaxSize())
-		{
-			if (height > width)
-				width *= 2;
-			else
-				height *= 2;
-			ixSize++;
-		}
+		super(width, height, maxSize);
 	}
 	
-	public void inc()
+	public TextureSize inc()
 	{
 		// swap height and width if it's not square
-		// this is to allow for better fitting of width and tall images
-		if (height > width && ixSize % 1 == 0)
-		{
-			int temp = height;
-			height = width;
-			width = temp;
-		}
+		// this is to allow for better fitting of wide and tall images
+		if (width > height)
+			return new TextureSizePOT(height, width, maxSize);  // swap
 		else if (height > width)
-			width *= 2;
+			return new TextureSizePOT(width * 2, height, maxSize);
 		else
-			height *= 2;
-		ixSize++;
-		checkMax();
+			return new TextureSizePOT(width, height * 2, maxSize);
 	}
 	
-	public void dec()
+	public TextureSize dec()
 	{
-		if (height < width)
-			width /= 2;
+		if (height > width)
+			return new TextureSizePOT(height, width, maxSize);  // swap
+		else if (height < width)
+			return new TextureSizePOT(width / 2, height, maxSize);
 		else
-			height /= 2;
-		checkMin();
+			return new TextureSizePOT(width, height / 2, maxSize);
 	}
 	
-	public boolean isPowerOfTwo() {
-		return true;
+	public TextureSize getNextSizeFits(int pixelsReq, int minWidth, int minHeight)
+	{
+		if ((width * height < pixelsReq || width < minWidth || height < minHeight) && !isMaxSize())
+			return inc().getNextSizeFits(pixelsReq, minWidth, minHeight);
+		return this;
 	}
+	
 }

@@ -56,8 +56,6 @@ public abstract class BinPacker
 	
 	public void pack(ArrayList<AtlasImage> atlasImages)
 	{
-		TextureSize textureSize = createTextureSize();
-		
 		for (int i = 0; ; i++)
 		{
 			int maxWidth = 0;
@@ -71,7 +69,8 @@ public abstract class BinPacker
 					maxHeight = atlasImage.getHeight();
 				pixelsReq += atlasImage.getPixelCount();
 			}
-			textureSize.getNextSizeFits(pixelsReq, maxWidth, maxHeight);
+			TextureSize textureSize = createTextureSize().getNextSizeFits(pixelsReq, maxWidth, maxHeight);
+			
 			TextureBin bin = new TextureBin(new File(outputDir, "atlas-" + i + ".png"), textureSize, border);
 			textureBins.add(bin);
 			this.pack2(atlasImages);
@@ -87,7 +86,7 @@ public abstract class BinPacker
 					{
 						prevWidth = textureSize.getWidth();
 						prevHeight = textureSize.getHeight();
-						textureSize.dec();
+						textureSize = textureSize.dec();
 						bin.resize(textureSize.getWidth(), textureSize.getHeight(), atlasImages); 
 						this.pack2(atlasImages);
 						
@@ -103,7 +102,7 @@ public abstract class BinPacker
 			
 			while (!textureSize.isMaxSize())
 			{
-				textureSize.inc();
+				textureSize = textureSize.inc();
 				bin.resize(textureSize.getWidth(), textureSize.getHeight(), atlasImages); 
 				this.pack2(atlasImages);
 				

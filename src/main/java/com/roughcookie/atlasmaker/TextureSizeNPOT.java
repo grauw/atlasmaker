@@ -21,70 +21,44 @@ OF THE POSSIBILITY OF SUCH DAMAGE.
 
 public class TextureSizeNPOT extends TextureSize
 {
-	protected int ixSize;
-	public static int STEP_SIZE = 64;
+	public static final int STEP_SIZE = 64;
 	
 	public TextureSizeNPOT(int maxSize)
 	{
-		super(maxSize);
+		this(0, 0, maxSize);
 	}
 	
-	public void inc()
+	public TextureSizeNPOT(int width, int height, int maxSize)
 	{
-//		if (height > width && ixSize % 1 == 0)
-//		{
-//			int temp = height;
-//			height = width;
-//			width = temp;
-//		}
-		if (height > width)
-			width += STEP_SIZE;
-		else
-			height += STEP_SIZE;
-//		ixSize++;
-		checkMax();
+		super(width, height, maxSize);
 	}
 	
-	public void dec()
+	public TextureSize inc()
+	{
+		if (height > width)
+			return new TextureSizeNPOT(width + STEP_SIZE, height, maxSize);
+		else
+			return new TextureSizeNPOT(width, height + STEP_SIZE, maxSize);
+	}
+	
+	public TextureSize dec()
 	{
 		if (height < width)
-			width -= STEP_SIZE;
+			return new TextureSizeNPOT(width - STEP_SIZE, height, maxSize);
 		else
-			height -= STEP_SIZE;
-//		ixSize++;
-		checkMin();
+			return new TextureSizeNPOT(width, height - STEP_SIZE, maxSize);
 	}
 	
-	public void getNextSizeFits(int pixelsReq, int maxWidth, int maxHeight)
+	public TextureSize getNextSizeFits(int pixelsReq, int minWidth, int minHeight)
 	{
 		// some of the smaller images fit into the other textures
-		// so deliberly choose smaller size
-		ixSize = 0;
-		int size = (int)Math.round(Math.sqrt(pixelsReq));
-		if (size < 32) size = 32;
-		if (maxWidth > size)
-		{
-			width = maxWidth;
-			height = (int)pixelsReq / width+1;
-		}
-		else
-		{
-			width = size;
-		}
-		if (maxHeight > size)
-		{
-			height = maxHeight;
-			width = (int)pixelsReq / height+1;
-		}
-		else
-		{
-			height = size;
-		}
-		checkMax();
+		// so deliberately choose smaller size
+		int size = Math.max((int)Math.round(Math.sqrt(pixelsReq)), minSize);
+		
+		int width = minHeight > size ? pixelsReq / minHeight + 1 : size;
+		int height = minWidth > size ? pixelsReq / minWidth + 1 : size;
+		
+		return new TextureSizeNPOT(Math.max(width, minWidth), Math.max(height, minHeight), maxSize);
 	}
 	
-	public boolean isPowerOfTwo() {
-		return false;
-	}
-
 }

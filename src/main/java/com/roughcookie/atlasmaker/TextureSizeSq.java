@@ -23,32 +23,29 @@ public class TextureSizeSq extends TextureSize
 {
 	public TextureSizeSq(int maxSize)
 	{
-		super(maxSize);
+		this(0, 0, maxSize);
 	}
 	
-	public void getNextSizeFits(int pixelsReq, int maxWidth, int maxHeight)
+	private TextureSizeSq(int width, int height, int maxSize)
 	{
-		width = 32;
-		height = 32;
-		while ((width * height < pixelsReq || width < maxWidth || height < maxHeight) && !isMaxSize())
-		{
-			inc();
-		}
+		super(width, height, maxSize);
 	}
 	
-	public void inc()
+	public TextureSize inc()
 	{
-		height *= 2;
-		width *= 2;
+		return new TextureSizeSq(height * 2, width * 2, maxSize);
 	}
 	
-	public void dec()
+	public TextureSize getNextSizeFits(int pixelsReq, int minWidth, int minHeight)
 	{
-		height /= 2;
-		width /= 2;
+		if ((width * height < pixelsReq || width < minWidth || height < minHeight) && !isMaxSize())
+			return inc().getNextSizeFits(pixelsReq, minWidth, minHeight);
+		return this;
 	}
 	
-	public boolean isPowerOfTwo() {
-		return true;
+	public TextureSize dec()
+	{
+		return new TextureSizeSq(height / 2, width / 2, maxSize);
 	}
+	
 }
