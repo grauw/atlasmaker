@@ -49,7 +49,7 @@ public abstract class TextureSize
 		return width;
 	}
 	
-	public int getNumPixels()
+	public int getPixels()
 	{
 		return width * height;
 	}
