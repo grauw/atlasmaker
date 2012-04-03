@@ -34,11 +34,6 @@ public abstract class TextureSize
 		this.minSize = 32;
 	}
 	
-	public void setMaxSize(int maxSize)
-	{
-		this.maxSize = maxSize;
-	}
-	
 	public int getNumPixels()
 	{
 		return width * height;
@@ -75,25 +70,9 @@ public abstract class TextureSize
 		return height;
 	}
 	
-	public void setHeight(int height)
-	{
-		this.height = height;
-	}
-	
-	public void setSize(int width, int height)
-	{
-		this.width = width;
-		this.height = height;
-	}
-	
 	public int getWidth()
 	{
 		return width;
-	}
-	
-	public void setWidth(int width)
-	{
-		this.width = width;
 	}
 	
 	abstract public void inc();
