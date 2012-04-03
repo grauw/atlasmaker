@@ -74,26 +74,28 @@ public abstract class BinPacker
 	{
 		for (int i = 0; ; i++)
 		{
-			TextureSize textureSize = createFittingTextureSize(atlasImages);
-			TextureBin bin = new TextureBin(new File(outputDir, "atlas-" + i + ".png"), textureSize, border);
+			TextureBin bin = new TextureBin(
+				new File(outputDir, "atlas-" + i + ".png"),
+				createFittingTextureSize(atlasImages),
+				border
+			);
 			textureBins.add(bin);
 			this.pack2(atlasImages);
 			
 			if (atlasImages.isEmpty()) 
 			{
-				if (textureBins.size() > 1 && !textureSize.isMinSize())
+				if (textureBins.size() > 1 && !bin.getSize().isMinSize())
 				{
 					// there is opportunity for further reduction
 					// because some images might fit in gaps of previous atlases
 					TextureSize prevSize;
 					do
 					{
-						prevSize = textureSize;
-						textureSize = textureSize.dec();
-						bin.resize(textureSize, atlasImages); 
+						prevSize = bin.getSize();
+						bin.resize(bin.getSize().dec(), atlasImages); 
 						this.pack2(atlasImages);
 						
-					} while (atlasImages.isEmpty() && !textureSize.isMinSize());
+					} while (atlasImages.isEmpty() && !bin.getSize().isMinSize());
 					// revert back to last size that fit
 					bin.resize(prevSize, atlasImages); 
 					this.pack2(atlasImages);
@@ -103,10 +105,9 @@ public abstract class BinPacker
 				return;
 			}
 			
-			while (!textureSize.isMaxSize())
+			while (!bin.getSize().isMaxSize())
 			{
-				textureSize = textureSize.inc();
-				bin.resize(textureSize, atlasImages); 
+				bin.resize(bin.getSize().inc(), atlasImages); 
 				this.pack2(atlasImages);
 				
 				if (atlasImages.isEmpty())
