@@ -2,7 +2,6 @@ package com.roughcookie.atlasmaker;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 
 public class BinPackerSq extends BinPacker {
@@ -46,8 +45,7 @@ public class BinPackerSq extends BinPacker {
 		
 		if (pixels < bin.getSize().getPixels())
 		{
-			textureBins.remove(bin);
-			textureBins.addAll(Arrays.asList(packer.getTextureBins()));
+			replaceTextureBin(bin, packer.getTextureBins());
 		}
 	}
 	

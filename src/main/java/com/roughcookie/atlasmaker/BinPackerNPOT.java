@@ -41,8 +41,7 @@ public class BinPackerNPOT extends BinPacker {
 		if (tweakedBin2.getSize().getPixels() < smallestBin.getSize().getPixels())
 			smallestBin = tweakedBin2;
 		
-		textureBins.remove(bin);
-		textureBins.add(smallestBin);
+		replaceTextureBin(bin, smallestBin);
 	}
 	
 	private TextureBin tweakWidth(TextureBin bin)

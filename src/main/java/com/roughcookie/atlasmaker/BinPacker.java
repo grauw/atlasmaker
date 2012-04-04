@@ -24,6 +24,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 
 import org.json.JSONArray;
@@ -135,8 +136,16 @@ public abstract class BinPacker
 			bin = smallerBin;
 		}
 		
-		textureBins.remove(getLastTextureBin());
-		textureBins.add(bin);
+		replaceTextureBin(getLastTextureBin(), bin);
+	}
+	
+	protected void replaceTextureBin(TextureBin oldBin, TextureBin... newBins)
+	{
+		int index = textureBins.indexOf(oldBin);
+		if (index < 0)
+			throw new RuntimeException("Old bin does not exist!");
+		textureBins.remove(index);
+		textureBins.addAll(index, Arrays.asList(newBins));
 	}
 	
 	public void write()
