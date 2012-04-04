@@ -70,7 +70,7 @@ public class BinPackerNPOT extends BinPacker {
 			}
 			bin.resize(size, imageList);
 			bin.pack(imageList);
-			if (imageList.size() > 0)
+			if (!imageList.isEmpty())
 			{
 				break;
 			}
