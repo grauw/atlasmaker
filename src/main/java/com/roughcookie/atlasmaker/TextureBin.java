@@ -52,15 +52,10 @@ public class TextureBin
 		return textureSize;
 	}
 	
-	public void resize(TextureSize textureSize, ArrayList<AtlasImage> imageList)
+	public void resize(TextureSize size, ArrayList<AtlasImage> imageList)
 	{
-		setSize(textureSize);
+		textureSize = size;
 		clear(imageList);
-	}
-	
-	public void setSize(TextureSize textureSize)
-	{
-		this.textureSize = textureSize;
 	}
 	
 	public ArrayList<AtlasImage> getImages()
@@ -110,7 +105,8 @@ public class TextureBin
 			width = Math.max(width, node.getX() + node.getImage().getWidth());
 			height = Math.max(height, node.getY() + node.getImage().getHeight());
 		}
-		setSize(textureSize.resize(width, height));
+		
+		textureSize = textureSize.resize(width, height);
 	}
 	
 	public boolean isTransparent()
