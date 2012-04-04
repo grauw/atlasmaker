@@ -32,9 +32,9 @@ import com.esotericsoftware.wildcard.Paths;
 
 public abstract class BinPacker
 {
-	private File outputDir;
+	protected File outputDir;
 	protected ArrayList<TextureBin> textureBins;
-	private int border;
+	protected int border;
 	
 	public BinPacker(File outputDir, int border) {
 		this.outputDir = outputDir;
@@ -96,7 +96,7 @@ public abstract class BinPacker
 			repackLastBin();
 	}
 	
-	private void pack2(ArrayList<AtlasImage> images)
+	protected void pack2(ArrayList<AtlasImage> images)
 	{
 		for (int i = images.size() - 1; i >= 0; i--)
 		{
