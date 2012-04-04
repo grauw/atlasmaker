@@ -53,6 +53,9 @@ public class TextureSizeSq extends TextureSize
 	
 	@Override
 	public TextureSize resize(int width, int height) {
+		if (width <= 0 || (width & (width - 1)) != 0 || height <= 0 || (height & (height - 1)) != 0)
+			throw new RuntimeException("Size width and height must be positive and a power of two.");
+		
 		return new TextureSizeSq(height, width, maxSize);
 	}
 	

@@ -66,6 +66,9 @@ public class TextureSizeNPOT extends TextureSize
 	
 	@Override
 	public TextureSize resize(int width, int height) {
+		if (width <= 0 || height <= 0)
+			throw new RuntimeException("Size width and height must be positive.");
+		
 		return new TextureSizeNPOT(width, height, maxSize);
 	}
 	
