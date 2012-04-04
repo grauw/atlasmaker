@@ -2,13 +2,11 @@ package com.roughcookie.atlasmaker;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class BinPackerNPOT extends BinPacker {
 	
 	private int maxSize;
-	private int bestSavings;
-	private TextureSize bestSize;
-	private TextureSize origSize;
 	
 	public BinPackerNPOT(File outputDir, int maxSize, int border) {
 		super(outputDir, border);
@@ -32,58 +30,57 @@ public class BinPackerNPOT extends BinPacker {
 		super.repackLastBin();
 		
 		TextureBin bin = getLastTextureBin();
-		ArrayList<AtlasImage> imageList = new ArrayList<AtlasImage>();
-		
-		bestSavings = 0;
 		bin.trim();
-		origSize = bin.getSize();
-		bestSize = origSize;
-		tweakWidthHeight(bin, imageList, true);
-		bin.setSize(origSize);
-		tweakWidthHeight(bin, imageList, false);
-		if (!bestSize.equals(bin.getSize()))
-		{
-			bin.resize(bestSize, imageList); 
-			bin.pack(imageList);
-		}
-		assert(imageList.isEmpty());
+		
+		TextureBin tweakedBin1 = tweakWidth(bin);
+		TextureBin tweakedBin2 = tweakHeight(bin);
+		
+		TextureBin smallestBin = bin;
+		if (tweakedBin1.getSize().getPixels() < smallestBin.getSize().getPixels())
+			smallestBin = tweakedBin1;
+		if (tweakedBin2.getSize().getPixels() < smallestBin.getSize().getPixels())
+			smallestBin = tweakedBin2;
+		
+		textureBins.remove(bin);
+		textureBins.add(smallestBin);
 	}
 	
-	private void tweakWidthHeight(TextureBin bin, ArrayList<AtlasImage> imageList, boolean doWidth)
+	private TextureBin tweakWidth(TextureBin bin)
 	{
-		TextureSize size = origSize;
-		int savings = 0;
-		TextureSize prevSize;
-		int prevSavings;
-		do
+		while (true)
 		{
-			prevSize = size;
-			prevSavings = savings;
-			// reduce by two pixels to force minimum re-organise
-			if (doWidth)
-			{
-				size = size.resize(size.getWidth() - 1, size.getHeight());
-			}
-			else
-			{
-				size = size.resize(size.getWidth(), size.getHeight() - 1);
-			}
-			bin.resize(size, imageList);
-			bin.pack(imageList);
-			if (!imageList.isEmpty())
-			{
-				break;
-			}
-			// check if we gained anything
-			bin.trim();
-			savings = origSize.getPixels() - bin.getSize().getPixels();
-		} while (savings >= prevSavings);
-		
-		if (bestSavings < prevSavings)
-		{
-			bestSavings = prevSavings;
-			bestSize = prevSize;
+			TextureSize size = bin.getSize();
+			TextureBin smallerBin = tweakSize(bin, size.resize(size.getWidth() - 1, size.getHeight()));
+			if (smallerBin == bin)
+				return bin;
+			bin = smallerBin;
 		}
+	}
+	
+	private TextureBin tweakHeight(TextureBin bin)
+	{
+		while (true)
+		{
+			TextureSize size = bin.getSize();
+			TextureBin smallerBin = tweakSize(bin, size.resize(size.getWidth(), size.getHeight() - 1));
+			if (smallerBin == bin)
+				return bin;
+			bin = smallerBin;
+		}
+	}
+	
+	private TextureBin tweakSize(TextureBin bin, TextureSize size)
+	{
+		ArrayList<AtlasImage> images = bin.getImages();
+		Collections.sort(images, new CompareArea());  // need to resort
+		
+		TextureBin smallerBin = createTextureBin(size);
+		smallerBin.pack(images);
+		smallerBin.trim();
+		
+		if (images.isEmpty() && smallerBin.getSize().getPixels() < size.getPixels())
+			return smallerBin;
+		return bin;
 	}
 	
 	public void trim()
