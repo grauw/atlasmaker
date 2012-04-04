@@ -44,7 +44,7 @@ public class TreeNode
 		int dx = width - image.getWidth();
 		int dy = height - image.getHeight();
 		// we split to give one very small leaf and one very big one
-		// because it allows more efficent use of space
+		// because it allows more efficient use of space
 		// if you don't do this, the bottom right corner never gets used
 		if (dx < dy)
 		{
