@@ -3,6 +3,7 @@ package com.roughcookie.atlasmaker;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 public class BinPackerSq extends BinPacker {
 	
@@ -33,12 +34,10 @@ public class BinPackerSq extends BinPacker {
 			if (image.getWidth() > halfSize || image.getHeight() > halfSize)
 				return;
 		
-		// take all images
-		ArrayList<AtlasImage> atlasImages = new ArrayList<AtlasImage>();
-		bin.clear(atlasImages);
+		ArrayList<AtlasImage> atlasImages = bin.getImages();
+		Collections.sort(atlasImages, new CompareArea());  // need to resort
 		
 		BinPacker packer = new BinPackerSq(outputDir, halfSize, border);
-		
 		packer.pack(atlasImages);
 		
 		int pixels = 0;
@@ -49,16 +48,6 @@ public class BinPackerSq extends BinPacker {
 		{
 			textureBins.remove(bin);
 			textureBins.addAll(Arrays.asList(packer.getTextureBins()));
-		}
-		else
-		{
-			// restore bin (yuck!)
-			// needed so images are positioned correctly
-			for (TextureBin smallBin : packer.getTextureBins())
-				smallBin.clear(atlasImages);
-			this.pack2(atlasImages);
-			
-			assert(atlasImages.isEmpty());
 		}
 	}
 	
