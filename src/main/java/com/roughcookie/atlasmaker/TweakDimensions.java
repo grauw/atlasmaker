@@ -27,8 +27,10 @@ public class TweakDimensions
 	private TextureSize bestSize;
 	private TextureSize origSize;
 	
-	public void tweak(TextureBin bin, ArrayList<AtlasImage> imageList)
+	public void tweak(TextureBin bin)
 	{
+		ArrayList<AtlasImage> imageList = new ArrayList<AtlasImage>();
+		
 		bestSavings = 0;
 		bin.trim();
 		origSize = bin.getSize();

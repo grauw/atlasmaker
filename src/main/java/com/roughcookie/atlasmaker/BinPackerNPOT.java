@@ -20,11 +20,16 @@ public class BinPackerNPOT extends BinPacker {
 	@Override
 	public void pack(ArrayList<AtlasImage> images) {
 		super.pack(images);
-
-		TweakDimensions tweakDimensions = new TweakDimensions();
-		tweakDimensions.tweak(getLastTextureBin(), images);
 		
 		trim();
+	}
+	
+	@Override
+	protected void repackLastBin() {
+		super.repackLastBin();
+		
+		TweakDimensions tweakDimensions = new TweakDimensions();
+		tweakDimensions.tweak(getLastTextureBin());
 	}
 	
 	public void trim()
