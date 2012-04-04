@@ -24,6 +24,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -121,26 +122,21 @@ public abstract class BinPacker
 	protected void repackLastBin()
 	{
 		TextureBin bin = getLastTextureBin();
-		ArrayList<AtlasImage> atlasImages = new ArrayList<AtlasImage>();
 		
-		if (bin.getSize().isMinSize())
-			return;
-		
-		// there is opportunity for further reduction
-		// because some images might fit in gaps of previous atlases
-		TextureSize prevSize;
-		do
+		while (!bin.getSize().isMinSize())
 		{
-			prevSize = bin.getSize();
-			bin.resize(bin.getSize().dec(), atlasImages);
-			this.pack2(atlasImages);
+			ArrayList<AtlasImage> atlasImages = bin.getImages();
+			Collections.sort(atlasImages, new CompareArea());  // need to resort
 			
-		} while (atlasImages.isEmpty() && !bin.getSize().isMinSize());
-		// revert back to last size that fit
-		bin.resize(prevSize, atlasImages);
-		this.pack2(atlasImages);
+			TextureBin smallerBin = createTextureBin(bin.getSize().dec());
+			if (!atlasImages.isEmpty())
+				break;
+			
+			bin = smallerBin;
+		}
 		
-		assert(atlasImages.isEmpty());
+		textureBins.remove(getLastTextureBin());
+		textureBins.add(bin);
 	}
 	
 	public void write()
