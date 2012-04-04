@@ -36,7 +36,6 @@ import org.json.JSONObject;
 public class TextureBin
 {
 	private TreeNode treeNode;
-	private ArrayList<AtlasImage> images;
 	private TextureSize textureSize;
 	private int border;
 	private List<ProgressListener> progressListeners = new ArrayList<ProgressListener>();
@@ -46,7 +45,6 @@ public class TextureBin
 		this.textureSize = textureSize;
 		this.border = border;
 		treeNode = new TreeNode(0, 0, textureSize.getWidth(), textureSize.getHeight(), border);
-		images = new ArrayList<AtlasImage>();
 	}
 	
 	public TextureSize getSize()
@@ -67,15 +65,15 @@ public class TextureBin
 	
 	public ArrayList<AtlasImage> getImages()
 	{
+		ArrayList<AtlasImage> images = new ArrayList<AtlasImage>();
+		for (TreeNode node : treeNode.getImageNodes())
+			images.add(node.getImage());
 		return images;
 	}
 	
 	public boolean add(AtlasImage image)
 	{
-		boolean added = treeNode.add(image);
-		if (added)
-			images.add(image);
-		return added;
+		return treeNode.add(image);
 	}
 	
 	/**
@@ -84,14 +82,12 @@ public class TextureBin
 	 */
 	public void clear(ArrayList<AtlasImage> imageList)
 	{
-		imageList.addAll(images);
+		imageList.addAll(getImages());
 		
 		// need to resort, because they may have been put in wrong order
 		Collections.sort(imageList, new CompareArea());
 		
 		treeNode = new TreeNode(0, 0, textureSize.getWidth(), textureSize.getHeight(), border);
-		
-		images.clear();
 	}
 	
 	public void pack(ArrayList<AtlasImage> imageList)
@@ -109,19 +105,17 @@ public class TextureBin
 	{
 		int width = 0;
 		int height = 0;
-		for (AtlasImage image : images)
+		for (TreeNode node : treeNode.getImageNodes())
 		{
-			if (width < image.getRight()) 
-				width = image.getRight();
-			if (height < image.getBottom()) 
-				height = image.getBottom();
+			width = Math.max(width, node.getX() + node.getImage().getWidth());
+			height = Math.max(height, node.getY() + node.getImage().getHeight());
 		}
 		setSize(textureSize.resize(width, height));
 	}
 	
 	public boolean isTransparent()
 	{
-		for (AtlasImage image : images)
+		for (AtlasImage image : getImages())
 			if (image.isTransparent())
 				return true;
 		return false;
@@ -132,11 +126,11 @@ public class TextureBin
 		BufferedImage imageOut = new BufferedImage(textureSize.getWidth(), textureSize.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g = imageOut.createGraphics();
 		
-		Collections.sort(images, new CompareName());
+		List<TreeNode> imageNodes = treeNode.getImageNodes();
 		
-		for (AtlasImage image : images)
+		for (TreeNode node : imageNodes)
 		{
-			image.draw(g);
+			node.getImage().draw(g, node);
 		}
 		g.dispose();
 		
@@ -160,9 +154,9 @@ public class TextureBin
 		texture.put("height", textureSize.getHeight());
 		texture.put("transparent", isTransparent());
 		JSONArray imagesJson = new JSONArray();
-		for (AtlasImage image : images)
+		for (TreeNode node : treeNode.getImageNodes())
 		{
-			imagesJson.put(image.toJSON());
+			imagesJson.put(node.getImage().toJSON(node));
 		}
 		texture.put("images", imagesJson);
 		return texture;

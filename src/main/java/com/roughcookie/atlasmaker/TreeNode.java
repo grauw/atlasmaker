@@ -1,5 +1,8 @@
 package com.roughcookie.atlasmaker;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /*
 Copyright (c) 2012, Rough Cookie and Ed Welch
 All rights reserved.
@@ -28,7 +31,7 @@ public class TreeNode
 	private TreeNode leaf1 = null;
 	private TreeNode leaf2 = null;
 	private int border;
-	public AtlasImage image = null;		// used for debugging only
+	private AtlasImage image = null;		// used for debugging only
 
 	public TreeNode(int x, int y, int width, int height, int border)
 	{
@@ -37,6 +40,35 @@ public class TreeNode
 		this.width = width;
 		this.height = height;
 		this.border = border;
+	}
+	
+	public int getX() {
+		return x;
+	}
+	
+	public int getY() {
+		return y;
+	}
+	
+	public AtlasImage getImage() {
+		return image;
+	}
+	
+	public List<TreeNode> getImageNodes()
+	{
+		ArrayList<TreeNode> nodes = new ArrayList<TreeNode>();
+		getImageNodes(nodes);
+		return nodes;
+	}
+	
+	private void getImageNodes(List<TreeNode> nodes)
+	{
+		if (this.image != null)
+			nodes.add(this);
+		if (leaf1 != null)
+			leaf1.getImageNodes(nodes);
+		if (leaf2 != null)
+			leaf2.getImageNodes(nodes);
 	}
 	
 	public void createBranches(AtlasImage image)
@@ -69,7 +101,6 @@ public class TreeNode
 				this.image = image;
 				
 				createBranches(image);
-				image.setXY(x, y);
 				return true;
 			}
 			return false;

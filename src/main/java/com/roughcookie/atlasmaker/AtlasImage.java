@@ -31,8 +31,6 @@ import org.json.JSONObject;
 
 public class AtlasImage 
 {
-	private int x;
-	private int y;
 	private int xOffset;
 	private int yOffset;
 	private int opaqueWidth;
@@ -80,12 +78,6 @@ public class AtlasImage
 		return opaqueHeight * opaqueWidth;
 	}
 	
-	public boolean pointInside(int xTest, int yTest)
-	{
-		return xTest > x && xTest < x + getWidth() &&
-				yTest > y && yTest < y + getHeight();
-	}
-	
 	public int getHeight()
 	{
 		return image.getHeight();
@@ -96,50 +88,14 @@ public class AtlasImage
 		return image.getWidth();
 	}
 	
-	public int getBottom()
-	{
-		return y + image.getHeight();
-	}
-	
-	public int getRight()
-	{
-		return x + image.getWidth();
-	}
-	
 	public void setImage(BufferedImage image)
 	{
 		this.image = image;
 	}
 	
-	public void draw(Graphics2D g)
+	public void draw(Graphics2D g, TreeNode node)
 	{
-		g.drawImage(image, null, x, y);		
-	}
-	
-	public int getX()
-	{
-		return x;
-	}
-	
-	public void setX(int x)
-	{
-		this.x = x;
-	}
-	
-	public int getY()
-	{
-		return y;
-	}
-	
-	public void setY(int y)
-	{
-		this.y = y;
-	}
-	
-	public void setXY(int x, int y)
-	{
-		this.x = x;
-		this.y = y;
+		g.drawImage(image, null, node.getX(), node.getY());
 	}
 	
 	public void cropTransparent(int alphaThresh) 
@@ -212,13 +168,13 @@ public class AtlasImage
 		return true;
 	}
 	
-	public JSONObject toJSON() throws JSONException 
+	public JSONObject toJSON(TreeNode node) throws JSONException 
 	{
 		JSONObject image = new JSONObject();
 		image.put("path", getRelativePath());
 		JSONObject coordinates = new JSONObject();
-		coordinates.put("x", x);
-		coordinates.put("y", y);
+		coordinates.put("x", node.getX());
+		coordinates.put("y", node.getY());
 		coordinates.put("width", opaqueWidth);
 		coordinates.put("height", opaqueHeight);
 		image.put("coordinates", coordinates);
