@@ -79,7 +79,7 @@ public abstract class BinPacker
 	
 	public void pack(ArrayList<AtlasImage> atlasImages)
 	{
-		for (int i = 0; !atlasImages.isEmpty(); i++)
+		while (!atlasImages.isEmpty())
 		{
 			TextureBin bin = createTextureBin(createFittingTextureSize(atlasImages));
 			textureBins.add(bin);
