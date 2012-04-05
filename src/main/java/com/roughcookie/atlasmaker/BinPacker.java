@@ -89,7 +89,11 @@ public abstract class BinPacker
 			// scale up the texture if useful
 			while (!atlasImages.isEmpty() && !bin.getSize().isMaxSize())
 			{
-				bin.resize(bin.getSize().inc(), atlasImages); 
+				atlasImages.addAll(bin.getImages());
+				Collections.sort(atlasImages, new CompareArea());  // need to resort
+				
+				TextureBin biggerBin = createTextureBin(bin.getSize().inc());
+				replaceTextureBin(bin, biggerBin);
 				this.pack2(atlasImages);
 			}
 		}
