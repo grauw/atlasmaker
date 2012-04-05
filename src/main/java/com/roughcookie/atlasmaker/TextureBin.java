@@ -24,7 +24,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -37,13 +36,11 @@ public class TextureBin
 {
 	private TreeNode treeNode;
 	private TextureSize textureSize;
-	private int border;
 	private List<ProgressListener> progressListeners = new ArrayList<ProgressListener>();
 	
 	public TextureBin(TextureSize textureSize, int border)
 	{
 		this.textureSize = textureSize;
-		this.border = border;
 		treeNode = new TreeNode(0, 0, textureSize.getWidth(), textureSize.getHeight(), border);
 	}
 	
