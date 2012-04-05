@@ -52,12 +52,6 @@ public class TextureBin
 		return textureSize;
 	}
 	
-	public void resize(TextureSize size, ArrayList<AtlasImage> imageList)
-	{
-		textureSize = size;
-		clear(imageList);
-	}
-	
 	public ArrayList<AtlasImage> getImages()
 	{
 		ArrayList<AtlasImage> images = new ArrayList<AtlasImage>();
@@ -69,20 +63,6 @@ public class TextureBin
 	public boolean add(AtlasImage image)
 	{
 		return treeNode.add(image);
-	}
-	
-	/**
-	 * Clears all images from the bin and re-adds them to the image list.
-	 * @param imageList The list to put the removed images into.
-	 */
-	public void clear(ArrayList<AtlasImage> imageList)
-	{
-		imageList.addAll(getImages());
-		
-		// need to resort, because they may have been put in wrong order
-		Collections.sort(imageList, new CompareArea());
-		
-		treeNode = new TreeNode(0, 0, textureSize.getWidth(), textureSize.getHeight(), border);
 	}
 	
 	public void pack(ArrayList<AtlasImage> imageList)
