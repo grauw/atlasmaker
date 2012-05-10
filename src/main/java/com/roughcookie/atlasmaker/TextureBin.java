@@ -19,8 +19,8 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -96,16 +96,15 @@ public class TextureBin
 	
 	public void write(File outputFile)
 	{
-		BufferedImage imageOut = new BufferedImage(textureSize.getWidth(), textureSize.getHeight(), BufferedImage.TYPE_INT_ARGB);
-		Graphics2D g = imageOut.createGraphics();
+		BufferedImage imageOut = new BufferedImage(textureSize.getWidth(), textureSize.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
+		WritableRaster raster = imageOut.getRaster();
 		
 		List<TreeNode> imageNodes = treeNode.getImageNodes();
 		
 		for (TreeNode node : imageNodes)
 		{
-			node.getImage().draw(g, node);
+			node.getImage().draw(raster, node);
 		}
-		g.dispose();
 		
 		try
 		{

@@ -20,7 +20,9 @@ OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
 
@@ -93,20 +95,27 @@ public class AtlasImage
 		this.image = image;
 	}
 	
-	public void draw(Graphics2D g, TreeNode node)
+	public void draw(WritableRaster raster, TreeNode node)
 	{
-		g.drawImage(image, null, node.getX(), node.getY());
+		raster.setRect(node.getX(), node.getY(), image.getRaster());
 	}
 	
 	public void cropTransparent(int alphaThresh) 
 	{
 		if (!detectAlpha(alphaThresh)) return;
 		BufferedImage imageCut;
-		imageCut = new BufferedImage(opaqueWidth, opaqueHeight, 
-				BufferedImage.TYPE_INT_ARGB);
-		Graphics2D g = imageCut.createGraphics();
-		g.drawImage(image, null, -xOffset, -yOffset);		
-		g.dispose();
+		imageCut = new BufferedImage(opaqueWidth, opaqueHeight, BufferedImage.TYPE_4BYTE_ABGR);
+		
+		if (image.getType() == BufferedImage.TYPE_4BYTE_ABGR || image.getType() == BufferedImage.TYPE_INT_ARGB)
+		{
+			imageCut.getRaster().setRect(-xOffset, -yOffset, image.getData(new Rectangle(xOffset, yOffset, opaqueWidth, opaqueHeight)));
+		}
+		else
+		{
+			Graphics2D g = imageCut.createGraphics();
+			g.drawImage(image, null, -xOffset, -yOffset);
+			g.dispose();
+		}
 		image = imageCut;
 	}
 
