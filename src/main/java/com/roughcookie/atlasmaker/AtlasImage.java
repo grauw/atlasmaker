@@ -100,9 +100,11 @@ public class AtlasImage
 		raster.setRect(node.getX(), node.getY(), image.getRaster());
 	}
 	
-	public void cropTransparent(int alphaThresh) 
+	public void cropTransparent(int alphaThreshold) 
 	{
-		if (!detectAlpha(alphaThresh)) return;
+		if (!detectAlpha(alphaThreshold))
+			return;
+		
 		BufferedImage imageCut;
 		imageCut = new BufferedImage(opaqueWidth, opaqueHeight, BufferedImage.TYPE_4BYTE_ABGR);
 		
