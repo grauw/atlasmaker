@@ -36,8 +36,6 @@ public class AtlasImage
 	private int yOffset;
 	private int opaqueWidth;
 	private int opaqueHeight;
-	private int transWidth;
-	private int transHeight;
 	private boolean transparent;
 	private BufferedImage image;
 	private File file;
@@ -108,8 +106,8 @@ public class AtlasImage
 	
 	public boolean detectAlpha(int alphaThresh)
 	{
-		transWidth = image.getWidth();
-		transHeight = image.getHeight();
+		int transWidth = image.getWidth();
+		int transHeight = image.getHeight();
 		int[] srcPixels;
 		try
 		{
@@ -166,20 +164,20 @@ public class AtlasImage
 	
 	public JSONObject toJSON(TreeNode node) throws JSONException 
 	{
-		JSONObject image = new JSONObject();
-		image.put("path", getRelativePath());
+		JSONObject imageJson = new JSONObject();
+		imageJson.put("path", getRelativePath());
 		JSONObject coordinates = new JSONObject();
 		coordinates.put("x", node.getX());
 		coordinates.put("y", node.getY());
 		coordinates.put("width", opaqueWidth);
 		coordinates.put("height", opaqueHeight);
-		image.put("coordinates", coordinates);
-		image.put("xOffset", xOffset);
-		image.put("yOffset", yOffset);
-		image.put("width", transWidth);
-		image.put("height", transHeight);
-		image.put("transparent", transparent);  // XXX not interesting?
-		return image;
+		imageJson.put("coordinates", coordinates);
+		imageJson.put("xOffset", xOffset);
+		imageJson.put("yOffset", yOffset);
+		imageJson.put("width", image.getWidth());
+		imageJson.put("height", image.getHeight());
+		imageJson.put("transparent", transparent);  // XXX not interesting?
+		return imageJson;
 	}
 	
 	private String getRelativePath()
