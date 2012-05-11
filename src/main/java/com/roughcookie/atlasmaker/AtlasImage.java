@@ -22,7 +22,6 @@ OF THE POSSIBILITY OF SUCH DAMAGE.
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
 
@@ -82,12 +81,12 @@ public class AtlasImage
 	
 	public int getHeight()
 	{
-		return image.getHeight();
+		return opaqueHeight;
 	}
 	
 	public int getWidth()
 	{
-		return image.getWidth();
+		return opaqueWidth;
 	}
 	
 	public void setImage(BufferedImage image)
@@ -95,40 +94,36 @@ public class AtlasImage
 		this.image = image;
 	}
 	
-	public void draw(WritableRaster raster, TreeNode node)
+	public void draw(BufferedImage target, TreeNode node)
 	{
-		raster.setRect(node.getX(), node.getY(), image.getRaster());
+		draw(target, node.getX(), node.getY());
 	}
 	
-	public void cropTransparent(int alphaThreshold) 
+	public void draw(BufferedImage target, int x, int y)
 	{
-		if (!detectAlpha(alphaThreshold))
-			return;
-		
-		BufferedImage imageCut;
-		imageCut = new BufferedImage(opaqueWidth, opaqueHeight, BufferedImage.TYPE_4BYTE_ABGR);
-		
-		if (image.getType() == BufferedImage.TYPE_4BYTE_ABGR || image.getType() == BufferedImage.TYPE_INT_ARGB)
+		// when possible, copy image data to preserve colours for pixels with alpha 0
+		if ((target.getType() == BufferedImage.TYPE_4BYTE_ABGR || target.getType() == BufferedImage.TYPE_INT_ARGB) &&
+				(image.getType() == BufferedImage.TYPE_4BYTE_ABGR || image.getType() == BufferedImage.TYPE_INT_ARGB))
 		{
-			imageCut.getRaster().setRect(-xOffset, -yOffset, image.getData(new Rectangle(xOffset, yOffset, opaqueWidth, opaqueHeight)));
+			target.getRaster().setRect(x - xOffset, y - yOffset, image.getData(new Rectangle(xOffset, yOffset, opaqueWidth, opaqueHeight)));
 		}
 		else
 		{
-			Graphics2D g = imageCut.createGraphics();
-			g.drawImage(image, null, -xOffset, -yOffset);
+			Graphics2D g = target.createGraphics();
+			g.setClip(x, y, opaqueWidth, opaqueHeight);
+			g.drawImage(image, null, x - xOffset, y - yOffset);
 			g.dispose();
 		}
-		image = imageCut;
 	}
-
-	public boolean detectAlpha(int alphaThresh) 
+	
+	public boolean detectAlpha(int alphaThresh)
 	{
-		transWidth = image.getWidth(null);
-		transHeight = image.getHeight(null);
+		transWidth = image.getWidth();
+		transHeight = image.getHeight();
 		int[] srcPixels;
 		try
 		{
-			srcPixels = new int[transWidth*transHeight];
+			srcPixels = new int[transWidth * transHeight];
 		}
 		catch (OutOfMemoryError e) 
 		{

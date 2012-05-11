@@ -151,7 +151,7 @@ public class Atlas implements ProgressListener
 	{
 		AtlasImage image = new AtlasImage(file, baseDir);
 		image.load();
-		image.cropTransparent(alphaThreshold);
+		image.detectAlpha(alphaThreshold);
 
 		// don't add images that don't fit
 		if (image.getWidth() > maxSize || image.getHeight() > maxSize)
