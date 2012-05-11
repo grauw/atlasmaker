@@ -69,11 +69,6 @@ public class AtlasImage
 		return opaqueWidth < image.getWidth() || opaqueHeight < image.getHeight();
 	}
 	
-	public BufferedImage getImage()
-	{
-		return image;
-	}
-	
 	public int getPixelCount()
 	{
 		return opaqueHeight * opaqueWidth;
@@ -87,11 +82,6 @@ public class AtlasImage
 	public int getWidth()
 	{
 		return opaqueWidth;
-	}
-	
-	public void setImage(BufferedImage image)
-	{
-		this.image = image;
 	}
 	
 	public void draw(BufferedImage target, TreeNode node)
