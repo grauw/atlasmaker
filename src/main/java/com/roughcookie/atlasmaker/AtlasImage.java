@@ -19,8 +19,6 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -89,19 +87,9 @@ public class AtlasImage
 	
 	public void draw(BufferedImage target, int x, int y)
 	{
-		// when possible, copy image data to preserve colours for pixels with alpha 0
-		if ((target.getType() == BufferedImage.TYPE_4BYTE_ABGR || target.getType() == BufferedImage.TYPE_INT_ARGB) &&
-				(image.getType() == BufferedImage.TYPE_4BYTE_ABGR || image.getType() == BufferedImage.TYPE_INT_ARGB))
-		{
-			target.getRaster().setRect(x - xOffset, y - yOffset, image.getData(new Rectangle(xOffset, yOffset, opaqueWidth, opaqueHeight)));
-		}
-		else
-		{
-			Graphics2D g = target.createGraphics();
-			g.setClip(x, y, opaqueWidth, opaqueHeight);
-			g.drawImage(image, null, x - xOffset, y - yOffset);
-			g.dispose();
-		}
+		// copy image region while preserving rgb data for pixels with alpha 0
+		int[] rgbArray = image.getRGB(xOffset, yOffset, opaqueWidth, opaqueHeight, null, 0, opaqueWidth);
+		target.setRGB(x, y, opaqueWidth, opaqueHeight, rgbArray, 0, opaqueWidth);
 	}
 	
 	public boolean detectAlpha(int alphaThresh)
