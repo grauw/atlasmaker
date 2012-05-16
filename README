@@ -6,7 +6,10 @@ atlases and JSON index files.
 
 Usage:
 
-  java -Xmx512m -jar atlasmaker.jar MANIFEST_FILE OUTPUT_DIR
+  java -Xmx512m -jar atlasmaker.jar MANIFEST_FILE OUTPUT_DIR [FILTER]
+
+Filter is an optional third argument to skip atlases whose name does not start
+with the given filter.
 
 Project page:
 

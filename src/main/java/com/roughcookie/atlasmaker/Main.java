@@ -39,24 +39,35 @@ public class Main
 	public static Main main;
 	private File manifest;
 	private File outputDir;
+	private String filter;
 	
 	public static void main(String[] args)
 	{
-		if (args.length == 2)
+		if (args.length == 2 || args.length == 3)
 		{
-			main = new Main(new File(args[0]), new File(args[1]));
+			if (args.length == 2)
+				main = new Main(new File(args[0]), new File(args[1]));
+			else
+				main = new Main(new File(args[0]), new File(args[1]), args[2]);
+			
 			main.createAtlases();
 		}
 		else
 		{
-			System.out.println("usage: java -jar AtlasMaker.jar MANIFEST_FILE OUTPUT_DIR");
+			System.out.println("usage: java -jar AtlasMaker.jar MANIFEST_FILE OUTPUT_DIR [FILTER]");
 		}
 	}
 	
 	public Main(File manifest, File outputDir)
 	{
+		this(manifest, outputDir, "");
+	}
+	
+	public Main(File manifest, File outputDir, String filter)
+	{
 		this.manifest = manifest;
 		this.outputDir = outputDir;
+		this.filter = filter;
 	}
 	
 	public JSONArray getManifestJson()
@@ -97,6 +108,8 @@ public class Main
 			{
 				JSONObject atlasJson = manifestJson.getJSONObject(i);
 				String atlasName = atlasJson.getString("name");
+				if (atlasName.indexOf(filter) != 0)
+					continue;
 				
 				JSONArray atlasFilePatterns = atlasJson.getJSONArray("images");
 				Paths paths = new Paths();
