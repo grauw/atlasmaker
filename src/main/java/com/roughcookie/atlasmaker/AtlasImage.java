@@ -20,6 +20,8 @@ OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 import java.awt.image.BufferedImage;
+import java.awt.image.ColorModel;
+import java.awt.image.DataBufferInt;
 import java.io.File;
 import java.io.IOException;
 
@@ -80,16 +82,40 @@ public class AtlasImage
 		return opaqueWidth;
 	}
 	
+	/**
+	 * Copy the opaque image region of this atlas image into another image.
+	 * This copy preserves the rgb data for pixels with alpha 0.
+	 * 
+	 * @param target The target image to draw on.
+	 * @param node The node specifying the target x/y coordinates.
+	 */
 	public void draw(BufferedImage target, TreeNode node)
 	{
 		draw(target, node.getX(), node.getY());
 	}
 	
+	/**
+	 * Copy the opaque image region of this atlas image into another image.
+	 * This copy preserves the rgb data for pixels with alpha 0.
+	 * 
+	 * @param target The target image to draw on.
+	 * @param x The x coordinate to draw at.
+	 * @param y The y coordinate to draw at.
+	 */
 	public void draw(BufferedImage target, int x, int y)
 	{
-		// copy image region while preserving rgb data for pixels with alpha 0
-		int[] rgbArray = image.getRGB(xOffset, yOffset, opaqueWidth, opaqueHeight, null, 0, opaqueWidth);
-		target.setRGB(x, y, opaqueWidth, opaqueHeight, rgbArray, 0, opaqueWidth);
+		if (target.getType() == BufferedImage.TYPE_INT_ARGB && target.getColorModel() == ColorModel.getRGBdefault())
+		{
+			// efficient method, writes directly into the image’s buffer if the type allows
+			int[] data = ((DataBufferInt) target.getRaster().getDataBuffer()).getData();
+			image.getRGB(xOffset, yOffset, opaqueWidth, opaqueHeight, data, y * target.getWidth() + x, target.getWidth());
+		}
+		else
+		{
+			// fallback method
+			int[] rgbArray = image.getRGB(xOffset, yOffset, opaqueWidth, opaqueHeight, null, 0, opaqueWidth);
+			target.setRGB(x, y, opaqueWidth, opaqueHeight, rgbArray, 0, opaqueWidth);
+		}
 	}
 	
 	public boolean detectAlpha(int alphaThresh)

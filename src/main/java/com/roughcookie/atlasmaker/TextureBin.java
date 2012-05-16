@@ -95,7 +95,7 @@ public class TextureBin
 	
 	public void write(File outputFile)
 	{
-		BufferedImage imageOut = new BufferedImage(textureSize.getWidth(), textureSize.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
+		BufferedImage imageOut = new BufferedImage(textureSize.getWidth(), textureSize.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		
 		List<TreeNode> imageNodes = treeNode.getImageNodes();
 		
