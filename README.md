@@ -1,4 +1,6 @@
 Texture Atlas Maker
+===================
+
 Copyright (c) 2012, Rough Cookie and Ed Welch
 
 This tool takes a manifest which references PNG images, and generates texture
@@ -6,19 +8,19 @@ atlases and JSON index files.
 
 Usage:
 
-  java -Xmx512m -jar atlasmaker.jar MANIFEST_FILE OUTPUT_DIR [FILTER]
+    java -Xmx512m -jar atlasmaker.jar MANIFEST_FILE OUTPUT_DIR [FILTER]
 
 Filter is an optional third argument to skip atlases whose name does not start
 with the given filter.
 
 Project page:
 
-  https://bitbucket.org/grauw/atlasmaker
+  <https://bitbucket.org/grauw/atlasmaker>
 
 The source code is freely available and BSD licensed.
 
 Table of contents
-=================
+-----------------
 
 - Manifest JSON file format
 - Output directory structure
@@ -27,104 +29,104 @@ Table of contents
 - Eclipse project setup
 
 Manifest JSON file format
-=========================
+-------------------------
 
 The manifest is a JSON file which has the following format:
 
-[
-    {
-        "name": "ui/100",
-        "border": 1,
-        "maxSize": 1,
-        "images": [
-            "<path_to_images>",
-            ...
-        ]
-    },
-    ...
-]
+    [
+        {
+            "name": "ui/100",
+            "border": 1,
+            "maxSize": 1,
+            "images": [
+                "<path_to_images>",
+                ...
+            ]
+        },
+        ...
+    ]
 
 The atlas name determines the directory name in the output directory. The paths
 to images are relative to the manifest file, and can contain wildcards. Example:
 
-[
-    {
-        "name": "ui/100",
-        "images": [
-            "navigation/100/*.png",
-            "settings/100/*.png"
-        ]
-    },
-    {
-        "name": "all",
-        "images": [
-            "**.png"
-        ]
-    }
-]
+    [
+        {
+            "name": "ui/100",
+            "images": [
+                "navigation/100/*.png",
+                "settings/100/*.png"
+            ]
+        },
+        {
+            "name": "all",
+            "images": [
+                "**.png"
+            ]
+        }
+    ]
 
 Additional optional atlas properties are:
 
-  maxSize
+  * **maxSize**  
     The maximum atlas size. Default 1024.
 
-  powersOfTwo
+  * **powersOfTwo**  
     Whether to restrict atlas sizes to powers of two. Default true.
 
-  square
+  * **square**  
     Whether to restrict atlas sizes to squares. Default true.
 
-  alphaThreshold
+  * **alphaThreshold**  
     The threshold for cropping transparent regions (-1 .. 255). Default 0.
 
-  border
+  * **border**  
     The number of transparent pixel borders between images. Default 0.
 
 Output directory structure
-==========================
+--------------------------
 
 The files are output to the output directory in the following structure:
 
-OUTPUT_DIR/
-  atlas_name/
-    atlas-0.png
-    atlas-1.png
-    index.json
+  * OUTPUTDIR/
+    * atlasname/
+      * atlas-0.png
+      * atlas-1.png
+      * index.json
 
 The sequentially numbered png files are the atlas textures. The json file is
 an index which describes the positions of each individual image in each texture.
 
 Index json file format
-======================
+----------------------
 
 The index json file has the following structure:
 
-[
-    {
-        "path": "atlas-0.png",
-        "width": 1024,
-        "height": 1024,
-        "transparent": true,
-        "images": [
-            {
-                "path": "navigation/100/close_button.png",
-                "coordinates": {
-                    "height": 60,
-                    "width": 60,
-                    "y": 312,
-                    "x": 0
+    [
+        {
+            "path": "atlas-0.png",
+            "width": 1024,
+            "height": 1024,
+            "transparent": true,
+            "images": [
+                {
+                    "path": "navigation/100/close_button.png",
+                    "coordinates": {
+                        "height": 60,
+                        "width": 60,
+                        "y": 312,
+                        "x": 0
+                    },
+                    "xOffset": 2,
+                    "yOffset": 2,
+                    "width": 64,
+                    "height": 64,
+                    "transparent": true
                 },
-                "xOffset": 2,
-                "yOffset": 2,
-                "width": 64,
-                "height": 64,
-                "transparent": true
-            },
-            ...
-        ]
-    },
-    ...
-]
+                ...
+            ]
+        },
+        ...
+    ]
 
 The root consists of an array of textures. For each texture it specifies the
 path, its width, height, whether the texture has any transparent pixels, and the
@@ -137,23 +139,23 @@ from the images. Finally, there is also a field which indicates whether the
 image contains any transparent pixels.
 
 Build instructions
-==================
+------------------
 
 The project can be built with the Maven build tool:
 
-  mvn package
+    mvn package
 
 After this command, the executable jar can be found in the target directory:
 
-  target/atlasmaker-1.0-jar-with-dependencies.jar
+    target/atlasmaker-1.0-jar-with-dependencies.jar
 
 Run it like so:
 
-  java -Xmx512m -jar target/atlasmaker-1.0-jar-with-dependencies.jar
-      /<project_path>/client/Content/Art/atlasManifest.json ./output
+    java -Xmx512m -jar target/atlasmaker-1.0-jar-with-dependencies.jar
+        /<project_path>/client/Content/Art/atlasManifest.json ./output
 
 Eclipse project setup
-=====================
+---------------------
 
 To set up the project in Eclipse, first install the "m2e" plugin (Maven
 integration for Eclipse). You can find this plugin in the Eclipse Marketplace
@@ -169,10 +171,10 @@ You may want to specify command line arguments in the build configuration, go
 to Run / Run configurations, select the correct entry and go to the Arguments
 tab. In the program arguments section, enter your command line arguments, e.g.:
 
-  /<project_path>/client/Content/Art/atlasManifest.json ./output
+    /<project_path>/client/Content/Art/atlasManifest.json ./output
 
 And in the VM arguments it is recommended to enter the following to increase
 the heap size:
 
-  -Xmx512m
+    -Xmx512m
  
