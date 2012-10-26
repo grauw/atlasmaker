@@ -22,11 +22,11 @@ The source code is freely available and BSD licensed.
 Table of contents
 -----------------
 
-- Manifest JSON file format
-- Output directory structure
-- Index json file format
-- Build instructions
-- Eclipse project setup
+  - Manifest JSON file format
+  - Output directory structure
+  - Index json file format
+  - Build instructions
+  - Eclipse project setup
 
 Manifest JSON file format
 -------------------------
