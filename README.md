@@ -1,7 +1,7 @@
 Texture Atlas Maker
 ===================
 
-Copyright (c) 2012, Rough Cookie and Ed Welch
+Copyright © 2012, Rough Cookie and Ed Welch
 
 This tool takes a manifest which references PNG images, and generates texture
 atlases and JSON index files.
