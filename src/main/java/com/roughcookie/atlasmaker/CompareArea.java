@@ -25,7 +25,6 @@ public class CompareArea implements Comparator<AtlasImage>
 {
 	public int compare(AtlasImage ai1, AtlasImage ai2) 
 	{
-		return ai1.getWidth() * ai1.getHeight() - 
-			ai2.getWidth() * ai2.getHeight();
+		return ai1.getPixelCount() - ai2.getPixelCount();
 	}
 }
