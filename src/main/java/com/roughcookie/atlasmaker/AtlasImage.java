@@ -71,6 +71,11 @@ public class AtlasImage
 	{
 		return opaqueHeight * opaqueWidth;
 	}
+
+	public int getMaxSize()
+	{
+		return Math.max(opaqueHeight, opaqueWidth);
+	}
 	
 	public int getHeight()
 	{
