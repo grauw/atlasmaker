@@ -94,6 +94,8 @@ public abstract class BinPacker
 				
 				TextureBin biggerBin = createTextureBin(bin.getSize().inc());
 				replaceTextureBin(bin, biggerBin);
+				bin = biggerBin;
+				
 				this.pack2(atlasImages);
 			}
 		}
