@@ -15,7 +15,7 @@ with the given filter.
 
 Project page:
 
-  <https://bitbucket.org/grauw/atlasmaker>
+  <https://hg.sr.ht/~grauw/atlasmaker>
 
 The source code is freely available and BSD licensed.
 
